@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione di presentazione del percorso annuale di Informatica per le classi quinte.">
+  <title>Lezione 0 — Informatica, classi quinte</title>
+  <link rel="icon" href="../../../../common/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../../../common/assets/style.css">
+  <link rel="stylesheet" href="../../../../common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script src="../../../../common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#metodo">Metodo</a>
+        <a href="#attivita">Attività</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">Tema</button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">Informatica quinta</a><span aria-hidden="true">/</span><span>Lezione 0</span></nav>
+      <p class="eyebrow">Lezione 0 · Informatica · Classi quinte</p>
+      <h1>Dai dati a un’applicazione vera</h1>
+      <p class="lead">Quest’anno impareremo a progettare i dati, interrogarli e usarli in un’applicazione Web completa, sicura e presentabile.</p>
+      <div class="meta-list" aria-label="Informazioni essenziali">
+        <span>4 ore settimanali</span>
+        <span>SQL</span>
+        <span>PHP e PDO</span>
+        <span>MariaDB</span>
+        <span>Progetto finale</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="domanda-iniziale">
+      <p class="eyebrow">Domanda iniziale</p>
+      <h2 id="domanda-iniziale">Dove finiscono i dati di un’app?</h2>
+      <p class="section-intro">Quando accediamo a un social, prenotiamo un viaggio o facciamo un acquisto, l’interfaccia è soltanto la parte visibile. Dietro ci sono dati organizzati, regole e programmi che decidono cosa salvare, cercare, modificare e mostrare.</p>
+      <div class="presentation-flow" aria-label="Flusso di una applicazione Web">
+        <strong>Utente</strong><span class="presentation-arrow" aria-hidden="true">→</span><strong>Browser</strong><span class="presentation-arrow" aria-hidden="true">→</span><strong>PHP</strong><span class="presentation-arrow" aria-hidden="true">→</span><strong>Database</strong>
+      </div>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><strong>La domanda guida dell’anno:</strong> come trasformiamo un problema reale in un sistema di dati affidabile e in un’applicazione che funziona?</div></aside>
+    </section>
+
+    <section id="percorso" class="section" aria-labelledby="dal-problema-al-prodotto">
+      <p class="eyebrow">La strada dell’anno</p>
+      <h2 id="dal-problema-al-prodotto">Dal problema al prodotto</h2>
+      <div class="presentation-path">
+        <article class="presentation-step"><b>M0 · Partenza</b><div><strong>Ambiente e diagnosi.</strong> Riprendiamo Web e SQL, prepariamo XAMPP, MariaDB, DBeaver e le modalità di consegna.</div></article>
+        <article class="presentation-step"><b>M1 · Analisi</b><div><strong>Capire il problema.</strong> Requisiti, entità, associazioni, cardinalità e dizionario dei dati.</div></article>
+        <article class="presentation-step"><b>M2 · Modello</b><div><strong>Progettare bene.</strong> Tabelle, chiavi, vincoli, trasformazione del modello E‑R e normalizzazione.</div></article>
+        <article class="presentation-step"><b>M3–M4 · SQL</b><div><strong>Interrogare e proteggere.</strong> Creazione, inserimento, filtri, funzioni, join, subquery, viste, transazioni e privilegi.</div></article>
+        <article class="presentation-step"><b>M5 · Web</b><div><strong>Collegare il sito ai dati.</strong> PHP, form, GET/POST, PDO, query preparate, CRUD, sessioni e ruoli.</div></article>
+        <article class="presentation-step"><b>M6–M7 · Qualità</b><div><strong>Andare oltre “funziona”.</strong> JSON essenziale, test, gestione degli errori, backup e sicurezza di base.</div></article>
+        <article class="presentation-step"><b>M8 · Capstone</b><div><strong>Realizzare e difendere il progetto.</strong> Applicazione completa, documentazione, dimostrazione e colloquio tecnico.</div></article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="laboratorio">
+      <p class="eyebrow">Gli strumenti</p>
+      <h2 id="laboratorio">Il nostro laboratorio</h2>
+      <div class="card-grid">
+        <article class="card"><span class="presentation-marker">DB</span><h3>MariaDB</h3><p>Conserva tabelle, relazioni e dati dell’applicazione.</p></article>
+        <article class="card"><span class="presentation-marker">SQL</span><h3>DBeaver</h3><p>Ci permette di progettare, interrogare e controllare il database.</p></article>
+        <article class="card"><span class="presentation-marker">WEB</span><h3>XAMPP</h3><p>Fornisce Apache, PHP e MariaDB per lavorare localmente.</p></article>
+        <article class="card"><span class="presentation-marker">PHP</span><h3>PDO</h3><p>Collega in modo ordinato e sicuro l’applicazione al database.</p></article>
+        <article class="card"><span class="presentation-marker">GIT</span><h3>Git e repository</h3><p>Registrano le versioni del lavoro e rendono visibile il contributo di ciascuno.</p></article>
+        <article class="card"><span class="presentation-marker">LMS</span><h3>Moodle</h3><p>Raccoglie consegne, prove, materiali e valutazioni.</p></article>
+      </div>
+    </section>
+
+    <section id="metodo" class="section" aria-labelledby="lezione-laboratorio">
+      <p class="eyebrow">Come lavoreremo</p>
+      <h2 id="lezione-laboratorio">Lezione breve, laboratorio vero</h2>
+      <div class="card-grid">
+        <article class="card"><span class="presentation-marker">1</span><h3>Problema</h3><p>Partiamo da un caso concreto e individuiamo cosa deve fare il sistema.</p></article>
+        <article class="card"><span class="presentation-marker">2</span><h3>Modello</h3><p>Organizziamo dati e regole prima di iniziare a programmare.</p></article>
+        <article class="card"><span class="presentation-marker">3</span><h3>Pratica guidata</h3><p>Costruiamo insieme la prima soluzione e leggiamo gli errori.</p></article>
+        <article class="card"><span class="presentation-marker">4</span><h3>Sfida</h3><p>Completate o migliorate la soluzione, individualmente o in coppia.</p></article>
+        <article class="card"><span class="presentation-marker">5</span><h3>Verifica</h3><p>Spiegate le scelte: non basta mostrare che il programma “gira”.</p></article>
+      </div>
+    </section>
+
+    <section class="section reading" aria-labelledby="traguardo">
+      <p class="eyebrow">Il traguardo</p>
+      <h2 id="traguardo">Un’applicazione completa per ogni classe</h2>
+      <p class="section-intro">Le due quinte lavoreranno su domini applicativi differenti, ma svilupperanno le stesse competenze e saranno valutate con criteri comuni.</p>
+      <ul class="presentation-checklist">
+        <li>analisi dei requisiti e modello E‑R;</li>
+        <li>schema relazionale coerente e normalizzato;</li>
+        <li>database popolato e interrogazioni SQL significative;</li>
+        <li>applicazione PHP con inserimento, ricerca, modifica ed eliminazione;</li>
+        <li>login, ruoli, controlli e query preparate;</li>
+        <li>test, documentazione, demo e presentazione delle scelte.</li>
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="valutazione">
+      <p class="eyebrow">Valutazione</p>
+      <h2 id="valutazione">Cosa conterà davvero</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Comprensione</h3><p>Saper spiegare dati, relazioni, query e comportamento del programma.</p></article>
+        <article class="card"><h3>Metodo</h3><p>Procedere per passi, verificare e correggere gli errori in autonomia crescente.</p></article>
+        <article class="card"><h3>Qualità</h3><p>Codice leggibile, database coerente, controlli e attenzione alla sicurezza.</p></article>
+        <article class="card"><h3>Responsabilità</h3><p>Consegne puntuali e contributo personale riconoscibile anche nei lavori di gruppo.</p></article>
+      </div>
+    </section>
+
+    <section id="attivita" class="section presentation-activity" aria-labelledby="biblioteca">
+      <p class="eyebrow">Attività diagnostica · 15 minuti</p>
+      <h2 id="biblioteca">Progettiamo una piccola biblioteca</h2>
+      <p>In coppia, immaginate un sistema che gestisca libri, studenti e prestiti. Senza scrivere codice:</p>
+      <ol>
+        <li>individuate almeno tre tipi di oggetti da memorizzare;</li>
+        <li>scrivete tre informazioni necessarie per ciascun oggetto;</li>
+        <li>indicate le relazioni tra gli oggetti;</li>
+        <li>proponete tre domande alle quali il database dovrebbe rispondere;</li>
+        <li>segnalate un errore o un abuso che il sistema dovrebbe impedire.</li>
+      </ol>
+    </section>
+
+    <section class="section reading" aria-labelledby="uscita">
+      <p class="eyebrow">Prima di uscire</p>
+      <h2 id="uscita">Tre risposte in un minuto</h2>
+      <ol>
+        <li>Quale parte del percorso ti sembra più interessante?</li>
+        <li>Su quale argomento pensi di avere più bisogno di ripasso?</li>
+        <li>Quale applicazione vorresti riuscire a costruire entro fine anno?</li>
+      </ol>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><strong>Prossimo passo:</strong> preparazione dell’ambiente e breve diagnosi iniziale su database, SQL e sviluppo Web.</div></aside>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../../index.html">← Indice del percorso</a><a href="../../../../roadmap/informatica-quinta.md">Roadmap completa →</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Informatica · Classi quinte</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
