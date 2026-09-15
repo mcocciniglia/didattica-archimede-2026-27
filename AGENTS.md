@@ -30,6 +30,16 @@ lettura: non deve mai essere modificato.
 - Non inserire nelle pagine dati personali, credenziali, valutazioni o
   elaborati identificabili degli studenti.
 
+## Asset condivisi
+
+- Gli asset pubblicati dal repository esterno `mcocciniglia/common` sono la
+  fonte autorevole per stile di base, tema, cambio tema e favicon.
+- Le pagine devono richiamare tali asset tramite gli URL assoluti
+  `https://mcocciniglia.github.io/common/assets/`; non devono esistere copie
+  locali della directory `common/`.
+- Le sole personalizzazioni del progetto appartengono a
+  `assets/archimede.css` e, quando necessario, `assets/archimede.js`.
+
 ## Struttura didattica
 
 Il sito comprende cinque percorsi:
@@ -49,7 +59,8 @@ esplicitamente.
 
 - Usare HTML5 semantico e lingua italiana.
 - Usare collegamenti interni relativi.
-- Utilizzare il solo foglio `assets/archimede.css` per lo stile condiviso.
+- Caricare gli asset condivisi esterni autorevoli e usare
+  `assets/archimede.css` soltanto per le personalizzazioni del progetto.
 - Non aggiungere framework o dipendenze esterne senza autorizzazione.
 - Mantenere JavaScript ridotto alle funzioni necessarie, come la preferenza di
   tema.
@@ -93,4 +104,3 @@ progressivi.
 - Verificare che `fonti/` continui a risultare ignorata da Git.
 - Non eseguire push, pubblicazione, merge, creazione di remoti o modifiche al
   repository sorgente.
-

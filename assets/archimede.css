@@ -1,4 +1,37 @@
-/* Archimede 2026/27 — sistema visivo condiviso */
+/* Archimede 2026/27 — personalizzazioni del sito */
+
+:root {
+  --surface: var(--bg);
+  --surface-soft: var(--panel);
+  --text: var(--fg);
+  --line: var(--panel-border);
+  --brand-strong: #0d3569;
+  --brand-soft: #e4eefb;
+  --accent: #ad5708;
+  --accent-soft: #fff0dd;
+  --success: #21734b;
+  --success-soft: #e5f4eb;
+  --warning: #8a5500;
+  --warning-soft: #fff3cf;
+  --radius-sm: 0.65rem;
+  --content: 74rem;
+  --reading: 52rem;
+}
+
+html[data-theme="dark"] {
+  --surface: var(--panel);
+  --surface-soft: var(--code-bg);
+  --text: var(--fg);
+  --line: var(--panel-border);
+  --brand-strong: #b9d8fa;
+  --brand-soft: #1b3655;
+  --accent: #f1ad62;
+  --accent-soft: #3d2b19;
+  --success: #76d1a0;
+  --success-soft: #173a2a;
+  --warning: #ffd071;
+  --warning-soft: #3c3018;
+}
 
 body {
   background: var(--bg);
@@ -605,6 +638,40 @@ details > :not(summary) {
   margin-bottom: 0.35rem;
 }
 
+html[data-theme="dark"] section {
+  background-color: transparent !important;
+}
+
+html[data-theme="dark"] :is(
+  .card,
+  .path-card,
+  .module-card,
+  .component-card,
+  .presentation-step,
+  .presentation-flow strong,
+  .lesson-nav a,
+  .meta-list span,
+  .badge,
+  .theme-toggle,
+  details,
+  table
+) {
+  background-color: var(--surface) !important;
+  color: var(--text) !important;
+}
+
+html[data-theme="dark"] .callout {
+  background: var(--brand-soft) !important;
+}
+
+html[data-theme="dark"] .callout.warning {
+  background: var(--warning-soft) !important;
+}
+
+html[data-theme="dark"] .callout.success {
+  background: var(--success-soft) !important;
+}
+
 .error-code {
   margin: 0;
   color: var(--accent);
@@ -682,6 +749,20 @@ details > :not(summary) {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @media print {
   :root,
   html[data-theme="dark"] {
@@ -715,6 +796,14 @@ details > :not(summary) {
 
   .presentation-step {
     break-inside: avoid;
+  }
+
+  html[data-theme="dark"] body,
+  html[data-theme="dark"] section,
+  html[data-theme="dark"] article,
+  html[data-theme="dark"] .callout {
+    background: #fff !important;
+    color: #000 !important;
   }
 
   a {
