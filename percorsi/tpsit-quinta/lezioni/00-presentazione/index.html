@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 0 di TPSIT per la classe quinta: il viaggio dai messaggi client-server a un servizio Web installabile come PWA.">
+  <title>Lezione 0 — Dalla rete a un servizio completo</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#viaggio">Il viaggio</a>
+        <a href="#sfida">Prima sfida</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT quinta</a><span aria-hidden="true">/</span><span>Lezione 0</span></nav>
+      <p class="eyebrow">Lezione 0 · TPSIT · Classe quinta</p>
+      <h1>Dalla rete a un servizio completo</h1>
+      <p class="lead">Partiremo dallo scambio di messaggi tra client e server e arriveremo a un servizio completo, accessibile dal browser e installabile come PWA.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">Durata: 60 minuti</span>
+        <span role="listitem">3 ore settimanali: 2 + 1</span>
+        <span role="listitem">Prerequisiti: concetti di base sulle reti</span>
+        <span role="listitem">Nessuna installazione oggi</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="domanda-iniziale">
+      <p class="eyebrow">Iniziamo da una domanda</p>
+      <h2 id="domanda-iniziale">Che cosa deve accadere quando più persone usano lo stesso servizio?</h2>
+      <p class="section-intro">Pensate a una chat, a un gioco online o a un sito di prenotazioni. Tante persone possono usarlo nello stesso momento: ciascuna invia una richiesta e si aspetta la risposta giusta. Che cosa deve succedere dietro lo schermo?</p>
+      <div class="presentation-flow" role="img" aria-label="Client, messaggio, server, risposta">
+        <strong>Client</strong><span class="presentation-arrow" aria-hidden="true">→</span><strong>Messaggio</strong><span class="presentation-arrow" aria-hidden="true">→</span><strong>Server</strong><span class="presentation-arrow" aria-hidden="true">→</span><strong>Risposta</strong>
+      </div>
+      <p>Provate a riconoscere questi quattro elementi in un servizio che usate ogni giorno. Chi è il client? Dove potrebbe trovarsi il server? Quale messaggio viene inviato? Che cosa contiene la risposta? Le vostre ipotesi sono il punto di partenza della conversazione.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><strong>Il centro di TPSIT:</strong> capire come i componenti di un sistema comunicano e collaborano.</div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="traguardo">
+      <p class="eyebrow">Dove vogliamo arrivare</p>
+      <h2 id="traguardo">Da uno scambio di messaggi a un prodotto vero</h2>
+      <p class="section-intro">Costruiremo un servizio in cui più client comunicano con un server, i dati viaggiano tramite messaggi e il risultato può essere consultato da una pagina Web installabile come PWA.</p>
+      <div class="presentation-flow" role="img" aria-label="Più client comunicano con un server che rende disponibile una pagina Web installabile">
+        <strong>Più client</strong><span class="presentation-arrow" aria-hidden="true">↔</span><strong>Server</strong><span class="presentation-arrow" aria-hidden="true">→</span><strong>Pagina Web</strong><span class="presentation-arrow" aria-hidden="true">→</span><strong>PWA</strong>
+      </div>
+      <p>Il prodotto finale non nascerà tutto insieme. Ogni parte del corso aggiungerà un elemento che potremo riusare: prima capiremo la comunicazione, poi costruiremo il servizio, infine lo collegheremo a un’interfaccia accessibile dal browser.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><strong>Due discipline, due prospettive:</strong> in TPSIT ci concentreremo sulla comunicazione tra i componenti; in Informatica sull’organizzazione e sull’uso dei dati.</div></aside>
+    </section>
+
+    <section id="viaggio" class="section" aria-labelledby="viaggio-anno">
+      <p class="eyebrow">Il viaggio dell’anno</p>
+      <h2 id="viaggio-anno">Quattro fasi collegate</h2>
+      <p class="section-intro">Non serve conoscere già tutti i termini. Per ora osservate la direzione: ogni fase risponde a una domanda e prepara quella successiva.</p>
+      <div class="card-grid">
+        <article class="card"><span class="presentation-marker">1</span><h3>Capire la comunicazione</h3><p>Riconosceremo client, server, protocolli e messaggi. Confronteremo TCP e UDP per capire che servizi diversi hanno esigenze diverse.</p></article>
+        <article class="card"><span class="presentation-marker">2</span><h3>Costruire servizi affidabili</h3><p>Useremo i socket di Python per far comunicare più client con un server. Impareremo a gestire errori, attese e test.</p></article>
+        <article class="card"><span class="presentation-marker">3</span><h3>Portare il servizio sul Web</h3><p>Con Flask, HTTP, API e JSON renderemo disponibili dati e operazioni. JavaScript permetterà alla pagina di inviare richieste e mostrare risposte.</p></article>
+        <article class="card"><span class="presentation-marker">4</span><h3>Integrare il prodotto</h3><p>Uniremo servizio e interfaccia responsive, realizzeremo una PWA e completeremo test, documentazione e progetto finale.</p></article>
+      </div>
+      <p>Alla fine non avremo soltanto programmi separati: sapremo raccontare come le parti collaborano, verificare che il sistema risponda correttamente e motivare le scelte fatte.</p>
+    </section>
+
+    <section id="metodo" class="section" aria-labelledby="come-lavoreremo">
+      <p class="eyebrow">Come lavoreremo</p>
+      <h2 id="come-lavoreremo">Tre ore, un unico percorso</h2>
+      <div class="card-grid">
+        <article class="card"><span class="presentation-marker">2 h</span><h3>Costruire e provare</h3><p>Le due ore saranno dedicate soprattutto a laboratorio, programmazione e debugging. Faremo comunicare i programmi, osserveremo gli errori e costruiremo parti del progetto.</p></article>
+        <article class="card"><span class="presentation-marker">1 h</span><h3>Progettare e rivedere</h3><p>Nell’ora singola lavoreremo su progettazione, protocolli, lettura del codice e revisione. Prepareremo il laboratorio e ragioneremo su ciò che abbiamo osservato.</p></article>
+      </div>
+      <p>I due momenti non sono separati: un’idea progettata insieme diventa codice in laboratorio; un errore incontrato nel codice diventa una domanda da analizzare e risolvere.</p>
+      <h3>Quattro famiglie di strumenti</h3>
+      <div class="card-grid">
+        <article class="card"><h4>Python e socket</h4><p>Per costruire i primi client e server e vedere direttamente lo scambio dei messaggi.</p></article>
+        <article class="card"><h4>Flask, API e JSON</h4><p>Per trasformare il servizio in qualcosa che altri programmi possono interrogare.</p></article>
+        <article class="card"><h4>HTML, CSS, JavaScript e PWA</h4><p>Per realizzare l’interfaccia Web, adattarla agli schermi e renderla installabile.</p></article>
+        <article class="card"><h4>GitHub e Moodle</h4><p>Per conservare il lavoro, seguire le versioni, trovare materiali e gestire le consegne.</p></article>
+      </div>
+      <p><strong>Valutazione:</strong> saranno valutati il funzionamento del lavoro, la comprensione delle scelte, la capacità di correggere gli errori e la progressione nel progetto.</p>
+    </section>
+
+    <section id="sfida" class="section presentation-activity" aria-labelledby="prima-sfida">
+      <p class="eyebrow">Prima sfida · Senza computer</p>
+      <h2 id="prima-sfida">Immaginate il servizio</h2>
+      <p class="section-intro">Immaginate un servizio usato contemporaneamente da più persone: chi sono i client, chi è il server, quale messaggio viene inviato e quale risposta dovrebbe comparire nel browser?</p>
+      <p>Confrontatevi a coppie e scegliete un esempio che conoscete. Poi proponetelo alla classe: possiamo confrontare idee diverse e scoprire quali domande serviranno per progettare davvero il servizio.</p>
+      <p>Non dobbiamo ancora decidere ogni dettaglio tecnico. Oggi ci interessa riconoscere le parti del sistema e seguire il viaggio di un messaggio dalla richiesta al risultato visibile.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="tre-domande">
+      <p class="eyebrow">Per chiudere</p>
+      <h2 id="tre-domande">Tre domande</h2>
+      <ol>
+        <li>Che cosa studia TPSIT in questo percorso?</li>
+        <li>Quale parte del progetto ti incuriosisce maggiormente?</li>
+        <li>Quale dubbio vorresti chiarire nelle prossime lezioni?</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../../index.html">← Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>TPSIT · Classe quinta</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
