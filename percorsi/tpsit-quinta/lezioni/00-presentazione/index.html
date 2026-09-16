@@ -19,8 +19,8 @@
       <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
       <nav class="site-nav" aria-label="Navigazione principale">
         <a href="../../index.html">Percorso</a>
-        <a href="#viaggio">Il viaggio</a>
-        <a href="#sfida">Prima sfida</a>
+        <a href="#tappe">Le tappe</a>
+        <a href="#proviamo">Proviamo</a>
         <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
       </nav>
     </div>
@@ -42,70 +42,68 @@
   </section>
 
   <main id="contenuto" class="container">
-    <section class="section reading" aria-labelledby="domanda-iniziale">
-      <p class="eyebrow">Iniziamo da una domanda</p>
-      <h2 id="domanda-iniziale">Che cosa deve accadere quando più persone usano lo stesso servizio?</h2>
-      <p class="section-intro">Pensate a una chat, a un gioco online o a un sito di prenotazioni. Tante persone possono usarlo nello stesso momento: ciascuna invia una richiesta e si aspetta la risposta giusta. Che cosa deve succedere dietro lo schermo?</p>
-      <div class="presentation-flow" role="img" aria-label="Client, messaggio, server, risposta">
-        <strong>Client</strong><span class="presentation-arrow" aria-hidden="true">→</span><strong>Messaggio</strong><span class="presentation-arrow" aria-hidden="true">→</span><strong>Server</strong><span class="presentation-arrow" aria-hidden="true">→</span><strong>Risposta</strong>
-      </div>
-      <p>Provate a riconoscere questi quattro elementi in un servizio che usate ogni giorno. Chi è il client? Dove potrebbe trovarsi il server? Quale messaggio viene inviato? Che cosa contiene la risposta? Le vostre ipotesi sono il punto di partenza della conversazione.</p>
-      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><strong>Il centro di TPSIT:</strong> capire come i componenti di un sistema comunicano e collaborano.</div></aside>
+    <section id="studieremo" class="section reading" aria-labelledby="cosa-studieremo">
+      <p class="eyebrow">La domanda guida</p>
+      <h2 id="cosa-studieremo">Che cosa studieremo in TPSIT</h2>
+      <p class="section-intro">Che cosa deve accadere quando più persone usano lo stesso servizio? Pensate a una chat, a un gioco online o a un sito di prenotazioni: molte richieste possono partire quasi nello stesso momento e ciascuno si aspetta la risposta giusta.</p>
+      <p>In TPSIT studieremo come le parti di un sistema comunicano e collaborano. Impareremo a riconoscere chi chiede un servizio, chi lo fornisce, quali informazioni vengono scambiate e quali regole permettono di capirsi. Il nostro punto di partenza sarà questo percorso essenziale:</p>
+      <figure class="figure">
+        <img src="dialogo-client-server.svg" width="1200" height="520" alt="Il client invia una richiesta al server; il server la elabora e restituisce una risposta al client.">
+      </figure>
+      <p>Provate a seguire mentalmente questo viaggio in un servizio che conoscete. Chi usa l’applicazione è sempre il client? Dove potrebbe trovarsi il server? Che cosa contiene il messaggio? Le vostre ipotesi ci aiuteranno a costruire le prime definizioni.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><strong>Due prospettive collegate:</strong> in TPSIT ci concentreremo sulla comunicazione tra i componenti; in Informatica sull’organizzazione e sull’uso dei dati.</div></aside>
     </section>
 
-    <section class="section reading" aria-labelledby="traguardo">
-      <p class="eyebrow">Dove vogliamo arrivare</p>
-      <h2 id="traguardo">Da uno scambio di messaggi a un prodotto vero</h2>
-      <p class="section-intro">Costruiremo un servizio in cui più client comunicano con un server, i dati viaggiano tramite messaggi e il risultato può essere consultato da una pagina Web installabile come PWA.</p>
-      <div class="presentation-flow" role="img" aria-label="Più client comunicano con un server che rende disponibile una pagina Web installabile">
-        <strong>Più client</strong><span class="presentation-arrow" aria-hidden="true">↔</span><strong>Server</strong><span class="presentation-arrow" aria-hidden="true">→</span><strong>Pagina Web</strong><span class="presentation-arrow" aria-hidden="true">→</span><strong>PWA</strong>
+    <section class="section reading" aria-labelledby="costruiremo">
+      <p class="eyebrow">Il traguardo</p>
+      <h2 id="costruiremo">Che cosa costruiremo</h2>
+      <p class="section-intro">Realizzeremo un servizio completo: più client potranno comunicare con un server, richiedere dati o operazioni e ricevere una risposta utile. Una API farà da punto di incontro tra il servizio e il client Web.</p>
+      <div class="presentation-flow" role="img" aria-label="Client Web, API, server e applicazione installabile">
+        <strong>Client Web</strong><span class="presentation-arrow" aria-hidden="true">↔</span><strong>API</strong><span class="presentation-arrow" aria-hidden="true">↔</span><strong>Server</strong><span class="presentation-arrow" aria-hidden="true">→</span><strong>PWA</strong>
       </div>
-      <p>Il prodotto finale non nascerà tutto insieme. Ogni parte del corso aggiungerà un elemento che potremo riusare: prima capiremo la comunicazione, poi costruiremo il servizio, infine lo collegheremo a un’interfaccia accessibile dal browser.</p>
-      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><strong>Due discipline, due prospettive:</strong> in TPSIT ci concentreremo sulla comunicazione tra i componenti; in Informatica sull’organizzazione e sull’uso dei dati.</div></aside>
+      <p>L’applicazione sarà utilizzabile dal browser, si adatterà a schermi diversi e potrà essere installata come PWA. Non costruiremo tutto subito: ogni attività aggiungerà una parte verificabile e riutilizzabile. Alla fine dovremo anche saper spiegare come collaborano i componenti e come abbiamo controllato il loro funzionamento.</p>
     </section>
 
-    <section id="viaggio" class="section" aria-labelledby="viaggio-anno">
-      <p class="eyebrow">Il viaggio dell’anno</p>
-      <h2 id="viaggio-anno">Quattro fasi collegate</h2>
-      <p class="section-intro">Non serve conoscere già tutti i termini. Per ora osservate la direzione: ogni fase risponde a una domanda e prepara quella successiva.</p>
+    <section id="tappe" class="section" aria-labelledby="percorso-tappe">
+      <p class="eyebrow">La direzione dell’anno</p>
+      <h2 id="percorso-tappe">Il percorso in tre tappe</h2>
+      <p class="section-intro">Non serve conoscere già tutti i termini. Per ora osservate la sequenza: partiremo dai meccanismi di rete e arriveremo a un’applicazione completa.</p>
       <div class="card-grid">
-        <article class="card"><span class="presentation-marker">1</span><h3>Capire la comunicazione</h3><p>Riconosceremo client, server, protocolli e messaggi. Confronteremo TCP e UDP per capire che servizi diversi hanno esigenze diverse.</p></article>
-        <article class="card"><span class="presentation-marker">2</span><h3>Costruire servizi affidabili</h3><p>Useremo i socket di Python per far comunicare più client con un server. Impareremo a gestire errori, attese e test.</p></article>
-        <article class="card"><span class="presentation-marker">3</span><h3>Portare il servizio sul Web</h3><p>Con Flask, HTTP, API e JSON renderemo disponibili dati e operazioni. JavaScript permetterà alla pagina di inviare richieste e mostrare risposte.</p></article>
-        <article class="card"><span class="presentation-marker">4</span><h3>Integrare il prodotto</h3><p>Uniremo servizio e interfaccia responsive, realizzeremo una PWA e completeremo test, documentazione e progetto finale.</p></article>
+        <article class="card"><span class="presentation-marker">1</span><h3>Reti, protocolli e socket</h3><p>Capiremo come client e server si trovano, stabiliscono le regole dello scambio e inviano messaggi. Con Python costruiremo i primi servizi di rete.</p></article>
+        <article class="card"><span class="presentation-marker">2</span><h3>Servizi Web e API</h3><p>Porteremo gli stessi concetti sul Web. Il server riceverà richieste HTTP e offrirà dati e operazioni attraverso una API.</p></article>
+        <article class="card"><span class="presentation-marker">3</span><h3>Client Web e applicazione finale</h3><p>Collegheremo un’interfaccia al servizio, gestiremo le risposte e integreremo il lavoro in una PWA documentata e verificata.</p></article>
       </div>
-      <p>Alla fine non avremo soltanto programmi separati: sapremo raccontare come le parti collaborano, verificare che il sistema risponda correttamente e motivare le scelte fatte.</p>
+      <p>Le tappe non sono capitoli isolati. I messaggi progettati all’inizio verranno riutilizzati nelle API; il client finale userà il servizio costruito e migliorato durante l’anno.</p>
     </section>
 
-    <section id="metodo" class="section" aria-labelledby="come-lavoreremo">
-      <p class="eyebrow">Come lavoreremo</p>
-      <h2 id="come-lavoreremo">Tre ore, un unico percorso</h2>
+    <section id="metodo" class="section" aria-labelledby="tre-ore">
+      <p class="eyebrow">Un ritmo comune</p>
+      <h2 id="tre-ore">Come lavoreremo nelle tre ore</h2>
       <div class="card-grid">
-        <article class="card"><span class="presentation-marker">2 h</span><h3>Costruire e provare</h3><p>Le due ore saranno dedicate soprattutto a laboratorio, programmazione e debugging. Faremo comunicare i programmi, osserveremo gli errori e costruiremo parti del progetto.</p></article>
-        <article class="card"><span class="presentation-marker">1 h</span><h3>Progettare e rivedere</h3><p>Nell’ora singola lavoreremo su progettazione, protocolli, lettura del codice e revisione. Prepareremo il laboratorio e ragioneremo su ciò che abbiamo osservato.</p></article>
+        <article class="card"><span class="presentation-marker">2 h</span><h3>Laboratorio e programmazione</h3><p>Costruiremo soluzioni, faremo comunicare i programmi, proveremo casi diversi e useremo il debugging per capire e correggere gli errori.</p></article>
+        <article class="card"><span class="presentation-marker">1 h</span><h3>Progettazione e revisione</h3><p>Ragioneremo su protocolli e architetture, leggeremo codice, confronteremo soluzioni e svolgeremo brevi verifiche per prepararci al laboratorio.</p></article>
       </div>
-      <p>I due momenti non sono separati: un’idea progettata insieme diventa codice in laboratorio; un errore incontrato nel codice diventa una domanda da analizzare e risolvere.</p>
-      <h3>Quattro famiglie di strumenti</h3>
-      <div class="card-grid">
-        <article class="card"><h4>Python e socket</h4><p>Per costruire i primi client e server e vedere direttamente lo scambio dei messaggi.</p></article>
-        <article class="card"><h4>Flask, API e JSON</h4><p>Per trasformare il servizio in qualcosa che altri programmi possono interrogare.</p></article>
-        <article class="card"><h4>HTML, CSS, JavaScript e PWA</h4><p>Per realizzare l’interfaccia Web, adattarla agli schermi e renderla installabile.</p></article>
-        <article class="card"><h4>GitHub e Moodle</h4><p>Per conservare il lavoro, seguire le versioni, trovare materiali e gestire le consegne.</p></article>
-      </div>
-      <p><strong>Valutazione:</strong> saranno valutati il funzionamento del lavoro, la comprensione delle scelte, la capacità di correggere gli errori e la progressione nel progetto.</p>
+      <p>Il blocco da due ore e l’ora singola fanno parte dello stesso percorso. Un’idea progettata insieme diventerà codice in laboratorio; un errore incontrato nel codice diventerà un caso da analizzare. Lavoreremo per piccoli risultati, così ogni passo potrà essere provato, spiegato e migliorato.</p>
     </section>
 
-    <section id="sfida" class="section presentation-activity" aria-labelledby="prima-sfida">
+    <section class="section" aria-labelledby="strumenti-organizzazione">
+      <p class="eyebrow">Strumenti con uno scopo</p>
+      <h2 id="strumenti-organizzazione">Strumenti e organizzazione</h2>
+      <p class="section-intro">Non è un elenco da imparare a memoria. Ogni strumento entrerà in gioco quando servirà a risolvere un problema concreto.</p>
+      <div class="card-grid">
+        <article class="card"><h3>Python</h3><p>Con i socket costruiremo client e server essenziali e osserveremo direttamente il viaggio dei messaggi.</p></article>
+        <article class="card"><h3>Flask</h3><p>Ci permetterà di creare servizi Web e API, collegando richieste, risposte e dati strutturati.</p></article>
+        <article class="card"><h3>JavaScript</h3><p>Renderà il browser un vero client, capace di interrogare il servizio e aggiornare la pagina.</p></article>
+        <article class="card"><h3>GitHub e Moodle</h3><p>GitHub ospiterà lezioni ed esempi pubblici. Moodle raccoglierà consegne, verifiche, feedback e materiali riservati.</p></article>
+      </div>
+    </section>
+
+    <section id="proviamo" class="section presentation-activity" aria-labelledby="proviamo-subito">
       <p class="eyebrow">Prima sfida · Senza computer</p>
-      <h2 id="prima-sfida">Immaginate il servizio</h2>
-      <p class="section-intro">Immaginate un servizio usato contemporaneamente da più persone: chi sono i client, chi è il server, quale messaggio viene inviato e quale risposta dovrebbe comparire nel browser?</p>
-      <p>Confrontatevi a coppie e scegliete un esempio che conoscete. Poi proponetelo alla classe: possiamo confrontare idee diverse e scoprire quali domande serviranno per progettare davvero il servizio.</p>
-      <p>Non dobbiamo ancora decidere ogni dettaglio tecnico. Oggi ci interessa riconoscere le parti del sistema e seguire il viaggio di un messaggio dalla richiesta al risultato visibile.</p>
-    </section>
-
-    <section class="section reading" aria-labelledby="tre-domande">
-      <p class="eyebrow">Per chiudere</p>
-      <h2 id="tre-domande">Tre domande</h2>
+      <h2 id="proviamo-subito">Proviamo subito</h2>
+      <p class="section-intro">Scegliete un servizio conosciuto, per esempio una chat, un gioco, una piattaforma video o un sistema di prenotazione. Provate a riconoscere chi è il client, chi è il server, quale messaggio potrebbe essere inviato e quale risposta dovrebbe arrivare.</p>
+      <p>Confrontatevi a coppie, concordate un esempio e proponetelo alla classe. Non serve conoscere già i termini tecnici: ci interessa seguire il viaggio della richiesta e capire quali parti devono collaborare.</p>
+      <h3>Tre domande per concludere</h3>
       <ol>
         <li>Che cosa studia TPSIT in questo percorso?</li>
         <li>Quale parte del progetto ti incuriosisce maggiormente?</li>
@@ -116,6 +114,6 @@
     <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../../index.html">← Indice del percorso</a></nav>
   </main>
 
-  <footer class="site-footer"><div class="container"><p><strong>TPSIT · Classe quinta</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe quinta</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
 </body>
 </html>
