@@ -168,7 +168,38 @@ corso, una lezione ordinaria, un laboratorio, un'esercitazione e una verifica
 hanno funzioni diverse. La struttura deve restare riconoscibile e completa,
 ma non produrre pagine artificialmente lunghe.
 
-### 6.2 Materiali integrativi
+### 6.2 Introduzione del lessico tecnico
+
+Ogni termine tecnico nuovo deve essere spiegato alla prima occorrenza. Ogni
+acronimo deve essere prima scritto per esteso e poi accompagnato dalla sigla.
+La definizione deve usare un linguaggio più semplice del termine definito e
+non deve essere circolare né costruita con concetti ancora più difficili.
+
+Quando è utile per la comprensione, la spiegazione deve comprendere:
+
+- una definizione breve;
+- un esempio concreto;
+- un'analogia quotidiana, dichiarata chiaramente come semplificazione;
+- una domanda di controllo.
+
+Una lezione dovrebbe introdurre indicativamente non più di tre o quattro
+termini nuovi importanti. Eventuali eccezioni devono essere motivate dal
+contenuto. Quando compaiono almeno due termini nuovi, la pagina deve prevedere
+un riquadro riconoscibile denominato **“Parole nuove”** o equivalente.
+
+Distinguere chiaramente ciò che lo studente deve comprendere subito da ciò che
+sarà approfondito nelle lezioni successive. Analogie ed esempi non devono
+introdurre rappresentazioni tecnicamente errate. Uno stesso concetto deve
+mantenere denominazione e significato coerenti nelle diverse lezioni e non si
+devono presupporre conoscenze previste soltanto nelle parti successive della
+roadmap. Per le classi fragili, suddividere le istruzioni operative in passi
+brevi, osservabili e verificabili.
+
+Prima di considerare completa una lezione, individuare tutti i termini tecnici
+presenti e verificare che quelli non introdotti precedentemente siano definiti
+o rimandati esplicitamente a una spiegazione successiva.
+
+### 6.3 Materiali integrativi
 
 Quaderni di allenamento, formulari, mappe, raccolte di esercizi e attività di
 ripasso sono materiali integrativi, non nuove lezioni. Devono:
@@ -183,7 +214,7 @@ ripasso sono materiali integrativi, non nuove lezioni. Devono:
 Prima di crearli, leggere la lezione di riferimento e verificare che il nuovo
 materiale non duplicherà inutilmente contenuti già disponibili.
 
-### 6.3 Coerenza editoriale
+### 6.4 Coerenza editoriale
 
 Dopo una modifica didattica controllare indice del percorso, lezione
 precedente, lezione successiva, roadmap e collegamenti direttamente coinvolti.
