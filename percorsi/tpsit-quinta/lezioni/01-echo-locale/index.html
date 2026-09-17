@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 1 di TPSIT per la classe quinta: verifica di Python e primo scambio echo tra client e server su localhost.">
+  <title>Lezione 1 — Il primo dialogo client-server</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#programmi">Programmi</a>
+        <a href="#avvio">Avvio</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT quinta</a><span aria-hidden="true">/</span><span>Lezione 1</span></nav>
+      <p class="eyebrow">Lezione 1 · M0 · TPSIT · Classe quinta</p>
+      <h1>Il primo dialogo client-server</h1>
+      <p class="lead">Un messaggio parte, il server lo riceve e lo restituisce.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">Durata: 2 ore</span>
+        <span role="listitem">Strumenti: Python e due terminali</span>
+        <span role="listitem">Prerequisito: Lezione 0</span>
+        <span role="listitem">Rete: solo questo computer</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="partiamo">
+      <p class="eyebrow">Da dove partiamo</p>
+      <h2 id="partiamo">Richiesta e risposta</h2>
+      <p>Nella <a href="../00-presentazione/index.html">Lezione 0</a> abbiamo seguito il percorso di un messaggio: il client invia una richiesta, il server la riceve e prepara una risposta.</p>
+      <p>Oggi vedremo questo scambio sul nostro computer. Non dobbiamo ancora memorizzare tutte le istruzioni: ci interessa riconoscere le parti e osservare che cosa accade.</p>
+      <p><strong>Una socket</strong> è il punto software attraverso il quale un programma invia o riceve dati; per ora ci basta riconoscerla come il collegamento usato dai due programmi.</p>
+    </section>
+
+    <section class="section" aria-labelledby="esperimento">
+      <p class="eyebrow">Il nostro esperimento</p>
+      <h2 id="esperimento">Un server echo su localhost</h2>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><strong>Facciamo partire un server sul nostro computer, gli inviamo un messaggio con un client e osserviamo la risposta.</strong></div></aside>
+      <div class="card-grid">
+        <article class="card"><h3>Stesso computer</h3><p>Client e server useranno entrambi <code>127.0.0.1</code>, cioè il computer sul quale stiamo lavorando. Questo indirizzo è chiamato anche <strong>localhost</strong>.</p></article>
+        <article class="card"><h3>Stessa porta</h3><p>Il server resterà in ascolto sulla porta <code>50000</code>. Il client userà questo numero per individuare il servizio al quale collegarsi.</p></article>
+        <article class="card"><h3>Un messaggio</h3><p>Il server echo riceverà un solo messaggio e lo restituirà al client. Al termine, entrambi i programmi si chiuderanno.</p></article>
+      </div>
+    </section>
+
+    <section class="section reading" aria-labelledby="ambiente">
+      <p class="eyebrow">Controlliamo l’ambiente</p>
+      <h2 id="ambiente">Python, cartella e due terminali</h2>
+      <ol class="steps">
+        <li><strong>Verifica Python.</strong><p>In PowerShell esegui:</p><pre><code>py --version</code></pre><p>Se il comando non è disponibile, prova:</p><pre><code>python --version</code></pre></li>
+        <li><strong>Prepara la cartella.</strong><p>Crea o apri una cartella di lavoro e salva al suo interno i due file della lezione senza rinominarli.</p></li>
+        <li><strong>Apri due terminali.</strong><p>In entrambi esegui:</p><pre><code>dir</code></pre><p>Nell’elenco devono comparire <code>server_echo.py</code> e <code>client_echo.py</code>. Se non li vedi, il terminale è aperto nella cartella sbagliata.</p></li>
+      </ol>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><strong>Non serve installare nulla.</strong><p>I programmi usano soltanto la libreria standard di Python: niente <code>pip</code>, servizi Internet o privilegi amministrativi.</p></div></aside>
+    </section>
+
+    <section id="programmi" class="section" aria-labelledby="due-programmi">
+      <p class="eyebrow">I due programmi</p>
+      <h2 id="due-programmi">Server e client</h2>
+      <p class="section-intro">Scarica entrambi i file nella stessa cartella. Il codice è riportato anche qui per poterlo leggere e confrontare durante l’esperimento.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><strong>Come affrontiamo il codice</strong><p>Oggi eseguiamo e osserviamo il codice. Non è necessario memorizzare tutte le istruzioni: le analizzeremo con maggiore precisione nelle prossime lezioni.</p></div></aside>
+      <div class="hero-actions">
+        <a class="button" href="server_echo.py" download>Scarica server_echo.py</a>
+        <a class="button secondary" href="client_echo.py" download>Scarica client_echo.py</a>
+      </div>
+
+      <h3><code>server_echo.py</code></h3>
+      <pre><code>import socket
+
+
+HOST = "127.0.0.1"
+PORT = 50000
+
+
+def main():
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+        server_socket.bind((HOST, PORT))
+        server_socket.listen(1)
+        print(f"Server in ascolto su {HOST}:{PORT}")
+        print("In attesa di un messaggio...")
+
+        connection, address = server_socket.accept()
+        with connection:
+            print(f"Client collegato da {address[0]}")
+            data = connection.recv(1024)
+            message = data.decode("utf-8")
+            print(f"Messaggio ricevuto: {message}")
+
+            response = message
+            connection.sendall(response.encode("utf-8"))
+            print(f"Risposta inviata: {response}")
+
+    print("Server terminato.")
+
+
+if __name__ == "__main__":
+    main()</code></pre>
+      <ul>
+        <li><code>bind</code> collega il server all’indirizzo e alla porta scelti.</li>
+        <li><code>listen</code> e <code>accept</code> preparano e attendono il collegamento del client.</li>
+        <li><code>recv</code> riceve i dati; <code>sendall</code> invia la risposta.</li>
+        <li><code>encode</code> e <code>decode</code> permettono di usare testo UTF-8.</li>
+      </ul>
+
+      <h3><code>client_echo.py</code></h3>
+      <pre><code>import socket
+
+
+HOST = "127.0.0.1"
+PORT = 50000
+
+
+def main():
+    message = input("Messaggio da inviare: ").strip()
+    if not message:
+        print("Nessun messaggio da inviare.")
+        return
+
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
+            print(f"Connessione al server {HOST}:{PORT}...")
+            client_socket.connect((HOST, PORT))
+            client_socket.sendall(message.encode("utf-8"))
+            print(f"Messaggio inviato: {message}")
+
+            data = client_socket.recv(1024)
+    except ConnectionRefusedError:
+        raise SystemExit(
+            "Connessione rifiutata: avvia prima il server e riprova."
+        )
+
+    response = data.decode("utf-8")
+    print(f"Risposta ricevuta: {response}")
+
+
+if __name__ == "__main__":
+    main()</code></pre>
+      <ul>
+        <li><code>connect</code> chiede di collegarsi al server.</li>
+        <li>Il client prima invia il messaggio e poi attende la risposta.</li>
+        <li>Se il server non è attivo, il programma mostra un messaggio comprensibile.</li>
+      </ul>
+    </section>
+
+    <section id="avvio" class="section reading" aria-labelledby="ordine-avvio">
+      <p class="eyebrow">Avvio</p>
+      <h2 id="ordine-avvio">Prima il server, poi il client</h2>
+      <ol class="steps">
+        <li><strong>Primo terminale: avvia il server.</strong><pre><code>py server_echo.py</code></pre><p>Deve comparire il messaggio <code>In attesa di un messaggio...</code>.</p></li>
+        <li><strong>Secondo terminale: avvia il client.</strong><pre><code>py client_echo.py</code></pre><p>Se stai usando il comando alternativo, sostituisci <code>py</code> con <code>python</code> in entrambi i terminali.</p></li>
+        <li><strong>Scrivi un messaggio.</strong><p>Inserisci una frase breve e premi Invio.</p></li>
+        <li><strong>Confronta i terminali.</strong><p>Nel terminale del server osserva il messaggio ricevuto e la risposta inviata. Nel terminale del client osserva la risposta ricevuta.</p></li>
+      </ol>
+    </section>
+
+    <section class="section reading" aria-labelledby="successo">
+      <p class="eyebrow">Che cosa è successo</p>
+      <h2 id="successo">Seguiamo il viaggio del messaggio</h2>
+      <p class="section-intro"><strong>Client → messaggio → server → risposta → client</strong></p>
+      <ol>
+        <li>Il client apre il collegamento e invia il testo.</li>
+        <li>Il server riceve e decodifica il messaggio.</li>
+        <li>Il server usa il testo ricevuto per costruire la risposta echo.</li>
+        <li>Il server invia la risposta e il client la riceve.</li>
+      </ol>
+      <p><strong>Inviare</strong> e <strong>ricevere</strong> sono azioni distinte: ciò che un programma invia deve essere ricevuto dall’altro lato.</p>
+    </section>
+
+    <section class="section" aria-labelledby="modifica">
+      <p class="eyebrow">Proviamo a modificarlo</p>
+      <h2 id="modifica">Piccole variazioni, nuovo risultato</h2>
+      <ol>
+        <li>Riavvia il server e prova un messaggio diverso.</li>
+        <li>Nel server, sostituisci <code>response = message</code> con:</li>
+      </ol>
+      <pre><code>response = f"Ricevuto: {message}"</code></pre>
+      <p>Riavvia entrambi i programmi e controlla come cambia la risposta.</p>
+      <details><summary>Variante facoltativa — risposta in maiuscolo</summary><p>Prova a costruire la risposta con <code>message.upper()</code>, poi verifica che il client riceva il testo trasformato.</p></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="errore-utile">
+      <p class="eyebrow">Un errore utile</p>
+      <h2 id="errore-utile">Che cosa accade senza server?</h2>
+      <ol class="steps">
+        <li><strong>Controlla che il server sia chiuso.</strong><p>Dopo uno scambio completo il nostro server termina da solo.</p></li>
+        <li><strong>Avvia soltanto il client.</strong><pre><code>py client_echo.py</code></pre></li>
+        <li><strong>Leggi il messaggio.</strong><p>Dovrebbe comparire: <code>Connessione rifiutata: avvia prima il server e riprova.</code></p></li>
+      </ol>
+      <p>Il client conosce indirizzo e porta, ma in quel momento nessun server è in ascolto. Per questo la comunicazione non può iniziare.</p>
+    </section>
+
+    <section class="section" aria-labelledby="verifica-finale">
+      <p class="eyebrow">Verifica finale</p>
+      <h2 id="verifica-finale">Tre domande</h2>
+      <ol>
+        <li>Perché il server deve essere avviato prima del client?</li>
+        <li>Che cosa rappresenta <code>127.0.0.1</code>?</li>
+        <li>In quale punto del programma nasce la risposta?</li>
+      </ol>
+    </section>
+
+    <section class="section reading" aria-labelledby="sintesi">
+      <p class="eyebrow">In sintesi</p>
+      <h2 id="sintesi">Cinque idee da ricordare</h2>
+      <ul>
+        <li>Client e server sono due programmi con compiti diversi.</li>
+        <li><code>127.0.0.1</code> indica il computer sul quale stiamo lavorando.</li>
+        <li>Indirizzo e porta devono coincidere nei due programmi.</li>
+        <li>Il server deve essere in ascolto prima che il client si colleghi.</li>
+        <li>Un server echo restituisce il messaggio che ha ricevuto.</li>
+      </ul>
+      <p>Nella prossima lezione osserveremo più da vicino come un client individua un servizio attraverso indirizzo e porta.</p>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../00-presentazione/index.html">← Lezione 0</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe quinta</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
