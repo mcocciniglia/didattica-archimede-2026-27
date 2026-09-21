@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 1 di Informatica per le classi quinte: primo programma PHP eseguito con il server locale e osservazione dell'HTML ricevuto dal browser.">
+  <title>Lezione 1 — Dal file statico alla pagina dinamica: il primo programma PHP</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#preparazione">Preparazione</a>
+        <a href="#primo-programma">Programma</a>
+        <a href="#sfida-finale">Sfida</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">Informatica quinta</a><span aria-hidden="true">/</span><span>Lezione 1</span></nav>
+      <p class="eyebrow">Lezione 1 · M0 · Informatica · Classi quinte</p>
+      <h1>Dal file statico alla pagina dinamica: il primo programma PHP</h1>
+      <p class="lead">Avviamo un server locale, eseguiamo poche istruzioni e osserviamo che cosa riceve davvero il browser.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">Durata: circa 1 ora</span>
+        <span role="listitem">Strumenti: editor, terminale e browser</span>
+        <span role="listitem">Prerequisiti: HTML e modello client-server</span>
+        <span role="listitem">Prodotto: due pagine PHP funzionanti</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="richiamo">
+      <p class="eyebrow">Richiamo iniziale</p>
+      <h2 id="richiamo">Dal browser al server e ritorno</h2>
+      <p>Hai già incontrato il linguaggio <strong>PHP: Hypertext Preprocessor (PHP)</strong>, il linguaggio <strong>HyperText Markup Language (HTML)</strong> e il protocollo <strong>Hypertext Transfer Protocol (HTTP)</strong>. Oggi ci interessa soltanto rivederli in azione.</p>
+      <figure class="figure">
+        <img src="clientserver.png" width="1774" height="887" alt="Schema del ciclo client-server tra browser e server HTTP integrato di PHP">
+        <figcaption class="caption">Ciclo client-server: il browser invia una richiesta HTTP al server HTTP integrato di PHP; PHP esegue il codice e il server restituisce al browser l’HTML generato.</figcaption>
+      </figure>
+      <div class="card-grid">
+        <article class="card"><h3>Pagina HTML</h3><p>Il browser legge il contenuto scritto nel file e lo rappresenta.</p></article>
+        <article class="card"><h3>Pagina PHP</h3><p>Il server HTTP riceve la richiesta; l’interprete PHP esegue le istruzioni e il server invia al browser l’HTML prodotto.</p></article>
+      </div>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><p class="eyebrow">Ricorda</p><h3>Il passaggio centrale</h3><p><strong>PHP viene eseguito lato server dall’interprete PHP. Il browser riceve soltanto il risultato dell’esecuzione.</strong></p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Che cosa saprai fare</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Preparare</h3><p>Creare la cartella di lavoro, il file <code>index.php</code> e avviare il server locale.</p></article>
+        <article class="card"><h3>Eseguire</h3><p>Aprire una pagina PHP da <code>http://localhost:8000</code> e modificarne il risultato.</p></article>
+        <article class="card"><h3>Osservare</h3><p>Confrontare il programma sul server con il codice HTML ricevuto dal browser.</p></article>
+      </div>
+    </section>
+
+    <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><p class="eyebrow">Parole operative</p><h2>Tre termini utili oggi</h2><ul><li><strong>localhost:</strong> indica il computer sul quale stai lavorando;</li><li><strong>porta 8000:</strong> è il numero usato dal browser per raggiungere questo servizio locale;</li><li><strong>output:</strong> è il risultato prodotto dal programma.</li></ul><p>Per ora basta questo significato pratico: rete e porte saranno approfondite in un altro percorso.</p></div></aside>
+
+    <section id="preparazione" class="section reading" aria-labelledby="prepara-ambiente">
+      <p class="eyebrow">Preparazione</p>
+      <h2 id="prepara-ambiente">Cartella, file e server locale</h2>
+      <ol class="steps">
+        <li><strong>Crea la cartella.</strong><p>Prepara una cartella chiamata <code>lezione1-php</code> e aprila nel tuo editor.</p></li>
+        <li><strong>Crea il file.</strong><p>All’interno della cartella crea <code>index.php</code>. Il nome <code>index</code> indica la pagina che il server cerca quando nell’indirizzo non specifichiamo un file.</p></li>
+        <li><strong>Apri il terminale nella cartella.</strong><p>Esegui <code>dir</code> e verifica che nell’elenco compaia <code>index.php</code>.</p><pre><code>dir</code></pre></li>
+        <li><strong>Avvia il server HTTP integrato di PHP.</strong><p>Lascia aperto questo terminale mentre lavori.</p><pre><code>php -S localhost:8000</code></pre><aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Se <code>php</code> non viene riconosciuto</h3><p>Su alcuni PC Windows il comando <code>php</code> non è disponibile nel PATH. Se usi PHP tramite XAMPP, prova:</p><pre><code>C:\xampp\php\php.exe -S localhost:8000</code></pre></div></aside></li>
+        <li><strong>Apri la pagina.</strong><p>Nel browser visita:</p><pre><code>http://localhost:8000</code></pre></li>
+      </ol>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><p class="eyebrow">Attenzione</p><h3>Non aprire il file con un doppio clic</h3><p>Un indirizzo che inizia con <code>file://</code> apre direttamente un file e non esegue PHP. Usa l’indirizzo <code>http://localhost:8000</code>. Per arrestare il server torna nel terminale e premi <kbd>Ctrl</kbd>+<kbd>C</kbd>.</p></div></aside>
+    </section>
+
+    <section id="primo-programma" class="section" aria-labelledby="ciao-mondo">
+      <p class="eyebrow">Primo risultato</p>
+      <h2 id="ciao-mondo">Un programma minimo</h2>
+      <p>Inserisci questo codice in <code>index.php</code>, salva e aggiorna il browser:</p>
+      <pre><code>&lt;?php
+echo "Ciao mondo!";
+?&gt;</code></pre>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Osserva</p><h3>Che cosa compare?</h3><p>Nel browser deve apparire <strong>Ciao mondo!</strong>. Se vedi il codice PHP oppure il download del file, controlla di avere usato l’indirizzo HTTP e che il server sia ancora attivo.</p></div></aside>
+
+      <h3>HTML e PHP nella stessa pagina</h3>
+      <p>Ora sostituisci il contenuto del file con questa pagina completa:</p>
+      <pre><code>&lt;!doctype html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;La mia prima pagina PHP&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;La mia prima pagina PHP&lt;/h1&gt;
+
+  &lt;?php
+  echo "&lt;p&gt;Ciao dal server!&lt;/p&gt;";
+  ?&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <p>Il codice HTML descrive la pagina. Le istruzioni comprese tra <code>&lt;?php</code> e <code>?&gt;</code> vengono invece eseguite dal server prima dell’invio al browser.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="variabili">
+      <p class="eyebrow">Un dato che può cambiare</p>
+      <h2 id="variabili">Le prime variabili</h2>
+      <p>Una <strong>variabile</strong> è un nome al quale assegniamo un valore che il programma può usare. Modifica il blocco PHP in questo modo:</p>
+      <pre><code>&lt;?php
+$nome = "Giulia";
+$classe = "5F";
+
+echo "&lt;p&gt;Ciao $nome!&lt;/p&gt;";
+echo "&lt;p&gt;Frequenti la classe $classe.&lt;/p&gt;";
+?&gt;</code></pre>
+      <ul>
+        <li><code>$</code> identifica una variabile PHP;</li>
+        <li><code>=</code> assegna un valore;</li>
+        <li><code>echo</code> produce un output;</li>
+        <li>l’output entra nell’HTML inviato al browser.</li>
+      </ul>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">✎</span><div><p class="eyebrow">Prova tu</p><h3>Personalizza il risultato</h3><p>Crea le variabili <code>$nome</code>, <code>$cognome</code>, <code>$classe</code> e <code>$anno</code>. Usale per ottenere un risultato simile a questo:</p><pre><code>Benvenuta Giulia Bianchi
+
+Classe: 5F
+Anno scolastico: 2026/2027</code></pre><ul><li>almeno un elemento <code>&lt;h1&gt;</code>;</li><li>almeno due elementi <code>&lt;p&gt;</code>;</li><li>almeno tre variabili PHP;</li><li>almeno due istruzioni <code>echo</code>.</li></ul></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="sorgente">
+      <p class="eyebrow">Esperimento importante</p>
+      <h2 id="sorgente">Dove è finito il codice PHP?</h2>
+      <ol class="steps">
+        <li><strong>Lascia aperta la pagina funzionante.</strong><p>Controlla che nel browser compaiano i valori delle variabili.</p></li>
+        <li><strong>Visualizza il sorgente ricevuto.</strong><p>Usa il comando del browser “Visualizza sorgente pagina”; in molti browser puoi premere <kbd>Ctrl</kbd>+<kbd>U</kbd>.</p></li>
+        <li><strong>Cerca il codice PHP.</strong><p>Trovi <code>$nome</code>, <code>echo</code> oppure i delimitatori <code>&lt;?php ... ?&gt;</code>?</p></li>
+        <li><strong>Confronta.</strong><p>Nel sorgente ricevuto dovresti vedere HTML e i valori prodotti, ma non le istruzioni PHP originali.</p></li>
+      </ol>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Conclusione</p><h3>Il lavoro lato server è già concluso</h3><p>Il codice è stato eseguito dall’interprete PHP lato server prima che la pagina fosse inviata. Il browser ha ricevuto il risultato in HTML.</p></div></aside>
+    </section>
+
+    <section id="sfida-finale" class="section" aria-labelledby="presentazione">
+      <p class="eyebrow">Se hai terminato</p>
+      <h2 id="presentazione">Crea <code>presentazione.php</code></h2>
+      <p>Se hai completato le attività precedenti, prova a creare una seconda pagina PHP in autonomia.</p>
+      <p>Crea nella stessa cartella una piccola pagina di presentazione. Definisci almeno le variabili <code>$nome</code>, <code>$classe</code> e <code>$materia</code>, quindi usale per generare contenuto HTML.</p>
+      <p><strong>La pagina è completa quando:</strong></p>
+      <ul class="presentation-checklist">
+        <li>si apre da <code>http://localhost:8000/presentazione.php</code>;</li>
+        <li>contiene una struttura HTML valida con titolo e intestazione;</li>
+        <li>mostra i valori di almeno tre variabili;</li>
+        <li>usa almeno due istruzioni <code>echo</code>;</li>
+        <li>nel sorgente ricevuto non compare il codice PHP.</li>
+      </ul>
+      <details><summary>Aiuto 1 — da dove partire</summary><p>Copia la struttura HTML di <code>index.php</code>, cambia il titolo e prepara le variabili all’inizio del blocco PHP.</p></details>
+      <details><summary>Aiuto 2 — una possibile soluzione</summary><pre><code>&lt;!doctype html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Presentazione&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;?php
+  $nome = "Giulia";
+  $classe = "5F";
+  $materia = "Informatica";
+
+  echo "&lt;h1&gt;Benvenuta, $nome!&lt;/h1&gt;";
+  echo "&lt;p&gt;Classe: $classe&lt;/p&gt;";
+  echo "&lt;p&gt;Materia: $materia&lt;/p&gt;";
+  ?&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="verifica">
+      <p class="eyebrow">Verifica rapida</p>
+      <h2 id="verifica">Quattro domande</h2>
+      <ol>
+        <li>Chi esegue il codice PHP?</li>
+        <li>Che cosa riceve normalmente il browser dopo l’esecuzione di uno script PHP?</li>
+        <li>A che cosa serve <code>echo</code>?</li>
+        <li>Qual è la differenza essenziale tra aprire un file PHP tramite <code>file://</code> e tramite <code>http://localhost:8000</code>?</li>
+      </ol>
+      <details><summary>Controlla le risposte</summary><ol><li>L’interprete PHP, lato server.</li><li>Il risultato prodotto dal programma, normalmente codice HTML.</li><li>Produce un output che può entrare nella pagina restituita.</li><li><code>file://</code> apre direttamente il file; l’indirizzo HTTP invia la richiesta al server, che affida il codice all’interprete PHP prima di rispondere.</li></ol></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="riepilogo">
+      <p class="eyebrow">In breve</p>
+      <h2 id="riepilogo">Il modello da ricordare</h2>
+      <p><strong>Browser → richiesta HTTP → server → esecuzione PHP → risposta HTML → browser</strong></p>
+      <p>Oggi bastano questo percorso, poche variabili e <code>echo</code>. Gli altri costrutti del linguaggio arriveranno nelle lezioni successive.</p>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../00-presentazione/index.html">← Lezione 0</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>Informatica · Classi quinte</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
