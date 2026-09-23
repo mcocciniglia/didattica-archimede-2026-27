@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 3.01 di TPSIT per la classe terza: sistemi posizionali, bit, byte e prime conversioni tra binario e decimale.">
+  <title>3.01 — Dal decimale al binario</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#conversioni">Conversioni</a>
+        <a href="#sfida">Sfida binaria</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT terza</a><span aria-hidden="true">/</span><span>3.01</span></nav>
+      <p class="eyebrow">3.01 · Modulo 3.1 · 60 minuti</p>
+      <h1>Dal decimale al binario</h1>
+      <p class="lead">Perché un computer che esegue operazioni così complesse utilizza soltanto due cifre?</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">TPSIT · Classe terza</span>
+        <span role="listitem">Strumenti: quaderno e penna</span>
+        <span role="listitem">Prerequisito: le quattro operazioni</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="domanda-iniziale">
+      <p class="eyebrow">5 minuti · Partiamo da una domanda</p>
+      <h2 id="domanda-iniziale">Solo zero e uno?</h2>
+      <p>Un computer può mostrare fotografie, riprodurre musica e fare calcoli. Eppure, alla base, rappresenta tutte queste informazioni usando soltanto <strong>0</strong> e <strong>1</strong>.</p>
+      <p>Per capire come sia possibile, ripartiamo dal sistema di numerazione che usiamo ogni giorno.</p>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Che cosa saprai fare</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Riconoscere</h3><p>Spiegare il ruolo della base e della posizione nel sistema decimale e in quello binario.</p></article>
+        <article class="card"><h3>Collegare</h3><p>Descrivere perché il computer usa due stati e distinguere bit, nibble e byte.</p></article>
+        <article class="card"><h3>Calcolare</h3><p>Ricavare il numero di configurazioni e svolgere semplici conversioni nelle due direzioni.</p></article>
+      </div>
+    </section>
+
+    <section class="section reading" aria-labelledby="sistema-posizionale">
+      <p class="eyebrow">10 minuti · Il valore della posizione</p>
+      <h2 id="sistema-posizionale">Che cosa significa 347?</h2>
+      <p>Nel numero 347<sub>10</sub>, la cifra 7 occupa la posizione 0 e ha peso 10<sup>0</sup>. Spostandoci verso sinistra, la cifra 4 occupa la posizione 1 e la cifra 3 occupa la posizione 2.</p>
+      <div class="definition"><strong>Base</strong><p>È il numero di cifre disponibili e stabilisce i pesi delle posizioni. Il sistema decimale ha base 10 e usa le cifre da 0 a 9.</p></div>
+      <div class="definition"><strong>Sistema di numerazione posizionale</strong><p>Il valore di un numero è dato dalla somma delle sue cifre moltiplicate per la base elevata alla posizione che occupano. Le posizioni si contano da destra, partendo da 0.</p></div>
+      <div class="card-grid">
+        <article class="card"><h3>In base 10</h3><p><strong>347<sub>10</sub> = 3 × 10<sup>2</sup> + 4 × 10<sup>1</sup> + 7 × 10<sup>0</sup></strong></p></article>
+        <article class="card"><h3>In base 2</h3><p><strong>1011<sub>2</sub> = 1 × 2<sup>3</sup> + 0 × 2<sup>2</sup> + 1 × 2<sup>1</sup> + 1 × 2<sup>0</sup></strong></p></article>
+      </div>
+      <p>Nel sistema binario la logica non cambia: cambia la base. Sono disponibili due cifre, 0 e 1, e ogni posizione vale il doppio di quella alla sua destra.</p>
+      <p>Il piccolo 2 indica la base binaria; il piccolo 10 indica la base decimale. Nell’esempio, 1011<sub>2</sub> vale 11<sub>10</sub>.</p>
+    </section>
+
+    <section class="section" aria-labelledby="potenze-due">
+      <p class="eyebrow">Un riferimento utile</p>
+      <h2 id="potenze-due">Le prime potenze di 2</h2>
+      <p class="section-intro">Riconoscere rapidamente questi valori rende più semplici le conversioni.</p>
+      <div class="table-wrap">
+        <table>
+          <caption>Pesi delle prime otto posizioni binarie, nell’ordine in cui si scrivono le cifre</caption>
+          <thead><tr><th scope="col">2<sup>7</sup></th><th scope="col">2<sup>6</sup></th><th scope="col">2<sup>5</sup></th><th scope="col">2<sup>4</sup></th><th scope="col">2<sup>3</sup></th><th scope="col">2<sup>2</sup></th><th scope="col">2<sup>1</sup></th><th scope="col">2<sup>0</sup></th></tr></thead>
+          <tbody><tr><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr></tbody>
+        </table>
+      </div>
+      <p><strong>Controllo rapido:</strong> quale peso si trova subito a destra di 128? Quale posizione occupa?</p>
+    </section>
+
+    <section class="section" aria-labelledby="perche-binario">
+      <p class="eyebrow">10 minuti · Due stati</p>
+      <h2 id="perche-binario">Perché il computer usa il binario?</h2>
+      <p class="section-intro">Due stati sono facili da distinguere in modo affidabile. Possiamo pensarli con coppie semplici:</p>
+      <div class="card-grid">
+        <article class="card"><h3>Acceso / spento</h3><p>Un dispositivo si trova in uno di due stati chiaramente diversi.</p></article>
+        <article class="card"><h3>Vero / falso</h3><p>Una condizione è verificata oppure non lo è.</p></article>
+        <article class="card"><h3>Segnale / nessun segnale</h3><p>Possiamo distinguere la presenza dall’assenza.</p></article>
+        <article class="card"><h3>1 / 0</h3><p>Assegniamo una cifra a ciascuno dei due stati.</p></article>
+      </div>
+      <p>Queste coppie sono esempi intuitivi: il punto importante è che il computer può rappresentare l’informazione combinando molti stati 0 e 1.</p>
+    </section>
+
+    <section class="section" aria-labelledby="parole-nuove">
+      <p class="eyebrow">10 minuti · Parole nuove</p>
+      <h2 id="parole-nuove">Bit, nibble e byte</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Bit</h3><p>Un <strong>bit</strong> è una cifra binaria: può valere 0 oppure 1.</p></article>
+        <article class="card"><h3>Nibble</h3><p>Un <strong>nibble</strong> è un gruppo di 4 bit.</p></article>
+        <article class="card"><h3>Byte</h3><p>Un <strong>byte</strong> è un gruppo di 8 bit, cioè due nibble.</p></article>
+        <article class="card"><h3>Configurazione</h3><p>Una <strong>configurazione</strong> è una specifica sequenza di 0 e 1.</p></article>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <caption>Posizioni, pesi e cifre del byte 01101001</caption>
+          <tbody>
+            <tr><th scope="row">Posizione</th><th scope="col">7</th><th scope="col">6</th><th scope="col">5</th><th scope="col">4</th><th scope="col">3</th><th scope="col">2</th><th scope="col">1</th><th scope="col">0</th></tr>
+            <tr><th scope="row">Potenza</th><td>2<sup>7</sup></td><td>2<sup>6</sup></td><td>2<sup>5</sup></td><td>2<sup>4</sup></td><td>2<sup>3</sup></td><td>2<sup>2</sup></td><td>2<sup>1</sup></td><td>2<sup>0</sup></td></tr>
+            <tr><th scope="row">Peso</th><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+            <tr><th scope="row">Cifra</th><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Quante configurazioni sono possibili?</h3>
+      <div class="table-wrap">
+        <table>
+          <caption>Numero di configurazioni al crescere dei bit</caption>
+          <thead><tr><th scope="col">Numero di bit</th><th scope="col">Calcolo</th><th scope="col">Configurazioni possibili</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">1 bit</th><td>2<sup>1</sup></td><td>2: 0, 1</td></tr>
+            <tr><th scope="row">2 bit</th><td>2<sup>2</sup></td><td>4: 00, 01, 10, 11</td></tr>
+            <tr><th scope="row">3 bit</th><td>2<sup>3</sup></td><td>8</td></tr>
+            <tr><th scope="row">8 bit</th><td>2<sup>8</sup></td><td>256</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><strong>Con <var>n</var> bit possiamo ottenere 2<sup><var>n</var></sup> configurazioni differenti.</strong><p>Un byte non “contiene 256 numeri”: ha 256 configurazioni possibili. Se le interpretiamo come numeri interi senza segno, rappresentano i valori da 0 a 255.</p></div></aside>
+      <details><summary>Approfondimento breve — KB e KiB</summary><p>Tradizionalmente in informatica 1 KB è stato usato per indicare 1024 byte, perché 1024 = 2<sup>10</sup>. Oggi gli standard distinguono i prefissi decimali da quelli binari: 1 kB = 1000 byte, mentre 1 KiB = 1024 byte.</p></details>
+    </section>
+
+    <section id="conversioni" class="section" aria-labelledby="binario-decimale">
+      <p class="eyebrow">20 minuti · Conversioni</p>
+      <h2 id="binario-decimale">Dal binario al decimale</h2>
+      <p>Scrivi sotto ogni cifra il peso della sua posizione, conserva i pesi che corrispondono a un bit 1 e sommali.</p>
+      <ol class="steps">
+        <li><strong>101<sub>2</sub></strong><p>1 × 4 + 0 × 2 + 1 × 1 = <strong>5<sub>10</sub></strong></p></li>
+        <li><strong>1010<sub>2</sub></strong><p>1 × 8 + 0 × 4 + 1 × 2 + 0 × 1 = <strong>10<sub>10</sub></strong></p></li>
+        <li><strong>11001<sub>2</sub></strong><p>1 × 16 + 1 × 8 + 0 × 4 + 0 × 2 + 1 × 1 = <strong>25<sub>10</sub></strong></p></li>
+      </ol>
+
+      <h2 id="decimale-binario">Dal decimale al binario</h2>
+      <p>Cerchiamo quali potenze di 2, sommate, costruiscono il numero. Scriviamo 1 nelle posizioni i cui pesi sono usati e 0 nelle altre.</p>
+      <ol class="steps">
+        <li><strong>Convertiamo 13.</strong><p>13 = 8 + 4 + 1. In corrispondenza dei pesi 8, 4, 2, 1 scriviamo quindi 1, 1, 0, 1: <strong>13<sub>10</sub> = 1101<sub>2</sub></strong>.</p></li>
+        <li><strong>Convertiamo 22.</strong><p>22 = 16 + 4 + 2. In corrispondenza dei pesi 16, 8, 4, 2, 1 scriviamo 1, 0, 1, 1, 0: <strong>22<sub>10</sub> = 10110<sub>2</sub></strong>.</p></li>
+      </ol>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><strong>Non saltare una posizione.</strong><p>Se una potenza di 2 non serve, devi scrivere 0. Per esempio, in 13 manca il 2 e il bit corrispondente è 0.</p></div></aside>
+      <details><summary>Un altro metodo — divisioni successive per 2</summary><p>Si può anche dividere ripetutamente il numero per 2 e annotare ogni resto. I resti, letti dall’ultimo al primo, formano il numero binario. Oggi usiamo soprattutto le potenze di 2 perché rendono visibile il peso di ogni posizione.</p></details>
+    </section>
+
+    <section id="sfida" class="section" aria-labelledby="sfida-binaria">
+      <p class="eyebrow">Ora prova tu</p>
+      <h2 id="sfida-binaria">Sfida binaria</h2>
+      <p>Rispondi prima senza calcolatrice. Per i numeri decimali puoi usare come guida i pesi <strong>128, 64, 32, 16, 8, 4, 2, 1</strong>.</p>
+      <ol>
+        <li>Quanto vale 1001<sub>2</sub> in decimale?</li>
+        <li>Quanto vale 1111<sub>2</sub> in decimale?</li>
+        <li>Quanto vale 100000<sub>2</sub> in decimale?</li>
+        <li>Come scrivi 6<sub>10</sub> in binario?</li>
+        <li>Come scrivi 19<sub>10</sub> in binario?</li>
+        <li>Come scrivi 42<sub>10</sub> usando tutte le otto posizioni di un byte?</li>
+      </ol>
+      <details><summary>Controlla le soluzioni</summary><ol><li>9<sub>10</sub></li><li>15<sub>10</sub></li><li>32<sub>10</sub></li><li>110<sub>2</sub></li><li>10011<sub>2</sub></li><li>00101010<sub>2</sub></li></ol></details>
+    </section>
+
+    <section class="section" aria-labelledby="controllo-finale">
+      <p class="eyebrow">5 minuti · Controllo finale</p>
+      <h2 id="controllo-finale">Tre domande rapide</h2>
+      <ol>
+        <li>Perché 101<sub>2</sub> non significa centouno?</li>
+        <li>Quante configurazioni posso ottenere con 4 bit?</li>
+        <li>Qual è il valore decimale di 1101<sub>2</sub>?</li>
+      </ol>
+      <details><summary>Verifica le risposte</summary><ol><li>Perché è scritto in base 2: le cifre occupano le posizioni 2, 1 e 0, che hanno pesi 4, 2 e 1.</li><li>2<sup>4</sup> = 16 configurazioni.</li><li>8 + 4 + 1 = 13<sub>10</sub>.</li></ol></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="porto-a-casa">
+      <p class="eyebrow">In breve</p>
+      <h2 id="porto-a-casa">Cosa porto a casa</h2>
+      <ul>
+        <li>In un sistema posizionale il valore di una cifra dipende dalla sua posizione.</li>
+        <li>Il sistema decimale è in base 10; il sistema binario è in base 2.</li>
+        <li>Il computer usa due stati facilmente distinguibili, rappresentati con 0 e 1.</li>
+        <li>Un bit è una cifra binaria, un nibble contiene 4 bit e un byte ne contiene 8.</li>
+        <li>Con <var>n</var> bit otteniamo 2<sup><var>n</var></sup> configurazioni.</li>
+      </ul>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><strong>Verso la prossima lezione</strong><p>Se il binario è perfetto per il computer, è altrettanto comodo per noi esseri umani quando le sequenze diventano molto lunghe?</p></div></aside>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../../index.html">← Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe terza</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
