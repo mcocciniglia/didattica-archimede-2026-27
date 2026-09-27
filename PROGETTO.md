@@ -45,11 +45,14 @@ di ricostruire il risultato e spiegare il procedimento.
 
 ## Ruolo degli ambienti
 
-- **Sito statico:** spiegazioni, calendario, esempi, file iniziali, rubriche e
+- **Sito statico:** spiegazioni, calendario, esempi, file iniziali, criteri e
   materiali pubblici.
 - **Moodle:** consegne, scadenze, quiz, feedback, valutazioni, soluzioni e
-  materiali riservati.
-- **Google Drive:** archivio operativo degli studenti nelle classi prime.
+  materiali riservati nei percorsi che lo utilizzano.
+- **Google Classroom:** assegnazione, consegna e restituzione delle attività
+  nei percorsi in cui viene adottato, in particolare nelle classi prime.
+- **Google Drive:** archivio operativo e spazio di lavoro degli studenti nelle
+  classi prime.
 - **Repository di progetto:** codice e documentazione versionata quando il
   percorso lo richiede.
 
@@ -58,10 +61,27 @@ valutazioni o elaborati identificabili degli studenti.
 
 ## Architettura editoriale
 
-La homepage conduce ai cinque indici. Ogni indice espone scopo, monte ore,
-strumenti, moduli ed evidenze del percorso e rimanda alla relativa roadmap
-Markdown. Le future lezioni useranno cartelle autonome e il template comune;
-le esercitazioni useranno un template separato.
+La homepage conduce ai cinque indici. Ogni indice è il punto di accesso del
+relativo percorso e deve distinguere chiaramente la **progettazione** dai
+**materiali effettivamente pubblicati**.
+
+La struttura comune degli indici è:
+
+1. presentazione del percorso;
+2. **Roadmap / Moduli del percorso**, con moduli, monte ore, argomenti ed
+   evidenze previste;
+3. eventuale **Stato del percorso**, per comunicazioni generali sull'avanzamento;
+4. **Materiali disponibili / Lezioni**, con le sole risorse realmente create,
+   verificate e raggiungibili.
+
+La roadmap resta relativamente stabile e non viene usata come elenco delle
+lezioni pubblicate. I collegamenti alle singole lezioni appartengono alla
+sezione dei materiali disponibili, presentata con componenti e metadati
+coerenti tra i diversi corsi.
+
+Le lezioni usano cartelle autonome e il template comune; le esercitazioni usano
+un template separato. Le regole operative di dettaglio sono definite in
+`AGENTS.md`.
 
 ## Identità visiva e accessibilità
 
@@ -70,9 +90,10 @@ all'identità scolastica, con superfici chiare, contrasto elevato e tema scuro.
 Il sistema tipografico privilegia leggibilità, righe non troppo lunghe,
 spaziatura generosa, focus visibile e comportamento responsive.
 
-## Ambito della fase iniziale
+## Stato del progetto
 
-Questa fase realizza la struttura, le roadmap e i modelli. Non comprende lo
-sviluppo delle singole lezioni, la pubblicazione, il collegamento a remoti Git
-o la gestione di dati persistenti.
+La struttura iniziale, le roadmap e i modelli sono stati predisposti. Il
+progetto è ora nella fase di sviluppo e pubblicazione progressiva delle
+lezioni e dei materiali didattici, mantenendo separati progettazione annuale,
+contenuti pubblici e ambienti autenticati di consegna e valutazione.
 

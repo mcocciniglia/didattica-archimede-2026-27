@@ -20,8 +20,10 @@ disconnessione e riconsegna dei portatili. Google Drive è l'ambiente di lavoro
 degli studenti; Documenti e Fogli Google sono gli strumenti principali. I
 file non devono rimanere soltanto sul dispositivo.
 
-Il sito ospita le lezioni pubbliche; Moodle raccoglie consegne, quiz, feedback
-e materiali non pubblici.
+Il sito ospita le lezioni pubbliche; Google Classroom gestisce assegnazione,
+consegna, restituzione, feedback e materiali non pubblici. Google Drive
+conserva e organizza i file; Documenti Google consente di produrre e
+completare gli elaborati.
 
 ## Lezione zero — 4 ore
 
@@ -134,7 +136,7 @@ prerequisiti.
 | Uso | Strumento | Decisione |
 | --- | --- | --- |
 | Lezioni | Sito statico | Una pagina per incontro con obiettivo, esempio, esercizio e riepilogo |
-| Consegne | Moodle | Quiz, compiti, feedback, rubriche e soluzioni riservate |
+| Assegnazione e consegna | Google Classroom | Compiti, consegne, feedback, rubriche e materiali riservati |
 | Archiviazione | Google Drive | Cartella annuale unica con sottocartelle numerate |
 | Produttività | Documenti, Fogli, Presentazioni | Applicazioni web uniformi e collaborative |
 | Hardware | Simulatore Von Neumann | Memoria, registri, CPU e ciclo di esecuzione |
@@ -175,4 +177,3 @@ predisposto, correzione guidata e seconda possibilità.
 | 2 | Von Neumann | Simulazione del ciclo | Traccia del ciclo |
 | 3 | Memorie e capacità | RAM, massa e unità | Tabella comparativa |
 | 4 | Periferiche e scelta | Input/output e configurazione | Scelta motivata |
-

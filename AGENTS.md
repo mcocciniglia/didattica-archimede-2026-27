@@ -118,11 +118,16 @@ Ogni livello editoriale ha una funzione precisa:
 - le **note docente** contengono regia, tempi, risposte attese, osservazioni,
   alternative e materiali non destinati agli studenti;
 - **Moodle** gestisce consegne, verifiche, quiz, feedback, rubriche compilate,
-  valutazioni, versioni facilitate, soluzioni e materiali riservati;
+  valutazioni, versioni facilitate, soluzioni e materiali riservati nei
+  percorsi che lo utilizzano;
+- **Google Classroom**, quando adottato per il percorso, gestisce assegnazione,
+  consegna e restituzione delle attività; per le classi prime può costituire
+  l'ambiente operativo ordinario insieme a Google Drive;
 - `fonti/` conserva documenti originali, archivi e note locali non
   pubblicabili;
-- Google Drive è un ambiente operativo previsto soprattutto per le classi
-  prime, secondo la relativa roadmap;
+- **Google Drive** conserva e organizza i file operativi degli studenti,
+  soprattutto nelle classi prime, secondo la relativa roadmap e le indicazioni
+  correnti del docente;
 - i repository di progetto contengono codice e documentazione versionata solo
   quando il percorso lo richiede.
 
@@ -362,9 +367,71 @@ con esempi pubblici privi di valori reali.
 
 ## 12. Navigazione e stato dei contenuti
 
-L'indice del percorso rappresenta la sequenza realmente disponibile. Una
-lezione può essere collegata come disponibile solo quando il relativo file
-esiste, è stato verificato e appartiene al percorso corretto.
+L'indice del percorso può descrivere l'intera progettazione annuale, ma deve
+separare chiaramente ciò che è **previsto** da ciò che è **realmente
+pubblicato**. La roadmap presenta il percorso complessivo; la sezione dei
+materiali disponibili rappresenta invece le risorse effettivamente
+consultabili. Una lezione può essere collegata come disponibile solo quando il
+relativo file esiste, è stato verificato e appartiene al percorso corretto.
+
+### 12.1 Struttura standard degli indici di percorso
+
+Tutti gli indici dei percorsi devono adottare, salvo motivata eccezione
+richiesta dal prompt o dalla roadmap, una gerarchia editoriale comune e
+prevedibile:
+
+1. **Presentazione del percorso**: materia, classe, finalità, monte ore,
+   strumenti e informazioni essenziali;
+2. **Roadmap / Moduli del percorso**: progettazione complessiva del corso;
+3. **Stato del percorso**: riquadro opzionale per comunicazioni generali sulla
+   pubblicazione o sull'avanzamento;
+4. **Materiali disponibili / Lezioni**: elenco delle risorse realmente
+   pubblicate e raggiungibili.
+
+La sezione **Roadmap / Moduli del percorso** deve:
+
+- descrivere moduli, titoli, monte ore, argomenti principali ed eventuali
+  prodotti o competenze attese;
+- restare sintetica e relativamente stabile nel tempo;
+- rappresentare anche moduli futuri, purché siano chiaramente parte della
+  progettazione e non presentati come materiali già disponibili;
+- **non contenere collegamenti alle singole lezioni pubblicate**: la roadmap
+  descrive la progettazione, non lo stato di pubblicazione.
+
+La sezione **Stato del percorso** è opzionale. Quando presente, può indicare
+che le lezioni vengono pubblicate progressivamente, segnalare note comuni alle
+classi o descrivere sinteticamente l'avanzamento. Non deve diventare un elenco
+di lezioni e non sostituisce la sezione dei materiali disponibili.
+
+La sezione **Materiali disponibili / Lezioni** deve:
+
+- comparire dopo la roadmap e l'eventuale stato del percorso;
+- contenere soltanto risorse realmente create, verificate e raggiungibili;
+- usare card o componenti coerenti tra tutti i percorsi;
+- mostrare, quando disponibili, modulo, numero di lezione o settimana, durata
+  indicativa, titolo e breve descrizione;
+- offrire il collegamento effettivo alla pagina della lezione o del materiale;
+- mantenere un ordinamento didattico leggibile e coerente con la roadmap.
+
+Quando viene pubblicata una nuova lezione:
+
+1. creare o completare la pagina della lezione nella cartella prevista;
+2. verificarla secondo le regole del progetto;
+3. aggiungerla alla sezione **Materiali disponibili / Lezioni** dell'indice;
+4. non modificare la roadmap salvo che sia cambiata realmente la progettazione
+   didattica;
+5. mantenere struttura, metadati e stile delle card coerenti con gli altri
+   percorsi.
+
+La stessa distinzione semantica deve valere per tutti i percorsi presenti e
+futuri:
+
+- **ROADMAP = progettazione didattica complessiva**;
+- **MATERIALI DISPONIBILI = contenuti realmente pubblicati e accessibili**.
+
+Differenze nei contenuti disciplinari non giustificano, da sole, strutture di
+navigazione differenti. Prima di introdurre una variante specifica per un
+corso, verificare se il componente o il modello comune è già sufficiente.
 
 - non creare link vuoti, `href="#"` usati come segnaposto o collegamenti a
   pagine inesistenti;
@@ -411,7 +478,12 @@ Non pubblicare nel sito o nel repository:
 La separazione degli ambienti è obbligatoria:
 
 - GitHub Pages ospita esclusivamente contenuti pubblici;
-- Moodle ospita consegne, verifiche, feedback, valutazioni e riservati;
+- Moodle ospita consegne, verifiche, feedback, valutazioni e riservati nei
+  percorsi che lo utilizzano;
+- Google Classroom può ospitare assegnazione, consegna e restituzione delle
+  attività nei percorsi in cui è adottato, in particolare nelle classi prime;
+- Google Drive conserva i file operativi degli studenti quando previsto dal
+  percorso;
 - `fonti/` ospita sorgenti originali, archivi e note locali;
 - eventuali repository privati ospitano codice degli studenti solo quando la
   roadmap e l'organizzazione scolastica lo prevedono.
