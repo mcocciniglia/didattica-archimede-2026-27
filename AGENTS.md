@@ -433,6 +433,8 @@ Differenze nei contenuti disciplinari non giustificano, da sole, strutture di
 navigazione differenti. Prima di introdurre una variante specifica per un
 corso, verificare se il componente o il modello comune è già sufficiente.
 
+### 12.2 Collegamenti e stato dei contenuti
+
 - non creare link vuoti, `href="#"` usati come segnaposto o collegamenti a
   pagine inesistenti;
 - non usare la pagina `404.html` come sostituto di una destinazione futura;
@@ -451,6 +453,32 @@ corso, verificare se il componente o il modello comune è già sufficiente.
 Non aggiungere automaticamente pagine placeholder. Un file mancante, un nome
 errato o un asset non trovato devono restare errori da correggere, non essere
 mascherati come contenuti in preparazione.
+
+### 12.3 Template e pagine interne
+
+Le cartelle `_template-lezione/`, `_template-esercitazione/`, `docs/`
+e gli altri materiali di supporto editoriale sono strumenti interni per la
+progettazione, la verifica e la manutenzione del sito.
+
+Non devono essere collegati dalle pagine pubbliche destinate agli studenti,
+salvo richiesta esplicita e motivata.
+
+Quando un template viene utilizzato per creare una lezione o
+un'esercitazione:
+
+- riutilizzare struttura e componenti appropriati;
+- sostituire o rimuovere tutti i contenuti e i collegamenti di esempio;
+- non mantenere collegamenti al template di origine;
+- non esporre collegamenti alla documentazione tecnica o agli strumenti
+  editoriali interni;
+- verificare che header, breadcrumb, footer e navigazione contengano soltanto
+  destinazioni utili allo studente e realmente disponibili;
+- verificare esplicitamente che nessun collegamento pubblico punti a
+  `_template-lezione/`, `_template-esercitazione/` o `docs/`, salvo che la
+  risorsa abbia una funzione didattica esplicitamente prevista.
+
+I template possono essere presenti nel repository e utilizzati dagli agenti
+senza essere destinazioni della navigazione pubblica.
 
 ## 13. Identità del docente
 
@@ -611,6 +639,7 @@ Prima di ogni commit autorizzato:
 Se il working tree contiene modifiche non riconducibili all'attività, lasciarle
 intatte. Se non è possibile isolare con certezza i file autorizzati, fermarsi
 e chiedere indicazioni invece di eseguire staging, commit o pulizia.
+
 
 ## 18. Regola finale
 
