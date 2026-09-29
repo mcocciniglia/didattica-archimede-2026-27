@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 2 di TPSIT quinta: cicli di ricezione, connessione persistente e primo server TCP iterativo in Python.">
+  <title>Lezione 2 — Un server che non si ferma</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#primo-ciclo">Primo ciclo</a>
+        <a href="#server-iterativo">Server iterativo</a>
+        <a href="#laboratorio">Laboratorio</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT quinta</a><span aria-hidden="true">/</span><span>Lezione 2</span></nav>
+      <p class="eyebrow">Lezione 2 · M2 · TPSIT · Classe quinta</p>
+      <h1>Un server che non si ferma</h1>
+      <p class="lead">Connessione persistente, cicli e server iterativo.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">Durata: 1 ora</span>
+        <span role="listitem">Strumenti: Python, Telnet e due terminali</span>
+        <span role="listitem">Prerequisito: Lezione 1</span>
+        <span role="listitem">Rete: solo questo computer</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="ripartiamo">
+      <p class="eyebrow">Ripartiamo dall’esperimento</p>
+      <h2 id="ripartiamo">Un solo scambio, poi la fine</h2>
+      <p>Nella <a href="../01-echo-locale/index.html">Lezione 1</a> il client riusciva a collegarsi, il server riceveva un messaggio e inviava la risposta. Subito dopo, però, la connessione veniva chiusa e per una nuova prova dovevamo riavviare il server.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Domanda-problema</p><h3>Perché Telnet viene disconnesso dopo il primo scambio di dati?</h3></div></aside>
+      <p>Seguiamo il flusso del programma precedente:</p>
+      <pre><code>socket()
+   ↓
+bind()
+   ↓
+listen()
+   ↓
+accept()
+   ↓
+recv()
+   ↓
+sendall()
+   ↓
+fine</code></pre>
+      <p>Il programma arriva semplicemente alla fine: nessuna istruzione gli dice di tornare indietro.</p>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Che cosa saprai osservare</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Dialogo persistente</h3><p>Riconoscere il ciclo che permette allo stesso client di inviare più messaggi.</p></article>
+        <article class="card"><h3>Disconnessione</h3><p>Individuare il valore <code>b''</code> e usare <code>break</code> per terminare il dialogo corrente.</p></article>
+        <article class="card"><h3>Client in successione</h3><p>Spiegare perché il server torna ad <code>accept()</code> e serve un nuovo client alla volta.</p></article>
+      </div>
+    </section>
+
+    <section class="section reading" aria-labelledby="richiamo-main">
+      <p class="eyebrow">Un tentativo da capire</p>
+      <h2 id="richiamo-main">Richiamare <code>main()</code> non significa “ricomincia”</h2>
+      <p>Un’idea possibile è richiamare la funzione alla fine del programma:</p>
+      <pre><code>def main():
+    ...
+    main()</code></pre>
+      <p>La nuova chiamata parte prima che la precedente sia terminata. Le chiamate si accumulano una dentro l’altra:</p>
+      <pre><code>main()
+  └── main()
+       └── main()
+            └── main()
+                 ...</code></pre>
+      <p class="eyebrow">Parole nuove</p>
+      <div class="definition"><strong>Ricorsione</strong><p>Una funzione richiama sé stessa. È un meccanismo utile in altri problemi, ma non è ciò che ci serve per mantenere vivo questo server.</p></div>
+      <div class="definition"><strong>Iterazione</strong><p>Un blocco di istruzioni viene ripetuto da un ciclo. Qui ripetiamo soltanto le operazioni necessarie al dialogo.</p></div>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><strong>Se vogliamo ripetere delle istruzioni, non dobbiamo richiamare tutto il programma.</strong><p>Possiamo ripetere soltanto la parte che ci interessa con un ciclo.</p></div></aside>
+    </section>
+
+    <section id="primo-ciclo" class="section" aria-labelledby="dialogo-aperto">
+      <p class="eyebrow">Primo passo</p>
+      <h2 id="dialogo-aperto">Manteniamo aperto il dialogo</h2>
+      <p>Partiamo dal server della Lezione 1 e ripetiamo la ricezione mentre il client rimane collegato.</p>
+      <pre><code>import socket
+
+HOST = "127.0.0.1"
+PORT = 50000
+
+def main():
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
+        server.bind((HOST, PORT))
+        server.listen(1)
+
+        print(f"Server in ascolto su {HOST}:{PORT}")
+
+        conn, addr = server.accept()
+
+        with conn:
+            print("Client connesso:", addr)
+
+            while True:
+                dati = conn.recv(1024)
+
+                if not dati:
+                    break
+
+                messaggio = dati.decode().strip()
+                print("Ricevuto:", messaggio)
+
+                risposta = "Hai scritto: " + messaggio
+                conn.sendall((risposta + "\n").encode())
+
+
+if __name__ == "__main__":
+    main()</code></pre>
+      <div class="definition"><strong><code>while True</code></strong><p>È un ciclo che ripete il blocco di istruzioni. Qui mantiene vivo il dialogo: dopo una risposta, il server torna ad attendere altri dati dallo stesso client.</p></div>
+      <p>Una sola esecuzione di <code>recv()</code> gestisce un momento del dialogo. Il ciclo permette di eseguirla di nuovo senza chiudere <code>conn</code>.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="nessun-dato">
+      <p class="eyebrow">Quando il client si scollega</p>
+      <h2 id="nessun-dato">Che cosa significa <code>if not dati</code>?</h2>
+      <p>Durante il dialogo, <code>recv()</code> restituisce una sequenza di byte simile a questa:</p>
+      <pre><code>b'ciao\r\n'</code></pre>
+      <p>Quando il client chiude correttamente la connessione, <code>recv()</code> restituisce una sequenza vuota:</p>
+      <pre><code>b''</code></pre>
+      <p>Perciò questo controllo rileva la chiusura:</p>
+      <pre><code>if not dati:
+    break</code></pre>
+      <pre><code>il client si è disconnesso
+        ↓
+termina il ciclo di dialogo</code></pre>
+      <p>Il <strong>peer</strong> è il programma all’altro capo della connessione: in questo caso, il client Telnet. <code>break</code> interrompe il ciclo interno. Uscendo dal blocco <code>with conn:</code>, la connessione viene chiusa.</p>
+    </section>
+
+    <section class="section" aria-labelledby="prima-prova">
+      <p class="eyebrow">Esperimento con Telnet</p>
+      <h2 id="prima-prova">Più messaggi, stessa connessione</h2>
+      <ol class="steps">
+        <li><strong>Terminale 1: avvia il server.</strong><pre><code>python server.py</code></pre><p>Se necessario, usa <code>py server.py</code>.</p></li>
+        <li><strong>Terminale 2: collega Telnet.</strong><pre><code>telnet 127.0.0.1 50000</code></pre></li>
+        <li><strong>Invia almeno tre messaggi.</strong><pre><code>ciao
+Hai scritto: ciao
+
+TPSIT
+Hai scritto: TPSIT
+
+prova numero 3
+Hai scritto: prova numero 3</code></pre></li>
+      </ol>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><strong>La differenza fondamentale</strong><p>Adesso lo stesso client può inviare più messaggi senza essere disconnesso dopo la prima risposta.</p></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="nuovo-problema">
+      <p class="eyebrow">Abbiamo davvero risolto tutto?</p>
+      <h2 id="nuovo-problema">Dopo Telnet termina anche il server</h2>
+      <p>Chiudi Telnet. Su Windows puoi premere <kbd>Ctrl</kbd>+<kbd>]</kbd>, scrivere <code>quit</code> e premere Invio. Il ciclo di dialogo termina, ma anche il programma server arriva ancora alla fine.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Seconda domanda-problema</p><h3>Come permettiamo a un nuovo client di collegarsi senza riavviare il server?</h3></div></aside>
+      <p>Dobbiamo ripetere anche <code>accept()</code>: serve un secondo ciclo, più esterno.</p>
+    </section>
+
+    <section id="server-iterativo" class="section" aria-labelledby="secondo-ciclo">
+      <p class="eyebrow">Secondo passo</p>
+      <h2 id="secondo-ciclo">Un server iterativo</h2>
+      <p>Scarica il programma completo oppure ricostruiscilo aggiungendo il ciclo esterno.</p>
+      <div class="hero-actions"><a class="button" href="server.py" download>Scarica server.py</a></div>
+      <pre><code>import socket
+
+HOST = "127.0.0.1"
+PORT = 50000
+
+def main():
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
+        server.bind((HOST, PORT))
+        server.listen(1)
+
+        print(f"Server in ascolto su {HOST}:{PORT}")
+
+        while True:
+            conn, addr = server.accept()
+
+            print("Client connesso:", addr)
+
+            with conn:
+                while True:
+                    dati = conn.recv(1024)
+
+                    if not dati:
+                        break
+
+                    messaggio = dati.decode().strip()
+                    print("Ricevuto:", messaggio)
+
+                    risposta = "Hai scritto: " + messaggio
+                    conn.sendall((risposta + "\n").encode())
+
+            print("Client disconnesso")
+
+
+if __name__ == "__main__":
+    main()</code></pre>
+      <div class="definition"><strong>Server iterativo</strong><p>Gestisce un client, termina il dialogo con esso e successivamente ne accetta un altro.</p></div>
+    </section>
+
+    <section class="section reading" aria-labelledby="due-cicli">
+      <p class="eyebrow">Leggiamo la struttura</p>
+      <h2 id="due-cicli">Due cicli, due responsabilità</h2>
+      <pre><code>SERVER
+│
+└── while True                 ciclo esterno
+     │
+     ├── accept()
+     │
+     ├── CLIENT CONNESSO
+     │     │
+     │     └── while True      ciclo interno
+     │          │
+     │          ├── recv()
+     │          ├── elabora
+     │          └── sendall()
+     │
+     ├── client si disconnette
+     │
+     └── torna ad accept()</code></pre>
+      <div class="card-grid">
+        <article class="card"><h3>Ciclo esterno</h3><p>Gestisce la successione dei client: attende una connessione, poi torna ad <code>accept()</code>.</p></article>
+        <article class="card"><h3>Ciclo interno</h3><p>Gestisce il dialogo con il client attualmente collegato: riceve, elabora e risponde.</p></article>
+      </div>
+    </section>
+
+    <section id="laboratorio" class="section" aria-labelledby="prova-completa">
+      <p class="eyebrow">Ora prova tu</p>
+      <h2 id="prova-completa">Due collegamenti senza riavviare il server</h2>
+      <p><strong>Prodotto atteso:</strong> una prova osservabile nella quale il server risponde a tre messaggi, rileva la disconnessione e accetta un nuovo collegamento.</p>
+      <ol class="steps">
+        <li><strong>Avvia il server.</strong><p>Esegui <code>python server.py</code> in un terminale.</p></li>
+        <li><strong>Collega il primo client.</strong><p>Apri Telnet e invia almeno tre messaggi.</p></li>
+        <li><strong>Chiudi il client.</strong><p>Verifica che il server mostri <code>Client disconnesso</code> senza terminare.</p></li>
+        <li><strong>Collega un nuovo client.</strong><p>Apri nuovamente Telnet e invia un altro messaggio, senza riavviare il server.</p></li>
+        <li><strong>Controlla il risultato.</strong><p>Il nuovo messaggio deve ricevere una risposta e il server deve restare in esecuzione.</p></li>
+      </ol>
+      <details><summary>Sfida facoltativa — risposta in maiuscolo</summary><p>Sostituisci la costruzione della risposta con <code>risposta = messaggio.upper()</code>.</p></details>
+      <details><summary>Sfida facoltativa — lunghezza del messaggio</summary><p>Usa <code>risposta = f"Hai inviato {len(messaggio)} caratteri"</code>.</p></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="limite">
+      <p class="eyebrow">Domanda finale</p>
+      <h2 id="limite">Il nostro server può servire più client?</h2>
+      <p><strong>Sì, ma uno alla volta.</strong> Può accettare più client in successione, non servirli contemporaneamente.</p>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><strong>Che cosa accade se il primo client rimane collegato e un secondo prova a usare il server?</strong><p>Il secondo deve attendere: il server è ancora occupato nel ciclo interno del primo client.</p></div></aside>
+      <p><strong>Client in successione ≠ client contemporanei.</strong> Nelle prossime lezioni vedremo come affrontare questo limite; qui ci fermiamo all’osservazione.</p>
+    </section>
+
+    <section class="section" aria-labelledby="verifica-finale">
+      <p class="eyebrow">Controlla</p>
+      <h2 id="verifica-finale">Tre domande rapide</h2>
+      <ol>
+        <li>Quale ciclo mantiene vivo il dialogo con il client collegato?</li>
+        <li>Che cosa indica il valore <code>b''</code> restituito da <code>recv()</code>?</li>
+        <li>Perché questo server è iterativo e non concorrente?</li>
+      </ol>
+    </section>
+
+    <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Da ricordare</p><h2>Il ciclo giusto nel punto giusto</h2><ul><li><code>accept()</code> attende un client.</li><li><code>recv()</code> attende dati.</li><li>Il <code>while</code> interno mantiene il dialogo.</li><li><code>b''</code> indica che il peer ha chiuso la connessione.</li><li><code>break</code> termina il dialogo corrente.</li><li>Il <code>while</code> esterno permette di accettare il client successivo.</li><li>Il server realizzato è <strong>iterativo</strong>, non concorrente.</li></ul></div></aside>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../01-echo-locale/index.html">← Lezione 1</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe quinta</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
