@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 2 di Informatica per le classi quinte: form HTML, metodo GET, parametri nell’URL e risposta dinamica generata con PHP.">
+  <title>Lezione 2 — Dal browser al server: form e metodo GET</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#primo-form">Primo form</a>
+        <a href="#url">URL</a>
+        <a href="#laboratorio">Laboratorio</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">Informatica quinta</a><span aria-hidden="true">/</span><span>Lezione 2</span></nav>
+      <p class="eyebrow">Lezione 2 · M0 · Informatica · Classi quinte</p>
+      <h1>Dal browser al server: form e metodo GET</h1>
+      <p class="lead">Inviare dati a PHP e generare una risposta dinamica.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">Durata: circa 2 ore</span>
+        <span role="listitem">Strumenti: editor, terminale e browser</span>
+        <span role="listitem">Prerequisito: Lezione 1</span>
+        <span role="listitem">Prodotto: form e risposta PHP</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="ripasso">
+      <p class="eyebrow">Ripasso iniziale</p>
+      <h2 id="ripasso">Il server produce la pagina</h2>
+      <p>Nella <a href="../01-primo-programma-php/index.html">Lezione 1</a> il browser era il <strong>client</strong>. Il comando <code>php -S localhost:8000</code> avviava un server HTTP locale, raggiungibile attraverso la porta <code>8000</code>.</p>
+      <div class="card-grid">
+        <article class="card"><h3>File HTML statico</h3><p>Il browser riceve il contenuto scritto nel file e lo rappresenta.</p></article>
+        <article class="card"><h3>Pagina PHP dinamica</h3><p>Il server esegue PHP e costruisce la risposta HTML prima di inviarla al browser.</p></article>
+        <article class="card"><h3>Richiesta e risposta</h3><p>Il browser invia una richiesta HTTP; il server restituisce una risposta HTTP.</p></article>
+      </div>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Domanda guida</p><h3>Finora il server produceva una pagina. Come possiamo permettere all’utente di inviare un dato al server?</h3></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Il percorso che saprai ricostruire</h2>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p><strong>input HTML → richiesta HTTP → parametro GET → PHP → risposta HTML → browser</strong></p></div></aside>
+      <div class="card-grid">
+        <article class="card"><h3>Preparare</h3><p>Creare un form con campi associati a etichette e scegliere la pagina di destinazione.</p></article>
+        <article class="card"><h3>Inviare</h3><p>Riconoscere nell’URL i parametri trasmessi con il metodo GET.</p></article>
+        <article class="card"><h3>Rispondere</h3><p>Leggere un parametro con PHP e usarlo per generare una pagina.</p></article>
+      </div>
+    </section>
+
+    <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><p class="eyebrow">Parole operative</p><h2>Tre idee nuove</h2><ul><li><strong>form:</strong> una parte della pagina che raccoglie dati inseriti dall’utente;</li><li><strong>parametro GET:</strong> un dato scritto nella richiesta e visibile nell’URL;</li><li><strong><code>$_GET</code>:</strong> la struttura PHP dalla quale leggiamo i parametri ricevuti con GET.</li></ul></div></aside>
+
+    <aside class="callout"><span class="callout-icon" aria-hidden="true">⏱</span><div><p class="eyebrow">Percorso indicativo</p><h2>Due ore, con spazio per provare</h2><p>Circa 15 minuti di ripasso, 20 minuti sul form, 20 minuti su PHP e <code>$_GET</code>, 10 minuti per osservare l’URL, 40 minuti di laboratorio e 15 minuti per confronto, correzione e <code>isset()</code>. I tempi sono orientativi: possiamo fermarci dove serve.</p></div></aside>
+
+    <section id="primo-form" class="section" aria-labelledby="form-html">
+      <p class="eyebrow">Primo passaggio</p>
+      <h2 id="form-html">Un form HTML invia il nome</h2>
+      <p>Crea una nuova cartella di lavoro, aprila nell’editor e aggiungi un file chiamato <code>index.html</code>:</p>
+      <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Il mio primo form&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;h1&gt;Presentati&lt;/h1&gt;
+
+&lt;form action="saluto.php" method="get"&gt;
+    &lt;label for="nome"&gt;Nome:&lt;/label&gt;
+    &lt;input type="text" id="nome" name="nome"&gt;
+
+    &lt;button type="submit"&gt;Invia&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <div class="card-grid">
+        <article class="card"><h3><code>form</code></h3><p>Raggruppa i controlli che raccolgono i dati e stabilisce come inviarli.</p></article>
+        <article class="card"><h3><code>action="saluto.php"</code></h3><p>Indica la pagina del server alla quale il browser invierà i dati.</p></article>
+        <article class="card"><h3><code>method="get"</code></h3><p>Dice al browser di inviare i dati come parametri GET, visibili nell’URL.</p></article>
+        <article class="card"><h3><code>input</code></h3><p>Crea il campo nel quale l’utente può scrivere il proprio nome.</p></article>
+      </div>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><p class="eyebrow">La parte decisiva</p><h3><code>name="nome"</code></h3><p>L’attributo <code>name</code> stabilisce il nome del parametro inviato al server. Senza <code>name</code>, il testo scritto nel campo non viene inviato come parametro del form.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="ricezione-php">
+      <p class="eyebrow">Secondo passaggio</p>
+      <h2 id="ricezione-php">PHP riceve il parametro</h2>
+      <p>Nella stessa cartella crea <code>saluto.php</code>:</p>
+      <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Saluto&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;?php
+$nome = $_GET["nome"];
+echo "&lt;h1&gt;Ciao $nome!&lt;/h1&gt;";
+?&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <ul>
+        <li><code>$_GET</code> contiene i parametri ricevuti con il metodo GET;</li>
+        <li><code>$_GET["nome"]</code> legge il parametro che si chiama <code>nome</code>;</li>
+        <li><code>$nome</code> è la variabile nella quale conserviamo il valore ricevuto;</li>
+        <li><code>echo</code> inserisce il saluto nella risposta HTML.</li>
+      </ul>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><strong>Esempio volutamente minimo</strong><p>Usiamo questo codice soltanto nel laboratorio locale per osservare il percorso dei dati. Non è ancora una soluzione pronta per un sito pubblico: validazione e sicurezza verranno affrontate più avanti.</p></div></aside>
+      <ol class="steps">
+        <li><strong>Avvia il server nella cartella.</strong><pre><code>php -S localhost:8000</code></pre></li>
+        <li><strong>Apri il form.</strong><p>Visita <code>http://localhost:8000/index.html</code>.</p></li>
+        <li><strong>Invia un nome.</strong><p>Scrivi <code>Marco</code> e premi il pulsante <strong>Invia</strong>.</p></li>
+        <li><strong>Osserva il risultato.</strong><p>Il server esegue <code>saluto.php</code> e il browser mostra il saluto generato.</p></li>
+      </ol>
+    </section>
+
+    <section id="url" class="section reading" aria-labelledby="osserva-url">
+      <p class="eyebrow">Esperimento importante</p>
+      <h2 id="osserva-url">Leggiamo la richiesta nell’URL</h2>
+      <p>Dopo l’invio, nella barra degli indirizzi compare qualcosa di simile:</p>
+      <pre><code>http://localhost:8000/saluto.php?nome=Marco</code></pre>
+      <p>Il form ha costruito una richiesta HTTP diretta a <code>saluto.php</code> e vi ha aggiunto il dato inserito:</p>
+      <div class="card-grid">
+        <article class="card"><h3><code>/saluto.php</code></h3><p>È la risorsa richiesta al server.</p></article>
+        <article class="card"><h3><code>?</code></h3><p>Separa il percorso della pagina dai parametri della richiesta.</p></article>
+        <article class="card"><h3><code>nome</code></h3><p>È il nome del parametro, scelto con <code>name="nome"</code>.</p></article>
+        <article class="card"><h3><code>=Marco</code></h3><p>È il valore che il browser ha inviato per quel parametro.</p></article>
+      </div>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><p class="eyebrow">Più parametri GET</p><h3>Un solo URL, più valori</h3><pre><code>scheda.php?nome=Mario&amp;cognome=Rossi&amp;eta=18&amp;classe=5F</code></pre><p><code>?</code> introduce la <strong>query string</strong>; <code>=</code> associa il nome del parametro al suo valore; <code>&amp;</code> separa un parametro dal successivo.</p></div></aside>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">✎</span><div><p class="eyebrow">Prova diretta</p><h3>Modifica manualmente il parametro</h3><p>Nella barra degli indirizzi sostituisci la parte finale con <code>saluto.php?nome=Anna</code> e premi Invio. Il server riceve il nuovo valore e produce una risposta diversa.</p></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="percorso-dati">
+      <p class="eyebrow">Modello client-server</p>
+      <h2 id="percorso-dati">Il form genera una richiesta HTTP</h2>
+      <pre><code>Browser
+   ↓
+GET /saluto.php?nome=Marco
+   ↓
+Server PHP
+   ↓
+$_GET["nome"]
+   ↓
+HTML generato
+   ↓
+Browser</code></pre>
+      <p>Il form non esegue PHP. Il browser legge il form, costruisce la richiesta GET e la invia al server. Solo il server esegue PHP; il browser riceve la risposta HTML già generata.</p>
+    </section>
+
+    <section id="laboratorio" class="section" aria-labelledby="scheda-studente">
+      <p class="eyebrow">Esercitazione guidata</p>
+      <h2 id="scheda-studente">Laboratorio — La scheda dello studente</h2>
+      <p><strong>Prodotto atteso:</strong> un form che invia quattro parametri con GET e una pagina <code>scheda.php</code> che li usa per generare una scheda.</p>
+      <ol class="steps">
+        <li><strong>Prepara il form.</strong><p>Crea una pagina che chieda nome, cognome, età e classe.</p></li>
+        <li><strong>Imposta la destinazione.</strong><p>Il form deve usare <code>action="scheda.php"</code> e <code>method="get"</code>.</p></li>
+        <li><strong>Scegli i nomi dei parametri.</strong><p>Usa <code>name="nome"</code>, <code>name="cognome"</code>, <code>name="eta"</code> e <code>name="classe"</code>.</p></li>
+        <li><strong>Costruisci la risposta.</strong><p>In <code>scheda.php</code> leggi i quattro parametri e produci una pagina con titolo <strong>Scheda dello studente</strong>.</p></li>
+        <li><strong>Controlla URL e risultato.</strong><p>Verifica che i quattro parametri compaiano nell’URL e che la pagina mostri i valori inviati.</p></li>
+      </ol>
+
+      <h3>Un possibile form di partenza</h3>
+      <pre><code>&lt;form action="scheda.php" method="get"&gt;
+    &lt;label for="nome"&gt;Nome:&lt;/label&gt;
+    &lt;input type="text" id="nome" name="nome"&gt;&lt;br&gt;
+
+    &lt;label for="cognome"&gt;Cognome:&lt;/label&gt;
+    &lt;input type="text" id="cognome" name="cognome"&gt;&lt;br&gt;
+
+    &lt;label for="eta"&gt;Età:&lt;/label&gt;
+    &lt;input type="number" id="eta" name="eta"&gt;&lt;br&gt;
+
+    &lt;label for="classe"&gt;Classe:&lt;/label&gt;
+    &lt;input type="text" id="classe" name="classe"&gt;&lt;br&gt;
+
+    &lt;button type="submit"&gt;Crea scheda&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+      <p>La pagina finale dovrebbe mostrare una struttura simile:</p>
+      <pre><code>Scheda dello studente
+
+Nome: Mario
+Cognome: Rossi
+Età: 18
+Classe: 5F</code></pre>
+      <p><strong>L’attività è completa quando:</strong></p>
+      <ul class="presentation-checklist">
+        <li>il form contiene quattro etichette associate ai rispettivi campi;</li>
+        <li>ogni campo ha un attributo <code>name</code> riconoscibile;</li>
+        <li>l’invio apre <code>scheda.php</code>;</li>
+        <li>nell’URL compaiono quattro parametri;</li>
+        <li>la risposta HTML mostra i quattro valori ricevuti.</li>
+      </ul>
+      <details><summary>Aiuto 1 — individua il primo parametro</summary><p>Inizia soltanto dal nome: assegna <code>$_GET["nome"]</code> a una variabile e mostrala con <code>echo</code>. Quando funziona, aggiungi gli altri campi uno alla volta.</p></details>
+      <details><summary>Aiuto 2 — mantieni gli stessi nomi</summary><p>Il testo scritto in <code>name="..."</code> nel form deve coincidere con il testo usato tra parentesi quadre in <code>$_GET["..."]</code>.</p></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="parametro-assente">
+      <p class="eyebrow">Un caso da gestire</p>
+      <h2 id="parametro-assente">Se il parametro non è presente</h2>
+      <p>Se apriamo direttamente <code>saluto.php</code> senza aggiungere <code>?nome=...</code>, il parametro <code>nome</code> non esiste. Possiamo controllarlo prima di leggerlo:</p>
+      <pre><code>&lt;?php
+if (isset($_GET["nome"])) {
+    $nome = $_GET["nome"];
+    echo "&lt;h1&gt;Ciao $nome!&lt;/h1&gt;";
+}
+?&gt;</code></pre>
+      <div class="definition"><strong><code>isset()</code></strong><p>Controlla se un valore è presente. Qui permette di eseguire il saluto soltanto quando il parametro <code>nome</code> è stato ricevuto.</p></div>
+      <p>Per ora ci fermiamo a questo controllo essenziale. Validazione, filtri e sicurezza verranno affrontati nelle lezioni successive.</p>
+
+      <details><summary>Soluzione possibile — <code>scheda.php</code></summary><p>Apri questo esempio soltanto dopo aver provato a costruire la pagina in autonomia.</p><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Scheda dello studente&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;?php
+if (isset(
+    $_GET["nome"],
+    $_GET["cognome"],
+    $_GET["eta"],
+    $_GET["classe"]
+)) {
+    $nome = $_GET["nome"];
+    $cognome = $_GET["cognome"];
+    $eta = $_GET["eta"];
+    $classe = $_GET["classe"];
+
+    echo "&lt;h1&gt;Scheda dello studente&lt;/h1&gt;";
+    echo "&lt;p&gt;Nome: $nome&lt;/p&gt;";
+    echo "&lt;p&gt;Cognome: $cognome&lt;/p&gt;";
+    echo "&lt;p&gt;Età: $eta&lt;/p&gt;";
+    echo "&lt;p&gt;Classe: $classe&lt;/p&gt;";
+}
+?&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details>
+    </section>
+
+    <section class="section" aria-labelledby="verifica">
+      <p class="eyebrow">Verifica rapida</p>
+      <h2 id="verifica">Tre domande</h2>
+      <ol>
+        <li>Quale attributo del form stabilisce il nome del parametro inviato?</li>
+        <li>Da quali parti è composto <code>?nome=Marco</code>?</li>
+        <li>Chi esegue PHP e che cosa riceve il browser?</li>
+      </ol>
+      <details><summary>Controlla le risposte</summary><ol><li>L’attributo <code>name</code> del campo.</li><li>Dal separatore <code>?</code>, dal nome del parametro <code>nome</code>, dal segno <code>=</code> e dal valore <code>Marco</code>.</li><li>PHP viene eseguito sul server; il browser riceve la risposta HTML generata.</li></ol></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="checklist-finale">
+      <p class="eyebrow">A fine lezione</p>
+      <h2 id="checklist-finale">Dovresti saper…</h2>
+      <ul class="presentation-checklist">
+        <li>creare un form HTML;</li>
+        <li>spiegare gli attributi <code>action</code>, <code>method</code> e <code>name</code>;</li>
+        <li>inviare parametri con GET;</li>
+        <li>riconoscere i parametri nell’URL;</li>
+        <li>leggere un parametro con <code>$_GET</code>;</li>
+        <li>descrivere il percorso browser → server → browser.</li>
+      </ul>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Verso la prossima lezione</p><h3>È sempre una buona idea mostrare i dati nell’URL?</h3><p>Conserviamo questa domanda: ci servirà nella prossima lezione, quando incontreremo il metodo POST.</p></div></aside>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../01-primo-programma-php/index.html">← Lezione 1</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>Informatica · Classi quinte</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
