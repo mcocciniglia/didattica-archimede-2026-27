@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 3.02 di TPSIT per la classe terza: conversione dal sistema binario al sistema decimale attraverso i pesi delle posizioni.">
+  <title>3.02 — Dal binario al decimale</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#pesi">Pesi</a>
+        <a href="#metodo">Metodo</a>
+        <a href="#prova-tu">Prova tu</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT terza</a><span aria-hidden="true">/</span><span>3.02</span></nav>
+      <p class="eyebrow">3.02 · Modulo 3.1 · 60 minuti</p>
+      <h1>Dal binario al decimale</h1>
+      <p class="lead">Ogni bit assume un valore diverso in base alla posizione che occupa.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">TPSIT · Classe terza</span>
+        <span role="listitem">Strumenti: quaderno e penna</span>
+        <span role="listitem">Prerequisito: Lezione 3.01</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="richiamo">
+      <p class="eyebrow">5 minuti · Da dove partiamo</p>
+      <h2 id="richiamo">La conversione inversa</h2>
+      <p>Nella <a href="../01-fondamenti-binario/index.html">Lezione 3.01</a> abbiamo usato le potenze di 2 per trasformare un numero decimale in binario.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Domanda iniziale</p><h3>Sappiamo trasformare un numero decimale in binario. Ma se incontriamo 1011<sub>2</sub>, come possiamo capire quale numero rappresenta?</h3><p>Per compiere il percorso inverso useremo il <strong>peso delle posizioni</strong>.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Che cosa saprai fare</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Associare</h3><p>Collegare ogni bit alla sua posizione e al suo peso.</p></article>
+        <article class="card"><h3>Convertire</h3><p>Trasformare semplici numeri binari in numeri decimali.</p></article>
+        <article class="card"><h3>Controllare</h3><p>Verificare una conversione svolgendo il percorso inverso.</p></article>
+      </div>
+    </section>
+
+    <section id="pesi" class="section" aria-labelledby="tabella-pesi">
+      <p class="eyebrow">10 minuti · Un riferimento essenziale</p>
+      <h2 id="tabella-pesi">Posizioni, potenze e pesi</h2>
+      <p>Le posizioni si contano da destra, partendo da 0. La posizione più a destra ha quindi peso <strong>2<sup>0</sup> = 1</strong>.</p>
+      <div class="table-wrap">
+        <table>
+          <caption>Pesi delle otto posizioni di un byte</caption>
+          <tbody>
+            <tr><th scope="row">Posizione</th><td>7</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr>
+            <tr><th scope="row">Potenza</th><td>2<sup>7</sup></td><td>2<sup>6</sup></td><td>2<sup>5</sup></td><td>2<sup>4</sup></td><td>2<sup>3</sup></td><td>2<sup>2</sup></td><td>2<sup>1</sup></td><td>2<sup>0</sup></td></tr>
+            <tr><th scope="row">Peso</th><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><p class="eyebrow">Osserva</p><h3>Procedendo da destra verso sinistra, ogni posizione vale il doppio della precedente.</h3><p>Per questo i pesi sono 1, 2, 4, 8, 16, 32, 64 e 128.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="primo-esempio">
+      <p class="eyebrow">10 minuti · Esempio guidato</p>
+      <h2 id="primo-esempio">Quanto vale 1011<sub>2</sub>?</h2>
+      <p>Moltiplichiamo ogni bit per il peso della posizione che occupa:</p>
+      <p><strong>1 × 2<sup>3</sup> + 0 × 2<sup>2</sup> + 1 × 2<sup>1</sup> + 1 × 2<sup>0</sup></strong></p>
+      <p>Otteniamo:</p>
+      <p><strong>8 + 0 + 2 + 1 = 11</strong></p>
+      <div class="table-wrap">
+        <table>
+          <caption>Associazione tra i bit di 1011 e i rispettivi pesi</caption>
+          <tbody>
+            <tr><th scope="row">Bit</th><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+            <tr><th scope="row">Peso</th><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+            <tr><th scope="row">Contributo</th><td>8</td><td>0</td><td>2</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><h3>1011<sub>2</sub> = 11<sub>10</sub></h3><p>I bit uguali a 1 hanno selezionato i pesi 8, 2 e 1.</p></div></aside>
+    </section>
+
+    <section id="metodo" class="section reading" aria-labelledby="metodo-rapido">
+      <p class="eyebrow">10 minuti · Metodo operativo</p>
+      <h2 id="metodo-rapido">Somma soltanto i pesi selezionati</h2>
+      <div class="definition"><strong>Metodo rapido</strong><p>Per convertire velocemente un numero binario in decimale basta sommare i pesi delle posizioni nelle quali compare 1.</p></div>
+      <p>Consideriamo <strong>11001<sub>2</sub></strong>:</p>
+      <div class="table-wrap">
+        <table>
+          <caption>Conversione rapida di 11001 in decimale</caption>
+          <tbody>
+            <tr><th scope="row">Peso</th><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+            <tr><th scope="row">Bit</th><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>I bit 1 selezionano i pesi 16, 8 e 1:</p>
+      <p><strong>16 + 8 + 1 = 25</strong>, quindi <strong>11001<sub>2</sub> = 25<sub>10</sub></strong>.</p>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Gli 0 non contribuiscono alla somma</h3><p>Un bit 0 mantiene la posizione, ma il suo contributo al valore finale è zero.</p></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="potenze-due">
+      <p class="eyebrow">Un caso da riconoscere</p>
+      <h2 id="potenze-due">Un 1 seguito soltanto da zeri</h2>
+      <pre><code>1₂       = 1
+10₂      = 2
+100₂     = 4
+1000₂    = 8
+10000₂   = 16
+100000₂  = 32</code></pre>
+      <p><strong>Un numero binario formato da un 1 seguito soltanto da zeri rappresenta una potenza di 2.</strong></p>
+      <p>L’unico bit 1 seleziona un solo peso della tabella: 1, 2, 4, 8, 16, 32 e così via.</p>
+    </section>
+
+    <section class="section" aria-labelledby="esempi-progressivi">
+      <p class="eyebrow">10 minuti · Allenamento guidato</p>
+      <h2 id="esempi-progressivi">Quattro esempi progressivi</h2>
+      <ol class="steps">
+        <li><strong>101<sub>2</sub></strong><p>4 + 1 = 5, quindi <strong>101<sub>2</sub> = 5<sub>10</sub></strong>.</p></li>
+        <li><strong>1111<sub>2</sub></strong><p>8 + 4 + 2 + 1 = 15, quindi <strong>1111<sub>2</sub> = 15<sub>10</sub></strong>.</p></li>
+        <li><strong>10110<sub>2</sub></strong><p>Forma completa: 1 × 2<sup>4</sup> + 0 × 2<sup>3</sup> + 1 × 2<sup>2</sup> + 1 × 2<sup>1</sup> + 0 × 2<sup>0</sup>.</p><p>Metodo rapido: 16 + 4 + 2 = 22, quindi <strong>10110<sub>2</sub> = 22<sub>10</sub></strong>.</p></li>
+        <li><strong>110010<sub>2</sub></strong><p>32 + 16 + 2 = 50, quindi <strong>110010<sub>2</sub> = 50<sub>10</sub></strong>.</p></li>
+      </ol>
+    </section>
+
+    <section class="section" aria-labelledby="procedura">
+      <p class="eyebrow">Procedura da ricordare</p>
+      <h2 id="procedura">Binario → decimale in 4 passi</h2>
+      <ol class="steps">
+        <li><strong>Parti dal bit più a destra.</strong><p>Quella è la posizione 0.</p></li>
+        <li><strong>Associa i pesi.</strong><p>Scrivi 1, 2, 4, 8, 16, 32, … procedendo verso sinistra.</p></li>
+        <li><strong>Considera soltanto i bit 1.</strong><p>Ogni 1 seleziona il peso della propria posizione.</p></li>
+        <li><strong>Somma i pesi selezionati.</strong><p>Il risultato è il valore in base 10.</p></li>
+      </ol>
+    </section>
+
+    <section id="prova-tu" class="section" aria-labelledby="esercizi">
+      <p class="eyebrow">10 minuti · Ora prova tu</p>
+      <h2 id="esercizi">Converti in decimale</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Livello 1</h3><ol><li>110<sub>2</sub></li><li>1001<sub>2</sub></li><li>1110<sub>2</sub></li><li>10101<sub>2</sub></li></ol></article>
+        <article class="card"><h3>Livello 2</h3><ol start="5"><li>11011<sub>2</sub></li><li>100000<sub>2</sub></li><li>101101<sub>2</sub></li><li>1100101<sub>2</sub></li></ol></article>
+      </div>
+      <p>Per ogni numero, scrivi prima i pesi e poi la somma. Apri le soluzioni soltanto dopo aver completato entrambi i livelli.</p>
+      <details><summary>Controlla le soluzioni</summary><ol><li>6</li><li>9</li><li>14</li><li>21</li><li>27</li><li>32</li><li>45</li><li>101</li></ol></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="andata-ritorno">
+      <p class="eyebrow">5 minuti · Collegamento con la Lezione 3.01</p>
+      <h2 id="andata-ritorno">Andata e ritorno</h2>
+      <p><strong>27<sub>10</sub> → 11011<sub>2</sub></strong></p>
+      <p><strong>11011<sub>2</sub> → 16 + 8 + 2 + 1 → 27<sub>10</sub></strong></p>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><h3>Possiamo controllare una conversione effettuando l’operazione inversa.</h3></div></aside>
+      <h3>Esercizio conclusivo</h3>
+      <p>Converti 45<sub>10</sub> in binario. Poi riconverti il risultato in decimale e verifica di ottenere nuovamente 45.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="riepilogo">
+      <p class="eyebrow">In breve</p>
+      <h2 id="riepilogo">Cosa porto a casa</h2>
+      <ul>
+        <li>Il sistema binario è posizionale.</li>
+        <li>Ogni posizione corrisponde a una potenza di 2.</li>
+        <li>Gli 1 indicano quali pesi devono essere sommati.</li>
+        <li>Gli 0 non contribuiscono al valore.</li>
+        <li>Una conversione può essere controllata effettuando la conversione inversa.</li>
+      </ul>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">→</span><div><p class="eyebrow">Verso le prossime lezioni</p><h3>Altri modi di lavorare con il binario</h3><p>Vedremo come rendere ancora più comoda la rappresentazione dei numeri binari e come eseguire operazioni direttamente in base 2.</p></div></aside>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../01-fondamenti-binario/index.html">← Lezione 3.01</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe terza</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
