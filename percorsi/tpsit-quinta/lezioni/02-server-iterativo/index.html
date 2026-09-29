@@ -222,23 +222,26 @@ if __name__ == "__main__":
     <section class="section reading" aria-labelledby="due-cicli">
       <p class="eyebrow">Leggiamo la struttura</p>
       <h2 id="due-cicli">Due cicli, due responsabilità</h2>
-      <pre><code>SERVER
-│
-└── while True                 ciclo esterno
-     │
-     ├── accept()
-     │
-     ├── CLIENT CONNESSO
-     │     │
-     │     └── while True      ciclo interno
-     │          │
-     │          ├── recv()
-     │          ├── elabora
-     │          └── sendall()
-     │
-     ├── client si disconnette
-     │
-     └── torna ad accept()</code></pre>
+      <figure class="figure">
+        <a href="serveriterativo.png" target="_blank" rel="noopener noreferrer" aria-label="Apri lo schema del server TCP iterativo a dimensione intera in una nuova scheda"><img src="serveriterativo.png" width="1536" height="1024" alt="Schema del funzionamento di un server TCP iterativo con ciclo esterno per le connessioni e ciclo interno per il dialogo con il client"></a>
+        <figcaption class="caption"><strong>Server TCP iterativo:</strong> <code>listen()</code> prepara una sola volta il socket all’ascolto; il ciclo esterno ripete <code>accept()</code> per accettare, uno dopo l’altro, nuovi client. Il ciclo interno gestisce invece lo scambio di più messaggi con il client attualmente connesso. <a href="serveriterativo.png" target="_blank" rel="noopener noreferrer">Apri lo schema a dimensione intera<span class="visually-hidden"> in una nuova scheda</span></a>.</figcaption>
+      </figure>
+
+      <h3><code>listen()</code> e <code>accept()</code> non fanno la stessa cosa</h3>
+      <pre><code>server.bind((HOST, PORT))
+server.listen(1)
+
+while True:
+    conn, addr = server.accept()</code></pre>
+      <div class="card-grid">
+        <article class="card"><h3><code>bind()</code></h3><p>Associa il socket server all’indirizzo IP e alla porta scelti.</p></article>
+        <article class="card"><h3><code>listen()</code></h3><p>Mette quel socket nello stato di ascolto. Nella struttura del nostro programma viene eseguito una sola volta.</p></article>
+        <article class="card"><h3><code>accept()</code></h3><p>Attende una richiesta di connessione. Per ogni nuovo client restituisce un nuovo socket <code>conn</code>, dedicato a quella connessione, e il relativo indirizzo <code>addr</code>.</p></article>
+      </div>
+      <p>Quando il dialogo termina e <code>conn</code> viene chiuso, il socket server è ancora in ascolto: non deve eseguire nuovamente <code>listen()</code>, ma torna alla successiva <code>accept()</code>.</p>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><strong><code>listen(1)</code> non significa “accetta un solo client e poi smetti”.</strong><p>Il parametro riguarda le connessioni che possono rimanere in attesa, non il numero totale di client che il server potrà servire durante la sua esecuzione. Per ora ci basta evitare questo equivoco.</p></div></aside>
+
+      <h3>Il compito dei due cicli</h3>
       <div class="card-grid">
         <article class="card"><h3>Ciclo esterno</h3><p>Gestisce la successione dei client: attende una connessione, poi torna ad <code>accept()</code>.</p></article>
         <article class="card"><h3>Ciclo interno</h3><p>Gestisce il dialogo con il client attualmente collegato: riceve, elabora e risponde.</p></article>
@@ -264,7 +267,7 @@ if __name__ == "__main__":
       <p class="eyebrow">Domanda finale</p>
       <h2 id="limite">Il nostro server può servire più client?</h2>
       <p><strong>Sì, ma uno alla volta.</strong> Può accettare più client in successione, non servirli contemporaneamente.</p>
-      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><strong>Che cosa accade se il primo client rimane collegato e un secondo prova a usare il server?</strong><p>Il secondo deve attendere: il server è ancora occupato nel ciclo interno del primo client.</p></div></aside>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><strong>Che cosa accade se il primo client rimane collegato e un secondo prova a usare il server?</strong><p><strong>Il server non può ancora gestire il secondo client: finché rimane nel ciclo interno del primo, non torna a eseguire <code>accept()</code>. La nuova connessione può quindi rimanere in attesa.</strong></p></div></aside>
       <p><strong>Client in successione ≠ client contemporanei.</strong> Nelle prossime lezioni vedremo come affrontare questo limite; qui ci fermiamo all’osservazione.</p>
     </section>
 
