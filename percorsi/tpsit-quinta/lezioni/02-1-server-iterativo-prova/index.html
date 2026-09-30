@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 2.1 di TPSIT quinta: laboratorio con due client per osservare la coda delle connessioni e il limite del server TCP iterativo.">
+  <title>Lezione 2.1 — Il server iterativo alla prova</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#due-cicli">Due cicli</a>
+        <a href="#esperimento">Esperimento</a>
+        <a href="#limite">Limite</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT quinta</a><span aria-hidden="true">/</span><span>Lezione 2.1</span></nav>
+      <p class="eyebrow">Lezione 2.1 · M2 · TPSIT · Classe quinta</p>
+      <h1>Il server iterativo alla prova: due client, una sola volta</h1>
+      <p class="lead">Coda delle connessioni, <code>accept()</code> e limite del modello iterativo.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">Durata: 1 ora</span>
+        <span role="listitem">Strumenti: Python, Telnet e tre terminali</span>
+        <span role="listitem">Prerequisito: Lezione 2</span>
+        <span role="listitem">Rete: solo questo computer</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="riprendiamo">
+      <p class="eyebrow">Riprendiamo il server iterativo</p>
+      <h2 id="riprendiamo">Una preparazione, molte connessioni</h2>
+      <p>Nella <a href="../02-server-iterativo/index.html">Lezione 2</a> abbiamo costruito un server che rimane attivo dopo la disconnessione di un client. Oggi non cambiamo il programma: lo mettiamo alla prova con due client collegati nello stesso momento.</p>
+      <pre><code>socket()
+   ↓
+bind()
+   ↓
+listen()
+   ↓
+while True:
+    accept()
+       ↓
+    comunicazione con il client
+       ↓
+    chiusura connessione
+       ↓
+    accept()</code></pre>
+      <div class="card-grid">
+        <article class="card"><h3><code>listen()</code>: una volta</h3><p>Prepara il socket server all’ascolto prima che inizi il ciclo dei client.</p></article>
+        <article class="card"><h3><code>accept()</code>: per ogni client</h3><p>Restituisce al programma una nuova connessione da usare per dialogare con quel client.</p></article>
+      </div>
+      <p>Dopo <code>listen()</code>, il socket server rimane in ascolto anche mentre una singola connessione viene aperta e poi chiusa. Non occorre quindi prepararlo di nuovo: occorre invece ripetere <code>accept()</code> per ottenere la connessione di ciascun nuovo client.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Controllo rapido</p><h3>Quale istruzione permette al server di ottenere una nuova connessione?</h3></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Che cosa saprai spiegare</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Preparare e accettare</h3><p>Distinguere il compito di <code>listen()</code> da quello di <code>accept()</code>.</p></article>
+        <article class="card"><h3>Due cicli</h3><p>Collegare ogni ciclo <code>while</code> alla responsabilità che ripete.</p></article>
+        <article class="card"><h3>Tre stati</h3><p>Distinguere un client connesso, servito o in attesa.</p></article>
+        <article class="card"><h3>Un limite</h3><p>Spiegare perché il server iterativo serve un solo client alla volta.</p></article>
+      </div>
+    </section>
+
+    <section id="due-cicli" class="section reading" aria-labelledby="responsabilita-cicli">
+      <p class="eyebrow">Leggiamo il programma già usato</p>
+      <h2 id="responsabilita-cicli">I due cicli del server</h2>
+      <p>Nel <a href="../02-server-iterativo/server.py" download><code>server.py</code> della Lezione 2</a> le due ripetizioni sono annidate:</p>
+      <pre><code>while True:              # ciclo dei client
+    conn, addr = server.accept()
+
+    while True:          # ciclo dei messaggi
+        dati = conn.recv(1024)</code></pre>
+      <div class="card-grid">
+        <article class="card"><h3>Ciclo esterno: client</h3><p>Attende una connessione, serve quel client e, quando il dialogo termina, torna ad attendere il client successivo.</p></article>
+        <article class="card"><h3>Ciclo interno: messaggi</h3><p>Riceve e risponde ai messaggi di un solo client finché quella connessione rimane aperta.</p></article>
+      </div>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Fermati e ragiona</p><h3>Perché non basta un solo ciclo <code>while</code>?</h3><p>Individua le due azioni diverse che il server deve poter ripetere.</p></div></aside>
+    </section>
+
+    <section id="esperimento" class="section" aria-labelledby="due-client">
+      <p class="eyebrow">Esperimento centrale</p>
+      <h2 id="due-client">Due client contemporaneamente</h2>
+      <p><strong>Prodotto atteso:</strong> un’osservazione riproducibile del Client B che attende mentre il server sta servendo il Client A.</p>
+      <div class="hero-actions"><a class="button" href="../02-server-iterativo/server.py" download>Scarica il server già usato</a></div>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><strong>Prima di provare, fai una previsione.</strong><p>Secondo voi il server risponderà immediatamente anche al Client B?</p></div></aside>
+      <ol class="steps">
+        <li><strong>Terminale 1: avvia il server.</strong><pre><code>python server.py</code></pre><p>Se necessario, usa <code>py server.py</code>. Attendi il messaggio che indica che il server è in ascolto.</p></li>
+        <li><strong>Terminale 2: collega il Client A.</strong><pre><code>telnet 127.0.0.1 50000</code></pre><p>Invia un messaggio e verifica che arrivi la risposta.</p></li>
+        <li><strong>Lascia aperto il Client A.</strong><p>Non chiudere Telnet: il server deve rimanere nel ciclo interno dedicato a questo client.</p></li>
+        <li><strong>Terminale 3: collega il Client B.</strong><pre><code>telnet 127.0.0.1 50000</code></pre><p>Scrivi un messaggio anche da questo terminale.</p></li>
+        <li><strong>Osserva senza chiudere il Client A.</strong><p>Confronta i tre terminali: il Client A continua a ricevere risposte, mentre il Client B non riceve ancora la sua.</p></li>
+      </ol>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><strong>Se Telnet non è disponibile</strong><p>Usa il client già predisposto dal docente per mantenere aperta una connessione e inviare più messaggi. L’esperimento richiede comunque due istanze del client.</p></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="cosa-accade">
+      <p class="eyebrow">Osserviamo il server</p>
+      <h2 id="cosa-accade">Che cosa sta succedendo?</h2>
+      <pre><code>CLIENT A ─────────► SERVER
+                   SERVITO
+                     │
+                     ├─ recv()
+                     ├─ send()
+                     └─ recv()
+
+CLIENT B ─────────► IN ATTESA</code></pre>
+      <p>Il programma server sta ancora eseguendo il ciclo interno relativo al Client A. Finché quel ciclo non termina, il programma non può tornare alla successiva chiamata di <code>accept()</code>.</p>
+      <div class="card-grid">
+        <article class="card"><h3>Client connesso</h3><p>La connessione TCP può essere già stata stabilita dal sistema operativo.</p></article>
+        <article class="card"><h3>Client servito</h3><p>Il programma ha ottenuto la sua connessione con <code>accept()</code> e sta eseguendo <code>recv()</code> e <code>sendall()</code> per quel client.</p></article>
+        <article class="card"><h3>Client in attesa</h3><p>La connessione non è ancora stata prelevata dal programma con una nuova <code>accept()</code>; quindi non riceve ancora la risposta applicativa.</p></article>
+      </div>
+      <p class="eyebrow">Parola nuova</p>
+      <div class="definition"><strong>Coda delle connessioni</strong><p>È l’area gestita dal sistema operativo in cui possono attendere le connessioni che il programma server non ha ancora prelevato con <code>accept()</code>. La sua capacità è limitata.</p></div>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><strong>Connessione TCP e <code>accept()</code> non sono la stessa cosa.</strong><p>Il sistema operativo gestisce la connessione di rete; <code>accept()</code> è invece la chiamata con cui il nostro programma ottiene una connessione pronta e può iniziare a servirla.</p></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="handshake">
+      <p class="eyebrow">Breve richiamo</p>
+      <h2 id="handshake">La connessione può precedere <code>accept()</code></h2>
+      <p>Nel Transmission Control Protocol (TCP), il collegamento viene stabilito con uno scambio iniziale chiamato <strong>three-way handshake</strong>, cioè “stretta di mano in tre passaggi”:</p>
+      <pre><code>Client                Server
+
+SYN ------------------&gt;
+    &lt;--------------- SYN + ACK
+ACK ------------------&gt;</code></pre>
+      <p>Questo scambio è gestito dal sistema operativo. Perciò il Client B può apparire collegato a livello TCP anche se il programma server è ancora occupato con il Client A e non ha ancora eseguito una nuova <code>accept()</code>.</p>
+      <p>Per il nostro esperimento basta riconoscere la distinzione: non dobbiamo analizzare nuovamente tutti i dettagli del protocollo TCP.</p>
+    </section>
+
+    <section class="section" aria-labelledby="previsione">
+      <p class="eyebrow">Facciamo una previsione</p>
+      <h2 id="previsione">Quando A si disconnette, che cosa accade a B?</h2>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><h3>Cosa accadrà al Client B quando Client A chiuderà la connessione?</h3><p>Formula la tua previsione prima di continuare l’esperimento.</p></div></aside>
+      <pre><code>PRIMA
+
+Client A → SERVITO
+Client B → IN ATTESA
+
+
+Client A si disconnette
+          ↓
+il ciclo interno termina
+          ↓
+conn viene chiusa
+          ↓
+il server torna ad accept()
+          ↓
+Client B → SERVITO</code></pre>
+      <ol class="steps">
+        <li><strong>Chiudi il Client A.</strong><p>Su Windows, in Telnet premi <kbd>Ctrl</kbd>+<kbd>]</kbd>, scrivi <code>quit</code> e premi Invio.</p></li>
+        <li><strong>Guarda il terminale del server.</strong><p>Il server segnala la disconnessione di A, termina il ciclo interno e torna a <code>accept()</code>.</p></li>
+        <li><strong>Controlla il Client B.</strong><p>Il messaggio già inviato riceve ora una risposta: B è diventato il client servito.</p></li>
+        <li><strong>Ripeti per confermare.</strong><p>Invia un secondo messaggio dal Client B e verifica che la risposta sia immediata.</p></li>
+      </ol>
+    </section>
+
+    <section id="limite" class="section reading" aria-labelledby="uno-alla-volta">
+      <p class="eyebrow">Il limite del modello</p>
+      <h2 id="uno-alla-volta">Molti nel tempo, uno alla volta</h2>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><h3>Un vero server web potrebbe servire migliaia di utenti aspettando che ciascuno termini prima di passare al successivo?</h3></div></aside>
+      <pre><code>Client A ───────► ███████████
+Client B ───────────────────► ███████
+Client C ────────────────────────────► ██████</code></pre>
+      <p>Ogni barra rappresenta il tempo durante il quale un client viene servito. B deve aspettare la fine di A; C deve aspettare sia A sia B. Se un client è lento o rimane collegato a lungo, ritarda tutti quelli che seguono.</p>
+      <p><strong>Il server iterativo può gestire molti client nel tempo, ma ne serve uno alla volta.</strong> Questo è il suo principale limite.</p>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><p class="eyebrow">Domanda-problema</p><h3>Come possiamo continuare ad accettare nuovi client mentre ne stiamo già servendo uno?</h3><pre><code>SERVER
+  │
+  ├── Client A ──► ?
+  ├── Client B ──► ?
+  └── Client C ──► ?</code></pre><p>Questa domanda introduce la successiva evoluzione del progetto: il <strong>server concorrente</strong>. Per ora non lo implementiamo.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="verifica-finale">
+      <p class="eyebrow">Controlla</p>
+      <h2 id="verifica-finale">Verifica se hai capito</h2>
+      <ol>
+        <li><code>listen()</code> viene eseguito una volta o per ogni client?</li>
+        <li>Quale istruzione restituisce al programma una nuova connessione?</li>
+        <li>Perché nel server iterativo sono presenti due cicli <code>while</code>?</li>
+        <li>Cosa accade al secondo client mentre il primo viene servito?</li>
+        <li>Qual è il principale limite del server iterativo?</li>
+      </ol>
+    </section>
+
+    <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Da ricordare</p><h2>Il server iterativo può accettare molti client nel tempo, ma ne serve uno alla volta.</h2></div></aside>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../02-server-iterativo/index.html">← Lezione 2</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe quinta</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
