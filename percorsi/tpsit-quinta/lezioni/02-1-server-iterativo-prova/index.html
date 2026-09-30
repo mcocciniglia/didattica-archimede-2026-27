@@ -75,7 +75,7 @@ while True:
       <div class="card-grid">
         <article class="card"><h3>Preparare e accettare</h3><p>Distinguere il compito di <code>listen()</code> da quello di <code>accept()</code>.</p></article>
         <article class="card"><h3>Due cicli</h3><p>Collegare ogni ciclo <code>while</code> alla responsabilità che ripete.</p></article>
-        <article class="card"><h3>Tre stati</h3><p>Distinguere un client connesso, servito o in attesa.</p></article>
+        <article class="card"><h3>Connessione TCP e servizio applicativo</h3><p>Distinguere una connessione TCP già stabilita da una connessione che il programma ha già prelevato con <code>accept()</code> e sta effettivamente servendo.</p></article>
         <article class="card"><h3>Un limite</h3><p>Spiegare perché il server iterativo serve un solo client alla volta.</p></article>
       </div>
     </section>
@@ -119,15 +119,15 @@ while True:
                    SERVITO
                      │
                      ├─ recv()
-                     ├─ send()
+                     ├─ sendall()
                      └─ recv()
 
 CLIENT B ─────────► IN ATTESA</code></pre>
       <p>Il programma server sta ancora eseguendo il ciclo interno relativo al Client A. Finché quel ciclo non termina, il programma non può tornare alla successiva chiamata di <code>accept()</code>.</p>
       <div class="card-grid">
-        <article class="card"><h3>Client connesso</h3><p>La connessione TCP può essere già stata stabilita dal sistema operativo.</p></article>
-        <article class="card"><h3>Client servito</h3><p>Il programma ha ottenuto la sua connessione con <code>accept()</code> e sta eseguendo <code>recv()</code> e <code>sendall()</code> per quel client.</p></article>
-        <article class="card"><h3>Client in attesa</h3><p>La connessione non è ancora stata prelevata dal programma con una nuova <code>accept()</code>; quindi non riceve ancora la risposta applicativa.</p></article>
+        <article class="card"><h3>Connessione TCP stabilita</h3><p>Il sistema operativo può avere già completato la connessione TCP.</p></article>
+        <article class="card"><h3>Connessione accettata e servita</h3><p>Il programma ha ottenuto la connessione con <code>accept()</code> e sta eseguendo <code>recv()</code> e <code>sendall()</code> per quel client.</p></article>
+        <article class="card"><h3>Connessione in attesa dell’applicazione</h3><p>La connessione TCP può essere stabilita, ma il programma non l’ha ancora prelevata con una nuova <code>accept()</code>; quindi il client non riceve ancora la risposta applicativa.</p></article>
       </div>
       <p class="eyebrow">Parola nuova</p>
       <div class="definition"><strong>Coda delle connessioni</strong><p>È l’area gestita dal sistema operativo in cui possono attendere le connessioni che il programma server non ha ancora prelevato con <code>accept()</code>. La sua capacità è limitata.</p></div>
@@ -137,14 +137,14 @@ CLIENT B ─────────► IN ATTESA</code></pre>
     <section class="section reading" aria-labelledby="handshake">
       <p class="eyebrow">Breve richiamo</p>
       <h2 id="handshake">La connessione può precedere <code>accept()</code></h2>
-      <p>Nel Transmission Control Protocol (TCP), il collegamento viene stabilito con uno scambio iniziale chiamato <strong>three-way handshake</strong>, cioè “stretta di mano in tre passaggi”:</p>
+      <p>Breve richiamo: nel Transmission Control Protocol (TCP), il collegamento viene stabilito con il <strong>three-way handshake</strong>, cioè uno scambio in tre passaggi:</p>
       <pre><code>Client                Server
 
 SYN ------------------&gt;
     &lt;--------------- SYN + ACK
 ACK ------------------&gt;</code></pre>
-      <p>Questo scambio è gestito dal sistema operativo. Perciò il Client B può apparire collegato a livello TCP anche se il programma server è ancora occupato con il Client A e non ha ancora eseguito una nuova <code>accept()</code>.</p>
-      <p>Per il nostro esperimento basta riconoscere la distinzione: non dobbiamo analizzare nuovamente tutti i dettagli del protocollo TCP.</p>
+      <p>Lo scambio è gestito dal sistema operativo: una connessione può risultare stabilita mentre il programma server non ha ancora eseguito una nuova <code>accept()</code>.</p>
+      <p>Per questo esperimento basta comprendere la distinzione tra connessione TCP stabilita e connessione già accettata dall’applicazione.</p>
     </section>
 
     <section class="section" aria-labelledby="previsione">
