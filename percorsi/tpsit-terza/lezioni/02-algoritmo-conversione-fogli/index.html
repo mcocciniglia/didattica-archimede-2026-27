@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 3.02 di TPSIT per la classe terza: dalle divisioni successive a un algoritmo di conversione automatizzato con Google Fogli.">
+  <title>3.02 — Dalla procedura all’algoritmo: conversione di base con Google Fogli</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#algoritmo">Algoritmo</a>
+        <a href="#foglio">Google Fogli</a>
+        <a href="#parametro">Parametro</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT terza</a><span aria-hidden="true">/</span><span>3.02</span></nav>
+      <p class="eyebrow">3.02 · Modulo 3.1 · 55 minuti</p>
+      <h1>Dalla procedura all’algoritmo: conversione di base con Google Fogli</h1>
+      <p class="lead">Le divisioni successive diventano una sequenza di istruzioni che il foglio può ripetere per noi.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">TPSIT · Classe terza</span>
+        <span role="listitem">Strumento: Google Fogli</span>
+        <span role="listitem">Prerequisito: Lezione 3.01</span>
+        <span role="listitem">Esempi: basi da 2 a 10</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="laboratorio">
+      <p class="eyebrow">Cosa abbiamo fatto in laboratorio</p>
+      <h2 id="laboratorio">Dalle divisioni al foglio di calcolo</h2>
+      <p>Abbiamo trasformato il procedimento delle divisioni successive in un piccolo <strong>algoritmo</strong> realizzato con Google Fogli.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><h3>Il computer non “indovina” la conversione.</h3><p>Esegue esattamente, una dopo l’altra, le <strong>istruzioni</strong> che gli forniamo.</p></div></aside>
+      <p>Nella <a href="../01-fondamenti-binario/index.html">Lezione 3.01</a> abbiamo già usato le divisioni successive per passare dal decimale al binario. Qui riprendiamo quegli stessi passi e li facciamo eseguire al foglio.</p>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Che cosa saprai riconoscere</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Passi ordinati</h3><p>Un algoritmo è formato da istruzioni eseguite in un ordine preciso.</p></article>
+        <article class="card"><h3>Operazioni ripetute</h3><p>Google Fogli può ripetere automaticamente gli stessi calcoli su righe successive.</p></article>
+        <article class="card"><h3>Un dato che cambia</h3><p>La base può diventare un parametro letto da una cella.</p></article>
+      </div>
+    </section>
+
+    <section id="algoritmo" class="section reading" aria-labelledby="passi-algoritmo">
+      <p class="eyebrow">Il nostro algoritmo</p>
+      <h2 id="passi-algoritmo">Sette passi, sempre nello stesso ordine</h2>
+      <ol class="steps">
+        <li><strong>Scegli il numero da convertire.</strong></li>
+        <li><strong>Scegli la base.</strong></li>
+        <li><strong>Dividi il numero per la base.</strong></li>
+        <li><strong>Conserva il resto.</strong></li>
+        <li><strong>Usa il quoziente come nuovo numero.</strong></li>
+        <li><strong>RIPETI finché il quoziente diventa 0.</strong></li>
+        <li><strong>Leggi i resti dal basso verso l’alto.</strong></li>
+      </ol>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">↻</span><div><p class="eyebrow">La parola importante</p><h3>RIPETI</h3><p>Le istruzioni “dividi, conserva il resto, usa il nuovo quoziente” vengono eseguite più volte. Questa <strong>ripetizione</strong> è il primo esempio intuitivo di un ciclo.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="parole-chiave">
+      <p class="eyebrow">Parole chiave</p>
+      <h2 id="parole-chiave">I nomi delle parti</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Istruzione</h3><p>Un singolo passo che indica che cosa fare.</p></article>
+        <article class="card"><h3>Ripetizione</h3><p>La stessa sequenza di passi eseguita più volte.</p></article>
+        <article class="card"><h3>Parametro</h3><p>Un dato che possiamo cambiare senza modificare l’algoritmo.</p></article>
+        <article class="card"><h3>Quoziente e resto</h3><p>Il risultato intero della divisione e ciò che rimane.</p></article>
+      </div>
+    </section>
+
+    <section id="foglio" class="section" aria-labelledby="esempio-foglio">
+      <p class="eyebrow">Esempio con Google Fogli</p>
+      <h2 id="esempio-foglio">Numero in E3, base in H2</h2>
+      <p>Prepariamo poche celle. La colonna E conterrà il numero iniziale e i <strong>quozienti</strong>; la colonna F conterrà i <strong>resti</strong>.</p>
+      <figure class="figure">
+        <a href="foglio.png" target="_blank" rel="noopener noreferrer" aria-label="Apri a dimensione intera il confronto tra procedimento manuale e automatico in Google Fogli"><img src="foglio.png" width="1494" height="597" alt="Foglio di calcolo con il procedimento manuale a sinistra e la conversione automatica parametrica a destra"></a>
+        <figcaption class="caption"><a href="foglio.png" target="_blank" rel="noopener noreferrer">Apri l’immagine a dimensione intera<span class="visually-hidden"> in una nuova scheda</span></a></figcaption>
+      </figure>
+      <div class="table-wrap">
+        <table>
+          <caption>Valori e formule iniziali del foglio</caption>
+          <thead><tr><th scope="col">Cella</th><th scope="col">Contenuto</th><th scope="col">Significato</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">H2</th><td><code>2</code></td><td>Base scelta: prova anche 8 o un’altra base da 2 a 10.</td></tr>
+            <tr><th scope="row">E3</th><td><code>255</code></td><td>Numero iniziale da convertire.</td></tr>
+            <tr><th scope="row">E4</th><td><code>=QUOZIENTE(E3;$H$2)</code></td><td>Quoziente intero della prima divisione.</td></tr>
+            <tr><th scope="row">F3</th><td><code>=RESTO(E3;$H$2)</code></td><td>Resto della prima divisione.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card-grid">
+        <article class="card"><h3><code>QUOZIENTE</code></h3><p>Ci dà il risultato intero della divisione. Questo valore continua nella riga successiva.</p></article>
+        <article class="card"><h3><code>RESTO</code></h3><p>Ci dà ciò che rimane dopo la divisione. Conserviamo questo valore per costruire il risultato finale.</p></article>
+        <article class="card"><h3><code>$H$2</code></h3><p>Contiene la base. I simboli <code>$</code> mantengono fermo il riferimento a H2 quando trasciniamo la formula.</p></article>
+      </div>
+    </section>
+
+    <section class="section reading" aria-labelledby="trascina">
+      <p class="eyebrow">Automatizziamo la ripetizione</p>
+      <h2 id="trascina">Trascina le formule verso il basso</h2>
+      <p>Quando trasciniamo la formula di E4, il riferimento al quoziente precedente cambia riga; il riferimento alla base resta sempre H2:</p>
+      <pre><code>E4 = QUOZIENTE(E3; base)
+E5 = QUOZIENTE(E4; base)
+E6 = QUOZIENTE(E5; base)
+...</code></pre>
+      <p>Lo stesso accade per i resti:</p>
+      <pre><code>F3 = RESTO(E3; base)
+F4 = RESTO(E4; base)
+F5 = RESTO(E5; base)
+...</code></pre>
+      <p>Continuiamo finché nella colonna dei quozienti compare 0. Poi leggiamo i resti <strong>dal basso verso l’alto</strong>.</p>
+    </section>
+
+    <section id="parametro" class="section" aria-labelledby="valore-parametro">
+      <p class="eyebrow">Passaggio fondamentale</p>
+      <h2 id="valore-parametro">Da valore fisso a parametro</h2>
+      <div class="card-grid">
+        <article class="card">
+          <h3>Prima versione: base fissa</h3>
+          <pre><code>=QUOZIENTE(E3;2)
+=RESTO(E3;2)</code></pre>
+          <p>Queste formule funzionano soltanto per la base 2.</p>
+        </article>
+        <article class="card">
+          <h3>Versione migliorata: base variabile</h3>
+          <pre><code>=QUOZIENTE(E3;$H$2)
+=RESTO(E3;$H$2)</code></pre>
+          <p>La base non è più scritta nella formula: viene letta dalla cella H2.</p>
+        </article>
+      </div>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><h3>Abbiamo sostituito un valore fisso con un parametro.</h3><p>L’algoritmo non cambia: cambia soltanto il dato che gli forniamo.</p></div></aside>
+      <p>Questo rende l’algoritmo più <strong>generale</strong>: gli stessi passi possono essere usati con basi diverse cambiando una sola cella.</p>
+    </section>
+
+    <section class="section" aria-labelledby="se-perso">
+      <p class="eyebrow">Ripasso essenziale</p>
+      <h2 id="se-perso">Se ti sei perso durante la lezione</h2>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">4</span><div><h3>Ricorda solo queste quattro cose</h3><ol><li>Il numero va diviso per la base.</li><li>Il quoziente continua nella riga successiva.</li><li>Il resto viene conservato.</li><li>Alla fine i resti si leggono dal basso verso l’alto.</li></ol></div></aside>
+      <pre><code>NUMERO
+   ↓
+divisione per BASE
+   ↓
+┌───────────────┐
+│               │
+QUOZIENTE     RESTO
+   │             │
+   ↓             ↓
+nuovo numero   conserva
+   │
+   └── RIPETI finché il quoziente è 0</code></pre>
+    </section>
+
+    <section class="section" aria-labelledby="prova-tu">
+      <p class="eyebrow">Ora prova tu</p>
+      <h2 id="prova-tu">Cambia soltanto la base</h2>
+      <ol class="steps">
+        <li><strong>Inserisci 100 come numero.</strong><p>Scrivi <code>100</code> nella cella E3.</p></li>
+        <li><strong>Inserisci 2 come base.</strong><p>Scrivi <code>2</code> nella cella H2 e completa la conversione.</p></li>
+        <li><strong>Prova la base 8.</strong><p>Cambia soltanto H2 da <code>2</code> a <code>8</code>. Quale altra parte del foglio devi modificare?</p></li>
+      </ol>
+      <details><summary>Controlla l’idea importante</summary><p>Devi modificare soltanto la cella H2, che contiene il parametro <strong>BASE</strong>. Le formule e i passi dell’algoritmo restano uguali.</p></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="verifica">
+      <p class="eyebrow">Senza voto</p>
+      <h2 id="verifica">Tre domande rapide</h2>
+      <ol>
+        <li>A cosa serve la funzione <code>RESTO</code>?</li>
+        <li>Perché abbiamo scritto <code>$H$2</code> invece di <code>2</code>?</li>
+        <li>In quale ordine devono essere letti i resti?</li>
+      </ol>
+    </section>
+
+    <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><p class="eyebrow">Nota sulle basi</p><h2>Per ora lavoriamo con le basi da 2 a 10</h2><p>Nelle basi superiori a 10 dovremo affrontare anche la rappresentazione delle cifre che vengono dopo il 9. Lo faremo in seguito.</p></div></aside>
+
+    <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Da ricordare</p><h2>Persona e foglio eseguono lo stesso algoritmo</h2><p>Il foglio ci aiuta ad automatizzare la ripetizione; il parametro BASE rende gli stessi passi utilizzabili in casi diversi.</p></div></aside>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../01-fondamenti-binario/index.html">← Lezione 3.01</a><a href="../../index.html">Indice del percorso</a><a href="../03-binario-decimale/index.html">Lezione 3.03 →</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe terza</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
