@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 4.00 di TPSIT per la classe quarta: dal programma al processo, esecuzione sequenziale e primi thread concorrenti in Python.">
+  <title>4.00 — Dal programma al processo: i primi thread in Python</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#thread">Thread</a>
+        <a href="#laboratorio">Laboratorio</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT quarta</a><span aria-hidden="true">/</span><span>4.00</span></nav>
+      <p class="eyebrow">4.00 · Laboratorio · 2 ore</p>
+      <h1>Dal programma al processo: i primi thread in Python</h1>
+      <p class="lead">Quando avviamo un programma, che cosa succede realmente?</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">TPSIT · Classe quarta</span>
+        <span role="listitem">Strumenti: Python 3 e editor di codice</span>
+        <span role="listitem">Prerequisiti: funzioni, cicli e terminale</span>
+        <span role="listitem">Prodotto: due script eseguibili</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="domanda-iniziale">
+      <p class="eyebrow">10 minuti · Partiamo da ciò che usiamo</p>
+      <h2 id="domanda-iniziale">Che cosa accade quando premiamo “Avvia”?</h2>
+      <p>Un browser, Spotify, un videogioco, un editor e un programma Python sono oggetti diversi, ma hanno qualcosa in comune: contengono istruzioni che il computer può eseguire.</p>
+      <p><strong>Obiettivo di oggi:</strong> distinguere un programma da un processo e osservare due attività che avanzano durante lo stesso intervallo di tempo.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><h3>Prima ipotesi</h3><p>Quando apriamo due volte lo stesso programma, stiamo usando due programmi diversi oppure due esecuzioni dello stesso programma?</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Che cosa saprai osservare</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Distinguere</h3><p>Spiegare con un esempio la differenza tra programma e processo.</p></article>
+        <article class="card"><h3>Confrontare</h3><p>Riconoscere la differenza tra esecuzione sequenziale ed esecuzione con più thread.</p></article>
+        <article class="card"><h3>Costruire</h3><p>Avviare due thread Python e attendere la loro conclusione con <code>join()</code>.</p></article>
+      </div>
+    </section>
+
+    <section class="section reading" aria-labelledby="programma-processo">
+      <p class="eyebrow">15 minuti · Due parole da non confondere</p>
+      <h2 id="programma-processo">Programma e processo</h2>
+      <div class="definition"><strong>Programma</strong><p>È un insieme di istruzioni memorizzate, per esempio nel file <code>programma.py</code>.</p></div>
+      <div class="definition"><strong>Processo</strong><p>È un programma mentre viene eseguito.</p></div>
+      <pre><code>PROGRAMMA
+    |
+    | esecuzione
+    v
+PROCESSO</code></pre>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><p class="eyebrow">Un’analogia, non una definizione</p><h3>La ricetta e la cucina</h3><pre><code>ricetta                    → programma
+ricetta eseguita in cucina → processo</code></pre><p>L’analogia aiuta a distinguere le istruzioni memorizzate dall’attività in corso, ma un processo informatico non è davvero una cucina.</p></div></aside>
+      <p>Lo stesso programma può essere avviato più volte. Ogni avvio crea una distinta esecuzione:</p>
+      <pre><code>programma.py
+   |
+   +--&gt; processo 1
+   +--&gt; processo 2
+   +--&gt; processo 3</code></pre>
+      <p><strong>Domanda:</strong> se chiudiamo il processo 2, il file <code>programma.py</code> viene cancellato?</p>
+    </section>
+
+    <section id="sequenziale" class="section" aria-labelledby="primo-esperimento">
+      <p class="eyebrow">15 minuti · Primo esperimento</p>
+      <h2 id="primo-esperimento">Due funzioni, una dopo l’altra</h2>
+      <p>Crea il file <code>sequenziale.py</code> e inserisci questo codice:</p>
+      <pre><code>import time
+
+def attivita_a():
+    for i in range(5):
+        print("A:", i)
+        time.sleep(1)
+
+def attivita_b():
+    for i in range(5):
+        print("B:", i)
+        time.sleep(1)
+
+attivita_a()
+attivita_b()
+
+print("Fine")</code></pre>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><h3>Prevedi prima di eseguire</h3><p>A e B verranno eseguite insieme oppure una dopo l’altra? Scrivi la tua previsione, poi avvia il programma.</p></div></aside>
+      <p>Esegui nel terminale:</p>
+      <pre><code>python sequenziale.py</code></pre>
+      <p>Se sul computer il comando è diverso, usa <code>py sequenziale.py</code>.</p>
+      <p>Dovresti osservare prima tutte le stampe di A, poi tutte quelle di B:</p>
+      <pre><code>A: 0
+A: 1
+A: 2
+...
+B: 0
+B: 1
+...</code></pre>
+      <div class="definition"><strong>Esecuzione sequenziale</strong><p>Le istruzioni vengono eseguite in sequenza: in questo caso la seconda funzione aspetta che la prima termini.</p></div>
+    </section>
+
+    <section class="section reading" aria-labelledby="problema-concorrenza">
+      <p class="eyebrow">10 minuti · Il problema</p>
+      <h2 id="problema-concorrenza">Aspettare senza poter fare altro?</h2>
+      <p>Immaginiamo un programma che debba scaricare un file e continuare a rispondere all’utente. Con una sequenza rigida, la seconda attività potrebbe restare ferma durante l’attesa:</p>
+      <pre><code>scarica file
+      |
+      | attesa...
+      |
+      v
+rispondi all’utente</code></pre>
+      <p><strong>Domanda:</strong> possiamo fare in modo che le due attività progrediscano nello stesso intervallo di tempo?</p>
+      <div class="definition"><strong>Concorrenza</strong><p>Più attività possono avanzare durante lo stesso intervallo di tempo.</p></div>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Per ora parliamo di concorrenza</h3><p>Non stiamo affermando che due thread vengano eseguiti nello stesso istante su due CPU. La differenza tra concorrenza e parallelismo sarà approfondita in seguito.</p></div></aside>
+    </section>
+
+    <section id="thread" class="section" aria-labelledby="primo-thread">
+      <p class="eyebrow">20 minuti · Trasformiamo il programma</p>
+      <h2 id="primo-thread">I primi thread Python</h2>
+      <div class="definition"><strong>Thread</strong><p>È un flusso di esecuzione all’interno di un processo.</p></div>
+      <p>Ripartiamo dalle due funzioni e affidiamole a due thread:</p>
+      <pre><code>import time
+from threading import Thread
+
+def attivita_a():
+    for i in range(5):
+        print("A:", i)
+        time.sleep(1)
+
+def attivita_b():
+    for i in range(5):
+        print("B:", i)
+        time.sleep(1)
+
+t1 = Thread(target=attivita_a)
+t2 = Thread(target=attivita_b)
+
+t1.start()
+t2.start()
+
+print("Il main continua")</code></pre>
+      <div class="card-grid">
+        <article class="card"><h3><code>Thread(...)</code></h3><p>Prepara un nuovo thread.</p></article>
+        <article class="card"><h3><code>target=</code></h3><p>Indica la funzione che il thread dovrà eseguire.</p></article>
+        <article class="card"><h3><code>start()</code></h3><p>Avvia il thread preparato.</p></article>
+      </div>
+      <p>Esegui il programma più volte e confronta le stampe. A e B possono alternarsi, ma non dobbiamo aspettarci sempre la stessa sequenza.</p>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>L’ordine non è garantito</h3><p>Con i thread non dobbiamo assumere che le istruzioni delle diverse attività vengano sempre eseguite nello stesso ordine.</p></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="main-thread">
+      <p class="eyebrow">10 minuti · Un terzo flusso</p>
+      <h2 id="main-thread">Anche il programma principale continua</h2>
+      <p>Perché la scritta <code>Il main continua</code> può comparire prima della fine di A e B? Dopo gli avvii, anche il flusso principale prosegue con la sua istruzione successiva.</p>
+      <pre><code>PROCESSO PYTHON
+
+├── main thread
+├── thread A
+└── thread B</code></pre>
+      <div class="definition"><strong>Main thread</strong><p>È il flusso di esecuzione principale da cui parte il programma Python.</p></div>
+    </section>
+
+    <section class="section" aria-labelledby="attendere-thread">
+      <p class="eyebrow">15 minuti · Aspettare nel punto giusto</p>
+      <h2 id="attendere-thread">Introduciamo <code>join()</code></h2>
+      <p>Se scriviamo <code>print("Fine")</code> subito dopo gli avvii, il messaggio può comparire mentre A e B stanno ancora lavorando. Modifica la parte finale:</p>
+      <pre><code>t1.start()
+t2.start()
+
+t1.join()
+t2.join()
+
+print("Fine")</code></pre>
+      <div class="definition"><strong><code>join()</code></strong><p>Fa attendere il thread che lo esegue finché il thread indicato non termina.</p></div>
+      <div class="card-grid">
+        <article class="card"><h3><code>start()</code></h3><p>Avvia il thread.</p></article>
+        <article class="card"><h3><code>join()</code></h3><p>Aspetta che quel thread termini.</p></article>
+      </div>
+      <p><strong>Controllo:</strong> quale thread esegue le due chiamate a <code>join()</code> in questo programma?</p>
+    </section>
+
+    <section id="laboratorio" class="section" aria-labelledby="due-attivita">
+      <p class="eyebrow">20 minuti · Laboratorio guidato</p>
+      <h2 id="due-attivita">Esercizio 1 — Due attività</h2>
+      <p><strong>Prodotto atteso:</strong> il file <code>esercizio_thread.py</code>, provato prima in sequenza e poi con due thread.</p>
+      <ol class="steps">
+        <li><strong>Crea due funzioni.</strong><p>La prima stampa da <code>Download: 1</code> a <code>Download: 5</code>, con una pausa di 1 secondo. La seconda stampa da <code>Interfaccia attiva: 1</code> a <code>Interfaccia attiva: 5</code>, con una pausa di 0,7 secondi.</p></li>
+        <li><strong>Esegui le funzioni in sequenza.</strong><p>Osserva quale attività deve attendere e annota la durata approssimativa.</p></li>
+        <li><strong>Trasforma le attività in thread.</strong><p>Crea due oggetti <code>Thread</code>, assegna i due <code>target</code> e avviali.</p></li>
+        <li><strong>Confronta il comportamento.</strong><p>Esegui più volte e osserva come si alternano le stampe.</p></li>
+        <li><strong>Aggiungi l’attesa finale.</strong><p>Usa <code>join()</code> in modo che <code>Programma terminato</code> compaia soltanto dopo la conclusione di entrambe le attività.</p></li>
+      </ol>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><h3>Criteri di completamento</h3><p>Lo script funziona in entrambe le versioni; le pause sono diverse; il messaggio finale appare per ultimo; sai indicare dove usi <code>start()</code> e <code>join()</code>.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="piccola-sfida">
+      <p class="eyebrow">Se rimane tempo</p>
+      <h2 id="piccola-sfida">Piccola sfida — Un terzo thread</h2>
+      <p>Aggiungi una funzione <code>musica()</code> che stampi cinque volte <code>Musica in riproduzione</code>, con una pausa di 0,5 secondi. Avviala insieme alle altre due attività e fai apparire il messaggio finale soltanto quando tutti e tre i thread sono terminati.</p>
+      <details><summary>Suggerimento — come preparare il terzo thread</summary><pre><code>t3 = Thread(target=musica)</code></pre><p>Ricorda che preparare, avviare e attendere sono tre azioni distinte.</p></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="domande-finali">
+      <p class="eyebrow">Verifica rapida</p>
+      <h2 id="domande-finali">Sette domande per spiegare ciò che hai visto</h2>
+      <ol>
+        <li>Qual è la differenza tra programma e processo?</li>
+        <li>Che cosa significa esecuzione sequenziale?</li>
+        <li>Che cos’è, in modo semplice, un thread?</li>
+        <li>Che cosa fa <code>start()</code>?</li>
+        <li>Che cosa fa <code>join()</code>?</li>
+        <li>Perché non possiamo essere certi dell’ordine delle stampe prodotte da thread differenti?</li>
+        <li>Un processo può contenere più thread?</li>
+      </ol>
+    </section>
+
+    <section class="section" aria-labelledby="riepilogo">
+      <p class="eyebrow">Riepilogo visuale</p>
+      <h2 id="riepilogo">Dal file ai flussi di esecuzione</h2>
+      <pre><code>PROGRAMMA
+    |
+    v
+PROCESSO
+    |
+    +---- main thread
+    |
+    +---- thread A
+    |
+    +---- thread B</code></pre>
+      <div class="table-wrap">
+        <table>
+          <caption>I concetti essenziali della lezione</caption>
+          <thead><tr><th scope="col">Concetto</th><th scope="col">Significato</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Programma</th><td>Insieme di istruzioni memorizzate.</td></tr>
+            <tr><th scope="row">Processo</th><td>Programma in esecuzione.</td></tr>
+            <tr><th scope="row">Thread</th><td>Flusso di esecuzione interno a un processo.</td></tr>
+            <tr><th scope="row"><code>start()</code></th><td>Avvia un thread.</td></tr>
+            <tr><th scope="row"><code>join()</code></th><td>Attende la conclusione di un thread.</td></tr>
+            <tr><th scope="row">Concorrenza</th><td>Più attività avanzano nello stesso intervallo di tempo.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../../index.html">← Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe quarta</strong></p><p>Anno scolastico 2026/27 · Istituto Archimede</p></div></footer>
+</body>
+</html>
