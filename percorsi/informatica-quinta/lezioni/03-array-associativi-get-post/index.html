@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 3 di Informatica per le classi quinte: array associativi e lettura delle coppie chiave-valore disponibili in $_GET e $_POST.">
+  <title>Lezione 3 — Array associativi, $_GET e $_POST</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#array-associativo">Array</a>
+        <a href="#get-post">GET e POST</a>
+        <a href="#laboratorio">Laboratorio</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">Informatica quinta</a><span aria-hidden="true">/</span><span>Lezione 3</span></nav>
+      <p class="eyebrow">Lezione 3 · M0 · Informatica · Classi quinte</p>
+      <h1>Array associativi, $_GET e $_POST</h1>
+      <p class="lead">Diamo un significato preciso alle parentesi quadre: PHP organizza i dati ricevuti come coppie chiave-valore.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">Durata: circa 1 ora</span>
+        <span role="listitem">Strumenti: editor, terminale e browser</span>
+        <span role="listitem">Prerequisito: Lezione 2</span>
+        <span role="listitem">Prodotto: file prova.php</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="richiamo">
+      <p class="eyebrow">Ripasso iniziale</p>
+      <h2 id="richiamo">Che cosa significano le parentesi quadre?</h2>
+      <p>Nella <a href="../02-form-get/index.html">Lezione 2</a> abbiamo scritto <code>$_GET["nome"]</code> per leggere un dato inviato dal browser. Ora fermiamoci a capire perché quella scrittura funziona.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Domanda guida</p><h3>In <code>$_GET["nome"]</code>, che cosa rappresenta <code>"nome"</code>?</h3><p>Alla fine della lezione saprai leggerlo come una <strong>chiave</strong> associata a un valore.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Che cosa saprai riconoscere</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Indice</h3><p>Leggere un valore di un array numerico usando la sua posizione.</p></article>
+        <article class="card"><h3>Chiave e valore</h3><p>Individuare le coppie presenti in un array associativo.</p></article>
+        <article class="card"><h3>Dati ricevuti</h3><p>Spiegare che <code>$_GET</code> e <code>$_POST</code> rendono disponibili coppie chiave-valore.</p></article>
+      </div>
+    </section>
+
+    <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Il punto della lezione</p><h2>Non sono formule speciali</h2><p><code>$_GET</code> e <code>$_POST</code> sono array associativi predisposti automaticamente da PHP: a ogni chiave corrisponde un valore.</p></div></aside>
+
+    <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><p class="eyebrow">Parole nuove</p><h2>Quattro termini essenziali</h2><ul><li><strong>array:</strong> una variabile che raccoglie più valori;</li><li><strong>indice:</strong> il numero che identifica un elemento in un array numerico;</li><li><strong>chiave:</strong> il nome che identifica un valore in un array associativo;</li><li><strong><code>var_dump()</code>:</strong> uno strumento che mostra che cosa contiene una variabile.</li></ul></div></aside>
+
+    <aside class="callout"><span class="callout-icon" aria-hidden="true">⏱</span><div><p class="eyebrow">Percorso indicativo</p><h2>Un’ora, un solo concetto centrale</h2><p>Circa 10 minuti da variabile ad array, 15 minuti sulle coppie chiave-valore, 10 minuti per osservare <code>$_GET</code> e <code>$_POST</code>, 20 minuti di laboratorio e 5 minuti di verifica. Il centro della lezione resta <strong>chiave → valore</strong>.</p></div></aside>
+
+    <section class="section reading" aria-labelledby="variabile">
+      <p class="eyebrow">Un solo dato</p>
+      <h2 id="variabile">Partiamo da una variabile normale</h2>
+      <pre><code>&lt;?php
+$nome = "Marco";
+?&gt;</code></pre>
+      <p>La variabile <code>$nome</code> conserva un solo valore:</p>
+      <pre><code>una variabile
+      ↓
+un valore</code></pre>
+      <p>Per questa lezione non ci servono dettagli sui tipi o sulla memoria: ci basta riconoscere il nome della variabile e il valore assegnato.</p>
+
+      <h3>Quando abbiamo più valori</h3>
+      <pre><code>&lt;?php
+$nomi = ["Marco", "Anna", "Luca"];
+
+echo $nomi[0];
+echo $nomi[1];
+echo $nomi[2];
+?&gt;</code></pre>
+      <p>In questo <strong>array numerico</strong> ogni elemento è identificato da un numero. Il primo indice è <code>0</code>, poi troviamo <code>1</code> e <code>2</code>.</p>
+      <div class="card-grid">
+        <article class="card"><h3><code>$nomi[0]</code></h3><p>Restituisce <code>"Marco"</code>.</p></article>
+        <article class="card"><h3><code>$nomi[1]</code></h3><p>Restituisce <code>"Anna"</code>.</p></article>
+        <article class="card"><h3><code>$nomi[2]</code></h3><p>Restituisce <code>"Luca"</code>.</p></article>
+      </div>
+    </section>
+
+    <section id="array-associativo" class="section reading" aria-labelledby="un-nome">
+      <p class="eyebrow">Il passaggio decisivo</p>
+      <h2 id="un-nome">Un nome invece di un numero</h2>
+      <p>Un <strong>array associativo</strong> identifica ogni valore con una chiave significativa:</p>
+      <pre><code>&lt;?php
+$studente = [
+    "nome" =&gt; "Marco",
+    "classe" =&gt; "5G"
+];
+
+echo $studente["nome"];
+?&gt;</code></pre>
+      <div class="card-grid">
+        <article class="card"><h3><code>"nome"</code> → <code>"Marco"</code></h3><p><code>"nome"</code> è la <strong>chiave</strong>; <code>"Marco"</code> è il <strong>valore</strong>.</p></article>
+        <article class="card"><h3><code>"classe"</code> → <code>"5G"</code></h3><p><code>"classe"</code> è la <strong>chiave</strong>; <code>"5G"</code> è il <strong>valore</strong>.</p></article>
+      </div>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Idea centrale</p><h3>Chiave → valore</h3><p><code>$studente["nome"]</code> significa: recupera dall’array <code>$studente</code> il valore associato alla chiave <code>"nome"</code>.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="prova-studente">
+      <p class="eyebrow">Prova breve</p>
+      <h2 id="prova-studente">Costruisci una frase</h2>
+      <p>Parti da questo array associativo:</p>
+      <pre><code>&lt;?php
+$studente = [
+    "nome" =&gt; "Mario",
+    "cognome" =&gt; "Rossi",
+    "classe" =&gt; "5G"
+];
+?&gt;</code></pre>
+      <p>Usa <code>$studente["nome"]</code>, <code>$studente["cognome"]</code> e <code>$studente["classe"]</code> per visualizzare:</p>
+      <pre><code>Mario Rossi frequenta la classe 5G.</code></pre>
+      <details><summary>Controlla una possibile soluzione</summary><pre><code>echo $studente["nome"] . " " . $studente["cognome"]
+    . " frequenta la classe " . $studente["classe"] . ".";</code></pre></details>
+    </section>
+
+    <section id="get-post" class="section reading" aria-labelledby="collegamento-get">
+      <p class="eyebrow">Torniamo alla Lezione 2</p>
+      <h2 id="collegamento-get">Il collegamento con <code>$_GET</code></h2>
+      <p>Aprendo questo indirizzo inviamo due parametri al server:</p>
+      <pre><code>prova.php?nome=Marco&amp;classe=5G</code></pre>
+      <p>PHP rende disponibili quei dati attraverso <code>$_GET</code>. Per capire il suo contenuto possiamo rappresentarlo così:</p>
+      <pre><code>$_GET = [
+    "nome" =&gt; "Marco",
+    "classe" =&gt; "5G"
+];</code></pre>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><p class="eyebrow">Attenzione</p><h3>È una rappresentazione per capire</h3><p>Non stiamo assegnando manualmente un valore a <code>$_GET</code>. È PHP che prepara questa variabile usando i dati ricevuti con GET.</p></div></aside>
+      <pre><code>URL
+
+?nome=Marco&amp;classe=5G
+         │
+         ▼
+PHP prepara $_GET
+         │
+         ├── "nome"   → "Marco"
+         └── "classe" → "5G"</code></pre>
+      <p>Ora possiamo leggere i valori attraverso le chiavi:</p>
+      <pre><code>&lt;?php
+echo $_GET["nome"];
+echo $_GET["classe"];
+?&gt;</code></pre>
+    </section>
+
+    <section class="section reading" aria-labelledby="osserva-array">
+      <p class="eyebrow">Guardiamo dentro</p>
+      <h2 id="osserva-array">Facciamo vedere realmente l’array</h2>
+      <p>La funzione <code>var_dump()</code> mostra che cosa contiene una variabile. In <code>prova.php</code> scrivi:</p>
+      <pre><code>&lt;?php
+var_dump($_GET);
+?&gt;</code></pre>
+      <p>Con l’indirizzo <code>prova.php?nome=Marco&amp;classe=5G</code> vedrai un risultato simile:</p>
+      <pre><code>array(2) {
+  ["nome"]=&gt;
+  string(5) "Marco"
+  ["classe"]=&gt;
+  string(2) "5G"
+}</code></pre>
+      <p>Concentrati sulle associazioni <strong>nome → Marco</strong> e <strong>classe → 5G</strong>. Le scritte <code>string(5)</code> e <code>string(2)</code> indicano anche il tipo e la lunghezza del testo, ma per ora non dobbiamo approfondirle.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="collegamento-post">
+      <p class="eyebrow">La stessa idea</p>
+      <h2 id="collegamento-post">Il collegamento con <code>$_POST</code></h2>
+      <p>Un form può inviare gli stessi dati usando POST:</p>
+      <pre><code>&lt;form action="ricevi.php" method="post"&gt;
+    &lt;label for="nome"&gt;Nome:&lt;/label&gt;
+    &lt;input type="text" id="nome" name="nome"&gt;
+
+    &lt;label for="classe"&gt;Classe:&lt;/label&gt;
+    &lt;input type="text" id="classe" name="classe"&gt;
+
+    &lt;button type="submit"&gt;Invia&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+      <p>In <code>ricevi.php</code> possiamo osservare i dati ricevuti:</p>
+      <pre><code>&lt;?php
+var_dump($_POST);
+?&gt;</code></pre>
+      <div class="card-grid">
+        <article class="card"><h3><code>"nome"</code> → <code>"Marco"</code></h3><p>La coppia è disponibile in <code>$_POST["nome"]</code>.</p></article>
+        <article class="card"><h3><code>"classe"</code> → <code>"5G"</code></h3><p>La coppia è disponibile in <code>$_POST["classe"]</code>.</p></article>
+      </div>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Confronto decisivo</p><h3>GET e POST cambiano l’arrivo, non l’idea chiave-valore</h3><pre><code>GET                 POST
+ ↓                    ↓
+$_GET               $_POST
+ ↓                    ↓
+chiave → valore     chiave → valore</code></pre><p>GET e POST cambiano il modo in cui i dati arrivano al server; PHP ce li rende disponibili attraverso array associativi. Questo confronto non significa che POST sia automaticamente sicuro.</p></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="origine-chiave">
+      <p class="eyebrow">Dal form a PHP</p>
+      <h2 id="origine-chiave">Da dove arriva la chiave?</h2>
+      <p>Nel form, l’attributo <code>name</code> sceglie il nome della chiave:</p>
+      <pre><code>&lt;input type="text" name="nome"&gt;
+             │
+             ▼
+       chiave "nome"
+             │
+             ▼
+      $_POST["nome"]</code></pre>
+      <p>Lo stesso collegamento vale con GET: <code>name="nome"</code> produce una chiave <code>"nome"</code> che leggiamo con <code>$_GET["nome"]</code>.</p>
+
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><p class="eyebrow">Errore frequente</p><h3>Se la chiave non esiste</h3><p>Se scriviamo <code>$_GET["nome"]</code> ma nell’URL non è presente il parametro <code>nome</code>, PHP può produrre un avviso. Per questo incontriamo questi controlli:</p></div></aside>
+      <div class="card-grid">
+        <article class="card"><h3><code>isset($_GET["nome"])</code></h3><p>Chiede: “Nell’array <code>$_GET</code> esiste la chiave <code>nome</code>?”</p></article>
+        <article class="card"><h3><code>$_GET["nome"] ?? ""</code></h3><p>Significa: “Se la chiave <code>nome</code> esiste, usa il suo valore; altrimenti usa una stringa vuota”.</p></article>
+      </div>
+      <p>Non approfondiamo formalmente l’operatore <code>??</code>: ci servirà nella <a href="../04-form-post/index.html">Lezione 4</a> per controllare i dati ricevuti.</p>
+    </section>
+
+    <section id="laboratorio" class="section" aria-labelledby="prova-get">
+      <p class="eyebrow">Esercitazione guidata</p>
+      <h2 id="prova-get">Laboratorio — Osserva <code>$_GET</code></h2>
+      <p><strong>Prodotto atteso:</strong> un file <code>prova.php</code> che mostra l’array ricevuto e usa tre chiavi.</p>
+      <ol class="steps">
+        <li><strong>Crea <code>prova.php</code>.</strong><p>Scrivi il codice seguente e avvia il server locale nella cartella.</p></li>
+        <li><strong>Apri l’indirizzo completo.</strong><p>Visita <code>http://localhost:8000/prova.php?nome=Mario&amp;classe=5G</code>.</p></li>
+        <li><strong>Osserva l’array.</strong><p>Individua nell’output di <code>var_dump()</code> le chiavi <code>nome</code> e <code>classe</code> e i rispettivi valori.</p></li>
+        <li><strong>Cambia i valori.</strong><p>Sostituisci <code>Mario</code> e <code>5G</code> nell’URL, poi aggiorna la pagina.</p></li>
+        <li><strong>Aggiungi una coppia.</strong><p>Completa l’URL con <code>&amp;eta=18</code>, osserva nuovamente <code>var_dump($_GET)</code> e visualizza anche <code>$_GET["eta"]</code>.</p></li>
+      </ol>
+      <pre><code>&lt;?php
+var_dump($_GET);
+
+echo "&lt;p&gt;Nome: " . $_GET["nome"] . "&lt;/p&gt;";
+echo "&lt;p&gt;Classe: " . $_GET["classe"] . "&lt;/p&gt;";
+?&gt;</code></pre>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Conclusione da verificare</p><h3>Un parametro in più crea una coppia in più</h3><p>Aggiungendo <code>&amp;eta=18</code>, nell’array compare la nuova associazione <code>"eta" → "18"</code>. Puoi leggerla con <code>$_GET["eta"]</code>.</p></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="riepilogo">
+      <p class="eyebrow">In breve</p>
+      <h2 id="riepilogo">Il modello da ricordare</h2>
+      <ul class="presentation-checklist">
+        <li>un array numerico identifica i valori con indici come <code>0</code>, <code>1</code> e <code>2</code>;</li>
+        <li>un array associativo identifica i valori con chiavi come <code>"nome"</code> e <code>"classe"</code>;</li>
+        <li><code>$_GET["nome"]</code> e <code>$_POST["nome"]</code> recuperano il valore associato alla chiave <code>"nome"</code>;</li>
+        <li>l’attributo HTML <code>name</code> determina normalmente la chiave ricevuta da PHP.</li>
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="verifica">
+      <p class="eyebrow">Verifica rapida</p>
+      <h2 id="verifica">Quattro domande</h2>
+      <ol>
+        <li>Che differenza c’è tra un array numerico e un array associativo?</li>
+        <li>In <code>$_GET["nome"]</code>, che cosa rappresenta <code>"nome"</code>?</li>
+        <li>Da dove deriva normalmente quella chiave quando utilizziamo un form?</li>
+        <li>Qual è la differenza concettuale tra <code>$_GET</code> e <code>$_POST</code>?</li>
+      </ol>
+      <details><summary>Controlla le risposte</summary><ol><li>Nell’array numerico usiamo indici numerici; nell’array associativo usiamo chiavi.</li><li><code>"nome"</code> è una chiave.</li><li>Deriva dall’attributo <code>name</code> del controllo HTML.</li><li>Entrambi contengono coppie chiave-valore, ma rappresentano dati ricevuti attraverso metodi HTTP differenti.</li></ol></details>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../02-form-get/index.html">← Lezione 2</a><a href="../../index.html">Indice del percorso</a><a href="../04-form-post/index.html">Lezione 4 →</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>Informatica · Classi quinte</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Lezione 3 di Informatica per le classi quinte: confronto tra GET e POST, invio di un form e lettura dei dati con PHP.">
-  <title>Lezione 3 — Dal GET al POST: inviare dati al server</title>
+  <meta name="description" content="Lezione 4 di Informatica per le classi quinte: confronto tra GET e POST, invio di un form e lettura dei dati con PHP.">
+  <title>Lezione 4 — Dal GET al POST: inviare dati al server</title>
   <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
   <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
   <link rel="stylesheet" href="../../../../assets/archimede.css">
@@ -29,14 +29,14 @@
 
   <section class="hero">
     <div class="container">
-      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">Informatica quinta</a><span aria-hidden="true">/</span><span>Lezione 3</span></nav>
-      <p class="eyebrow">Lezione 3 · M0 · Informatica · Classi quinte</p>
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">Informatica quinta</a><span aria-hidden="true">/</span><span>Lezione 4</span></nav>
+      <p class="eyebrow">Lezione 4 · M0 · Informatica · Classi quinte</p>
       <h1>Dal GET al POST: inviare dati al server</h1>
       <p class="lead">Cambiamo una parola nel form, osserviamo la richiesta e costruiamo una risposta PHP con semplici controlli.</p>
       <div class="meta-list" role="list" aria-label="Informazioni essenziali">
         <span role="listitem">Durata: circa 2 ore</span>
         <span role="listitem">Strumenti: editor, terminale e browser</span>
-        <span role="listitem">Prerequisito: Lezione 2</span>
+        <span role="listitem">Prerequisito: Lezione 3</span>
         <span role="listitem">Prodotto: Scheda studente 2.0</span>
       </div>
     </div>
@@ -118,7 +118,7 @@ echo "Ciao " . $nome;
         <article class="card"><h3><code>name="cognome"</code> → <code>$_POST["cognome"]</code></h3><p>Il valore scritto nel campo <strong>cognome</strong>.</p></article>
         <article class="card"><h3><code>name="classe"</code> → <code>$_POST["classe"]</code></h3><p>Il valore scritto nel campo <strong>classe</strong>.</p></article>
       </div>
-      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><p class="eyebrow">Regola pratica</p><h3>Stesso nome nei due punti</h3><p>Se il form usa <code>name="nome"</code>, PHP legge quel valore con <code>$_POST["nome"]</code>. Non serve ancora studiare la teoria degli array: ci basta usare correttamente questa corrispondenza.</p></div></aside>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><p class="eyebrow">Regola pratica</p><h3>Stesso nome nei due punti</h3><p>Come visto nella Lezione 3, se il form usa <code>name="nome"</code>, PHP legge quel valore con <code>$_POST["nome"]</code>: la chiave resta <code>"nome"</code> nei due punti.</p></div></aside>
     </section>
 
     <section id="controllo" class="section reading" aria-labelledby="form-inviato">
@@ -280,7 +280,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       <details><summary>Controlla le risposte</summary><ol><li>Con GET i dati compaiono nella query string dell’URL; con POST non vi compaiono.</li><li>La struttura <code>$_POST</code>.</li><li><strong>No.</strong> POST non cifra automaticamente i dati. La protezione della comunicazione dipende, tra le altre cose, dall’uso di HTTPS.</li></ol></details>
     </section>
 
-    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../02-form-get/index.html">← Lezione 2</a><a href="../../index.html">Indice del percorso</a></nav>
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../03-array-associativi-get-post/index.html">← Lezione 3</a><a href="../../index.html">Indice del percorso</a></nav>
   </main>
 
   <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>Informatica · Classi quinte</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
