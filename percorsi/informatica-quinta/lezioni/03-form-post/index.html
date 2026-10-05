@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 3 di Informatica per le classi quinte: confronto tra GET e POST, invio di un form e lettura dei dati con PHP.">
+  <title>Lezione 3 — Dal GET al POST: inviare dati al server</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#confronto">GET e POST</a>
+        <a href="#controllo">Controlli</a>
+        <a href="#laboratorio">Laboratorio</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">Informatica quinta</a><span aria-hidden="true">/</span><span>Lezione 3</span></nav>
+      <p class="eyebrow">Lezione 3 · M0 · Informatica · Classi quinte</p>
+      <h1>Dal GET al POST: inviare dati al server</h1>
+      <p class="lead">Cambiamo una parola nel form, osserviamo la richiesta e costruiamo una risposta PHP con semplici controlli.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">Durata: circa 2 ore</span>
+        <span role="listitem">Strumenti: editor, terminale e browser</span>
+        <span role="listitem">Prerequisito: Lezione 2</span>
+        <span role="listitem">Prodotto: Scheda studente 2.0</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="ripartiamo">
+      <p class="eyebrow">Ripasso iniziale</p>
+      <h2 id="ripartiamo">Ripartiamo da GET</h2>
+      <p>Nella <a href="../02-form-get/index.html">Lezione 2</a> il form usava il metodo GET:</p>
+      <pre><code>&lt;form action="risultato.php" method="get"&gt;</code></pre>
+      <p>Dopo l’invio, i dati comparivano nella <strong>query string</strong> dell’URL:</p>
+      <pre><code>risultato.php?nome=Marco&amp;classe=5G</code></pre>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Domanda guida</p><h3>Dove sono finiti i dati inseriti nel form?</h3><p>Osserva soltanto i segni già noti: <code>?</code> introduce i parametri, <code>=</code> associa un nome a un valore e <code>&amp;</code> separa due parametri.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Il percorso che saprai ricostruire</h2>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p><strong>utente → form HTML → richiesta HTTP → PHP → elaborazione → HTML → browser</strong></p></div></aside>
+      <div class="card-grid">
+        <article class="card"><h3>Confrontare</h3><p>Distinguere GET e POST osservando l’URL e il codice del form.</p></article>
+        <article class="card"><h3>Ricevere</h3><p>Leggere con <code>$_POST</code> i dati inviati dal browser.</p></article>
+        <article class="card"><h3>Controllare</h3><p>Verificare il metodo della richiesta e riconoscere i campi obbligatori rimasti vuoti.</p></article>
+      </div>
+    </section>
+
+    <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><p class="eyebrow">Parole operative</p><h2>Tre idee per oggi</h2><ul><li><strong>POST:</strong> un metodo HTTP che permette al browser di inviare dati senza inserirli nella query string dell’URL;</li><li><strong><code>$_POST</code>:</strong> la struttura PHP dalla quale leggiamo i dati ricevuti con POST;</li><li><strong>controllo dei dati:</strong> una verifica eseguita prima di usare i valori ricevuti.</li></ul></div></aside>
+
+    <aside class="callout"><span class="callout-icon" aria-hidden="true">⏱</span><div><p class="eyebrow">Percorso indicativo</p><h2>Due ore di laboratorio</h2><p>Circa 10 minuti di richiamo, 20 minuti per passare a POST, 15 minuti di confronto, 20 minuti sui controlli, 40 minuti per la Scheda studente 2.0 e 15 minuti per esperimento, verifica e correzione. I tempi restano adattabili al lavoro della classe.</p></div></aside>
+
+    <section class="section" aria-labelledby="una-parola">
+      <p class="eyebrow">Primo passaggio</p>
+      <h2 id="una-parola">Cambiamo una sola parola</h2>
+      <p>Il form resta quasi identico. Sostituiamo soltanto <code>method="get"</code> con <code>method="post"</code>:</p>
+      <pre><code>&lt;form action="risultato.php" method="post"&gt;
+    &lt;label for="nome"&gt;Nome:&lt;/label&gt;
+    &lt;input type="text" id="nome" name="nome"&gt;
+
+    &lt;button type="submit"&gt;Invia&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+      <p>Anche nella pagina PHP cambia un solo nome: da <code>$_GET</code> a <code>$_POST</code>.</p>
+      <pre><code>&lt;?php
+$nome = $_POST["nome"];
+echo "Ciao " . $nome;
+?&gt;</code></pre>
+      <ol class="steps">
+        <li><strong>Avvia il server locale.</strong><p>Apri nel browser il form usando un indirizzo che inizia con <code>http://localhost:8000</code>.</p></li>
+        <li><strong>Scrivi un nome e invia.</strong><p>La pagina <code>risultato.php</code> riceve il dato e genera il saluto.</p></li>
+        <li><strong>Guarda subito l’URL.</strong><p>Il nome non compare più dopo un punto interrogativo: con POST i dati non vengono inseriti nella query string.</p></li>
+      </ol>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><p class="eyebrow">Esempio minimo</p><h3>Tra poco aggiungiamo i controlli</h3><p>Questo primo codice serve soltanto a vedere il cambiamento. Prima di usare i dati ricevuti controlleremo la richiesta e prepareremo il testo per la visualizzazione.</p></div></aside>
+    </section>
+
+    <section id="confronto" class="section" aria-labelledby="get-post">
+      <p class="eyebrow">Confronto essenziale</p>
+      <h2 id="get-post">GET e POST</h2>
+      <div class="table-wrap">
+        <table>
+          <caption>Differenze osservabili in questa lezione</caption>
+          <thead><tr><th scope="col">GET</th><th scope="col">POST</th></tr></thead>
+          <tbody>
+            <tr><td>I dati sono visibili nella query string dell’URL.</td><td>I dati non sono presenti nella query string.</td></tr>
+            <tr><td>PHP li legge con <code>$_GET</code>.</td><td>PHP li legge con <code>$_POST</code>.</td></tr>
+            <tr><td>È utile, per esempio, per ricerche e parametri.</td><td>È utile, per esempio, per inviare dati di un modulo.</td></tr>
+            <tr><td>L’URL con i parametri può essere copiato e riaperto.</td><td>I dati inviati non sono incorporati nell’URL.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><p class="eyebrow">Attenzione</p><h3>POST non significa automaticamente “sicuro”</h3><p>POST <strong>non cifra</strong> i dati: li sposta fuori dalla query string, ma essi fanno ancora parte della richiesta HTTP. La protezione della comunicazione dipende, tra le altre cose, dall’uso di <strong>HTTPS</strong>. Per ora non approfondiamo i meccanismi di cifratura.</p></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="riceve-php">
+      <p class="eyebrow">Collegamento fondamentale</p>
+      <h2 id="riceve-php">Che cosa riceve PHP?</h2>
+      <p>Come con GET, il testo scelto nell’attributo <code>name</code> deve coincidere con il testo usato tra parentesi quadre in PHP.</p>
+      <div class="card-grid">
+        <article class="card"><h3><code>name="nome"</code> → <code>$_POST["nome"]</code></h3><p>Il valore scritto nel campo <strong>nome</strong>.</p></article>
+        <article class="card"><h3><code>name="cognome"</code> → <code>$_POST["cognome"]</code></h3><p>Il valore scritto nel campo <strong>cognome</strong>.</p></article>
+        <article class="card"><h3><code>name="classe"</code> → <code>$_POST["classe"]</code></h3><p>Il valore scritto nel campo <strong>classe</strong>.</p></article>
+      </div>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><p class="eyebrow">Regola pratica</p><h3>Stesso nome nei due punti</h3><p>Se il form usa <code>name="nome"</code>, PHP legge quel valore con <code>$_POST["nome"]</code>. Non serve ancora studiare la teoria degli array: ci basta usare correttamente questa corrispondenza.</p></div></aside>
+    </section>
+
+    <section id="controllo" class="section reading" aria-labelledby="form-inviato">
+      <p class="eyebrow">Prima di elaborare</p>
+      <h2 id="form-inviato">Controlliamo che il form sia stato inviato</h2>
+      <p>PHP può verificare con quale metodo HTTP è arrivata la richiesta:</p>
+      <pre><code>&lt;?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Il form è stato inviato con POST.
+}
+?&gt;</code></pre>
+      <p>Per ora usiamo <code>$_SERVER["REQUEST_METHOD"]</code> soltanto come controllo: non serve approfondire l’intera struttura <code>$_SERVER</code>.</p>
+
+      <h3>Controlliamo anche il valore</h3>
+      <pre><code>&lt;?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $nome = trim($_POST["nome"] ?? "");
+
+    if ($nome === "") {
+        echo "Inserisci il nome.";
+    } else {
+        echo "Ciao " . htmlspecialchars($nome);
+    }
+}
+?&gt;</code></pre>
+      <div class="card-grid">
+        <article class="card"><h3><code>trim()</code></h3><p>Elimina gli spazi inutili all’inizio e alla fine del testo.</p></article>
+        <article class="card"><h3><code>?? ""</code></h3><p>Usa una stringa vuota se il valore non è presente, evitando un avviso di PHP.</p></article>
+        <article class="card"><h3><code>htmlspecialchars()</code></h3><p>Prepara il testo inserito dall’utente per mostrarlo in modo più sicuro dentro l’HTML.</p></article>
+      </div>
+      <p>Questi sono controlli iniziali e non una trattazione completa della sicurezza o della validazione.</p>
+    </section>
+
+    <section id="laboratorio" class="section" aria-labelledby="scheda-studente">
+      <p class="eyebrow">Esercitazione guidata</p>
+      <h2 id="scheda-studente">Laboratorio — Scheda studente 2.0</h2>
+      <p>Riprendiamo lo stesso prodotto della Lezione 2. Questa volta invieremo nome, cognome, età e classe con POST e controlleremo i campi essenziali.</p>
+      <p><strong>Prodotto atteso:</strong> un form in <code>index.html</code> e una pagina <code>scheda.php</code> che genera la scheda usando i dati ricevuti.</p>
+      <ol class="steps">
+        <li><strong>Passo 1 — crea il form HTML.</strong><p>Prepara quattro etichette associate ai campi nome, cognome, età e classe. Usa gli attributi <code>name="nome"</code>, <code>name="cognome"</code>, <code>name="eta"</code> e <code>name="classe"</code>.</p></li>
+        <li><strong>Passo 2 — imposta POST.</strong><p>Scrivi <code>action="scheda.php"</code> e <code>method="post"</code> nel tag <code>&lt;form&gt;</code>.</p></li>
+        <li><strong>Passo 3 — leggi i dati.</strong><p>In <code>scheda.php</code> verifica il metodo della richiesta, poi assegna ogni valore di <code>$_POST</code> a una variabile. Usa <code>trim()</code> e <code>?? ""</code>.</p></li>
+        <li><strong>Passo 4 — mostra la scheda.</strong><p>Genera il titolo <strong>Scheda studente</strong> e una riga per ciascun valore. Usa <code>htmlspecialchars()</code> quando inserisci i dati nell’HTML.</p></li>
+        <li><strong>Passo 5 — controlla i campi essenziali.</strong><p>Se nome, cognome o classe sono vuoti, mostra un messaggio e non generare la scheda. Se sono compilati, mostra il risultato completo.</p></li>
+      </ol>
+
+      <h3>Il form di partenza</h3>
+      <pre><code>&lt;form action="scheda.php" method="post"&gt;
+    &lt;label for="nome"&gt;Nome:&lt;/label&gt;
+    &lt;input type="text" id="nome" name="nome"&gt;&lt;br&gt;
+
+    &lt;label for="cognome"&gt;Cognome:&lt;/label&gt;
+    &lt;input type="text" id="cognome" name="cognome"&gt;&lt;br&gt;
+
+    &lt;label for="eta"&gt;Età:&lt;/label&gt;
+    &lt;input type="number" id="eta" name="eta"&gt;&lt;br&gt;
+
+    &lt;label for="classe"&gt;Classe:&lt;/label&gt;
+    &lt;input type="text" id="classe" name="classe"&gt;&lt;br&gt;
+
+    &lt;button type="submit"&gt;Crea scheda&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+      <p>La pagina finale dovrebbe mostrare una struttura simile:</p>
+      <pre><code>SCHEDA STUDENTE
+
+Nome: Mario
+Cognome: Rossi
+Età: 18
+Classe: 5G</code></pre>
+      <p><strong>L’attività è completa quando:</strong></p>
+      <ul class="presentation-checklist">
+        <li>il form contiene quattro etichette associate ai rispettivi campi;</li>
+        <li>usa <code>method="post"</code> e apre <code>scheda.php</code>;</li>
+        <li>PHP legge i quattro valori da <code>$_POST</code>;</li>
+        <li>nome, cognome e classe vuoti producono un messaggio;</li>
+        <li>i valori compilati generano la scheda e non compaiono nella query string.</li>
+      </ul>
+      <details><summary>Aiuto 1 — prepara una variabile alla volta</summary><p>Inizia dal nome: <code>$nome = trim($_POST["nome"] ?? "");</code>. Quando funziona, ripeti la stessa struttura per cognome, età e classe.</p></details>
+      <details><summary>Aiuto 2 — controlla i tre campi essenziali</summary><pre><code>if ($nome === "" || $cognome === "" || $classe === "") {
+    echo "Compila nome, cognome e classe.";
+} else {
+    // Genera qui la scheda.
+}</code></pre></details>
+      <details><summary>Soluzione possibile — <code>scheda.php</code></summary><p>Apri questo esempio soltanto dopo aver provato a costruire la pagina in autonomia.</p><pre><code>&lt;!doctype html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+    &lt;title&gt;Scheda studente&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $nome = trim($_POST["nome"] ?? "");
+    $cognome = trim($_POST["cognome"] ?? "");
+    $eta = trim($_POST["eta"] ?? "");
+    $classe = trim($_POST["classe"] ?? "");
+
+    if ($nome === "" || $cognome === "" || $classe === "") {
+        echo "&lt;p&gt;Compila nome, cognome e classe.&lt;/p&gt;";
+    } else {
+        echo "&lt;h1&gt;Scheda studente&lt;/h1&gt;";
+        echo "&lt;p&gt;Nome: " . htmlspecialchars($nome) . "&lt;/p&gt;";
+        echo "&lt;p&gt;Cognome: " . htmlspecialchars($cognome) . "&lt;/p&gt;";
+        echo "&lt;p&gt;Età: " . htmlspecialchars($eta) . "&lt;/p&gt;";
+        echo "&lt;p&gt;Classe: " . htmlspecialchars($classe) . "&lt;/p&gt;";
+    }
+}
+?&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="esperimento">
+      <p class="eyebrow">Osserva e confronta</p>
+      <h2 id="esperimento">Piccola sperimentazione GET e POST</h2>
+      <ol class="steps">
+        <li><strong>Prova con GET.</strong><p>Imposta temporaneamente <code>method="get"</code>, invia dati riconoscibili e osserva l’URL.</p></li>
+        <li><strong>Copia l’URL.</strong><p>Incollalo in una nuova scheda del browser e verifica che contenga i parametri inviati.</p></li>
+        <li><strong>Passa a POST.</strong><p>Ripristina <code>method="post"</code>. Nella pagina PHP usa nuovamente <code>$_POST</code>.</p></li>
+        <li><strong>Invia gli stessi dati.</strong><p>Osserva una seconda volta la barra degli indirizzi.</p></li>
+        <li><strong>Scrivi la conclusione.</strong><p>In una frase descrivi la differenza che hai osservato tra i due URL.</p></li>
+      </ol>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Risultato atteso</p><h3>La differenza è visibile</h3><p>Con GET i parametri entrano nella query string; con POST gli stessi dati vengono inviati nella richiesta, ma non sono incorporati nell’URL.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="sfida">
+      <p class="eyebrow">Se hai terminato</p>
+      <h2 id="sfida">Mini-sfida facoltativa</h2>
+      <p>Amplia la Scheda studente 2.0 senza cambiare il flusso POST. Puoi aggiungere:</p>
+      <ul>
+        <li>un campo per l’indirizzo e-mail;</li>
+        <li>un elemento <code>&lt;select&gt;</code> per scegliere la specializzazione o la classe;</li>
+        <li>un campo note con <code>&lt;textarea&gt;</code>.</li>
+      </ul>
+      <p>Ricorda di assegnare un <code>name</code> a ogni nuovo controllo e di leggere in PHP la voce corrispondente di <code>$_POST</code>.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="riepilogo">
+      <p class="eyebrow">In breve</p>
+      <h2 id="riepilogo">Il percorso di POST</h2>
+      <figure class="figure">
+        <img src="percorso_post.png" width="1024" height="1536" alt="Infografica del percorso dei dati inviati con metodo POST, dal form HTML al server PHP e ritorno al browser">
+        <figcaption class="caption">Figura – Il percorso di una richiesta POST: dal form HTML all’elaborazione PHP e alla risposta visualizzata nel browser.</figcaption>
+      </figure>
+      <p>Il metodo cambia il modo in cui il browser invia i dati e la struttura dalla quale PHP li legge. Il flusso generale resta lo stesso: l’utente compila il form, il server elabora la richiesta e il browser riceve HTML.</p>
+    </section>
+
+    <section class="section" aria-labelledby="verifica">
+      <p class="eyebrow">Verifica rapida</p>
+      <h2 id="verifica">Tre domande</h2>
+      <ol>
+        <li>Qual è la differenza più evidente tra GET e POST?</li>
+        <li>Quale variabile PHP utilizziamo per leggere i dati inviati con POST?</li>
+        <li>Se utilizziamo POST, i dati sono automaticamente cifrati?</li>
+      </ol>
+      <details><summary>Controlla le risposte</summary><ol><li>Con GET i dati compaiono nella query string dell’URL; con POST non vi compaiono.</li><li>La struttura <code>$_POST</code>.</li><li><strong>No.</strong> POST non cifra automaticamente i dati. La protezione della comunicazione dipende, tra le altre cose, dall’uso di HTTPS.</li></ol></details>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../02-form-get/index.html">← Lezione 2</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>Informatica · Classi quinte</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
