@@ -67,8 +67,8 @@
 1 + 0 = 1
 1 + 1 = 10</code></pre>
       <p>Le prime tre somme producono una sola cifra. Nell’ultima, invece, il risultato richiede due cifre binarie.</p>
-      <div class="definition"><strong>Parola nuova: riporto</strong><p>Il <strong>riporto</strong> è la cifra che passa alla colonna successiva, a sinistra. In <strong>1 + 1 = 10<sub>2</sub></strong> scriviamo 0 nella colonna corrente e riportiamo 1.</p></div>
-      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><p class="eyebrow">Attenzione</p><h3>10<sub>2</sub> non significa “dieci”</h3><p>È il numero binario <strong>uno-zero</strong> e corrisponde a <strong>2<sub>10</sub></strong>.</p></div></aside>
+      <div class="definition"><strong>Parola nuova: riporto</strong><p>Il <strong>riporto</strong> è la cifra che passa alla colonna successiva, a sinistra. In <strong>1 + 1 = (10)<sub>2</sub></strong> scriviamo 0 nella colonna corrente e riportiamo 1.</p></div>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><p class="eyebrow">Attenzione</p><h3>(10)<sub>2</sub> non rappresenta il numero dieci.</h3><p>Nel sistema binario, <strong>(10)<sub>2</sub> corrisponde a (2)<sub>10</sub></strong>.</p></div></aside>
       <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><h3>È simile a ciò che accade in decimale</h3><p>Quando calcoliamo 9 + 1 = 10, scriviamo 0 nella colonna delle unità e riportiamo 1 nella colonna successiva. In binario succede già con 1 + 1, perché le cifre disponibili sono soltanto 0 e 1.</p></div></aside>
     </section>
 
@@ -80,7 +80,7 @@
 ------
   1111</code></pre>
       <p>Partiamo da destra e sommiamo una colonna alla volta. In ogni colonna troviamo 0 + 1 oppure 1 + 0, quindi non serve alcun riporto.</p>
-      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><h3>Controllo in decimale</h3><p>1010<sub>2</sub> vale 10, 0101<sub>2</sub> vale 5 e 1111<sub>2</sub> vale 15. La verifica è quindi <strong>10 + 5 = 15</strong>.</p></div></aside>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><h3>Controllo in decimale</h3><p>(1010)<sub>2</sub> vale 10, (0101)<sub>2</sub> vale 5 e (1111)<sub>2</sub> vale 15. La verifica è quindi <strong>10 + 5 = 15</strong>.</p></div></aside>
     </section>
 
     <section class="section" aria-labelledby="con-riporto">
@@ -93,21 +93,21 @@
     1000</code></pre>
       <p>Procediamo sempre da destra verso sinistra:</p>
       <ol class="steps">
-        <li><strong>Prima colonna: 1 + 1 = 10<sub>2</sub>.</strong><p>Scriviamo 0 e riportiamo 1.</p></li>
-        <li><strong>Seconda colonna: 0 + 1 + 1 di riporto = 10<sub>2</sub>.</strong><p>Scriviamo 0 e riportiamo ancora 1.</p></li>
-        <li><strong>Terza colonna: 1 + 0 + 1 di riporto = 10<sub>2</sub>.</strong><p>Scriviamo 0 e riportiamo ancora 1.</p></li>
-        <li><strong>Ultima colonna: 0 + 0 + 1 di riporto = 1.</strong><p>Scriviamo 1 e otteniamo 1000<sub>2</sub>.</p></li>
+        <li><strong>Prima colonna: 1 + 1 = (10)<sub>2</sub>.</strong><p>Scriviamo 0 e riportiamo 1.</p></li>
+        <li><strong>Seconda colonna: 0 + 1 + 1 di riporto = (10)<sub>2</sub>.</strong><p>Scriviamo 0 e riportiamo ancora 1.</p></li>
+        <li><strong>Terza colonna: 1 + 0 + 1 di riporto = (10)<sub>2</sub>.</strong><p>Scriviamo 0 e riportiamo ancora 1.</p></li>
+        <li><strong>Ultima colonna: 0 + 0 + 1 di riporto = 1.</strong><p>Scriviamo 1 e otteniamo (1000)<sub>2</sub>.</p></li>
       </ol>
       <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Non saltare le colonne</h3><p>Scrivi i numeri ben allineati e lavora sempre da destra verso sinistra.</p></div></aside>
-      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><h3>Controllo in decimale</h3><p>0101<sub>2</sub> vale 5, 0011<sub>2</sub> vale 3 e 1000<sub>2</sub> vale 8: <strong>5 + 3 = 8</strong>.</p></div></aside>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><h3>Controllo in decimale</h3><p>(0101)<sub>2</sub> vale 5, (0011)<sub>2</sub> vale 3 e (1000)<sub>2</sub> vale 8: <strong>5 + 3 = 8</strong>.</p></div></aside>
     </section>
 
     <section class="section reading" aria-labelledby="tre-uno">
       <p class="eyebrow">Un caso da riconoscere</p>
       <h2 id="tre-uno">Che cosa succede con 1 + 1 + 1?</h2>
       <p>Dopo un riporto può capitare di dover sommare tre cifre uguali a 1:</p>
-      <p><strong>1 + 1 + 1 = 11<sub>2</sub></strong></p>
-      <p>Il risultato è 11<sub>2</sub>: scriviamo 1 nella colonna corrente e riportiamo 1 nella colonna successiva.</p>
+      <p><strong>1 + 1 + 1 = (11)<sub>2</sub></strong></p>
+      <p>Il risultato è (11)<sub>2</sub>: scriviamo 1 nella colonna corrente e riportiamo 1 nella colonna successiva.</p>
     </section>
 
     <section id="insieme" class="section" aria-labelledby="facciamolo">
@@ -130,8 +130,8 @@
   + 0011
   --------
     1001</code></pre>
-          <p>Da destra: 0 + 1 = 1. Poi 1 + 1 = 10<sub>2</sub>: scriviamo 0 e riportiamo 1.</p>
-          <p>Nella colonna seguente 1 + 0 + 1 = 10<sub>2</sub>: scriviamo 0 e riportiamo 1. Nell’ultima colonna scriviamo il riporto.</p>
+          <p>Da destra: 0 + 1 = 1. Poi 1 + 1 = (10)<sub>2</sub>: scriviamo 0 e riportiamo 1.</p>
+          <p>Nella colonna seguente 1 + 0 + 1 = (10)<sub>2</sub>: scriviamo 0 e riportiamo 1. Nell’ultima colonna scriviamo il riporto.</p>
           <p><strong>Verifica:</strong> 6 + 3 = 9.</p>
         </article>
       </div>
@@ -155,15 +155,15 @@
         <article class="card"><h3>4</h3><p><strong>0111 + 0001</strong></p></article>
         <article class="card"><h3>5</h3><p><strong>1010 + 0111</strong></p></article>
       </div>
-      <details><summary>Controlla le soluzioni</summary><ol><li>0111<sub>2</sub> = 7<sub>10</sub>; verifica: 2 + 5 = 7.</li><li>0111<sub>2</sub> = 7<sub>10</sub>; verifica: 5 + 2 = 7.</li><li>0110<sub>2</sub> = 6<sub>10</sub>.</li><li>1000<sub>2</sub> = 8<sub>10</sub>.</li><li>10001<sub>2</sub> = 17<sub>10</sub>.</li></ol></details>
+      <details><summary>Controlla le soluzioni</summary><ol><li>(0111)<sub>2</sub> = (7)<sub>10</sub>; verifica: 2 + 5 = 7.</li><li>(0111)<sub>2</sub> = (7)<sub>10</sub>; verifica: 5 + 2 = 7.</li><li>(0110)<sub>2</sub> = (6)<sub>10</sub>.</li><li>(1000)<sub>2</sub> = (8)<sub>10</sub>.</li><li>(10001)<sub>2</sub> = (17)<sub>10</sub>.</li></ol></details>
     </section>
 
     <section class="section reading" aria-labelledby="sfida">
       <p class="eyebrow">Facoltativa · Per chi termina prima</p>
       <h2 id="sfida">Prevedi il risultato</h2>
       <p>Senza svolgere subito tutti i passaggi, prova a prevedere il risultato di:</p>
-      <p><strong>1111<sub>2</sub> + 0001<sub>2</sub></strong></p>
-      <details><summary>Mostra il risultato</summary><p>Il riporto passa attraverso tutte le colonne: <strong>1111<sub>2</sub> + 0001<sub>2</sub> = 10000<sub>2</sub></strong>. In decimale, 15 + 1 = 16.</p></details>
+      <p><strong>(1111)<sub>2</sub> + (0001)<sub>2</sub></strong></p>
+      <details><summary>Mostra il risultato</summary><p>Il riporto passa attraverso tutte le colonne: <strong>(1111)<sub>2</sub> + (0001)<sub>2</sub> = (10000)<sub>2</sub></strong>. In decimale, 15 + 1 = 16.</p></details>
     </section>
 
     <section class="section reading" aria-labelledby="riepilogo">
@@ -176,9 +176,9 @@
         <li>Possiamo verificare il risultato trasformando i numeri in decimale.</li>
       </ul>
       <h3>Domande rapide</h3>
-      <details><summary>Quanto vale 1 + 1 in binario?</summary><p>Vale 10<sub>2</sub>: si scrive 0 e si riporta 1.</p></details>
+      <details><summary>Quanto vale 1 + 1 in binario?</summary><p>Vale (10)<sub>2</sub>: si scrive 0 e si riporta 1.</p></details>
       <details><summary>Che cosa significa riporto?</summary><p>È la cifra che passa alla colonna successiva, a sinistra.</p></details>
-      <details><summary>Perché 111<sub>2</sub> + 1<sub>2</sub> = 1000<sub>2</sub>?</summary><p>In ogni colonna 1 + 1 produce 0 e un riporto. Il riporto continua fino a creare la nuova cifra 1 a sinistra.</p></details>
+      <details><summary>Perché (111)<sub>2</sub> + (1)<sub>2</sub> = (1000)<sub>2</sub>?</summary><p>In ogni colonna 1 + 1 produce 0 e un riporto. Il riporto continua fino a creare la nuova cifra 1 a sinistra.</p></details>
     </section>
 
     <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../03-binario-decimale/index.html">← Lezione 3.03</a><a href="../../index.html">Indice del percorso</a></nav>
