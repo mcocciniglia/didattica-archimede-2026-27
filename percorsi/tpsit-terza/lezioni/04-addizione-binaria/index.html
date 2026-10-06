@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 3.04 di TPSIT per la classe terza: regole dell’addizione binaria, riporto e verifica del risultato in decimale.">
+  <title>3.04 — Addizione binaria</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#regole">Regole</a>
+        <a href="#insieme">Insieme</a>
+        <a href="#prova-tu">Prova tu</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT terza</a><span aria-hidden="true">/</span><span>3.04</span></nav>
+      <p class="eyebrow">3.04 · Modulo 3.1 · 60 minuti</p>
+      <h1>Addizione binaria</h1>
+      <p class="lead">Le regole della somma non cambiano: cambiano le cifre disponibili.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">TPSIT · Classe terza</span>
+        <span role="listitem">Strumenti: quaderno e penna</span>
+        <span role="listitem">Prerequisito: Lezione 3.03</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="richiamo">
+      <p class="eyebrow">5 minuti · Da dove partiamo</p>
+      <h2 id="richiamo">Dalle conversioni alle operazioni</h2>
+      <p>Nella <a href="../03-binario-decimale/index.html">Lezione 3.03</a> abbiamo ricordato che il sistema binario usa soltanto le cifre 0 e 1. Abbiamo anche usato i pesi delle posizioni per passare dal binario al decimale e viceversa.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Domanda iniziale</p><h3>Se il computer rappresenta i numeri con 0 e 1, come può sommarli?</h3><p>Partiremo da quattro regole molto semplici e le useremo una colonna alla volta.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Che cosa saprai fare</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Riconoscere</h3><p>Applicare le quattro regole dell’addizione binaria.</p></article>
+        <article class="card"><h3>Calcolare</h3><p>Sommare da destra verso sinistra, gestendo il riporto.</p></article>
+        <article class="card"><h3>Controllare</h3><p>Verificare una somma trasformando operandi e risultato in decimale.</p></article>
+      </div>
+    </section>
+
+    <section id="regole" class="section reading" aria-labelledby="quattro-regole">
+      <p class="eyebrow">10 minuti · Le basi</p>
+      <h2 id="quattro-regole">Le quattro regole</h2>
+      <pre><code>0 + 0 = 0
+0 + 1 = 1
+1 + 0 = 1
+1 + 1 = 10</code></pre>
+      <p>Le prime tre somme producono una sola cifra. Nell’ultima, invece, il risultato richiede due cifre binarie.</p>
+      <div class="definition"><strong>Parola nuova: riporto</strong><p>Il <strong>riporto</strong> è la cifra che passa alla colonna successiva, a sinistra. In <strong>1 + 1 = 10<sub>2</sub></strong> scriviamo 0 nella colonna corrente e riportiamo 1.</p></div>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><p class="eyebrow">Attenzione</p><h3>10<sub>2</sub> non significa “dieci”</h3><p>È il numero binario <strong>uno-zero</strong> e corrisponde a <strong>2<sub>10</sub></strong>.</p></div></aside>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><h3>È simile a ciò che accade in decimale</h3><p>Quando calcoliamo 9 + 1 = 10, scriviamo 0 nella colonna delle unità e riportiamo 1 nella colonna successiva. In binario succede già con 1 + 1, perché le cifre disponibili sono soltanto 0 e 1.</p></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="senza-riporto">
+      <p class="eyebrow">5 minuti · Primo esempio</p>
+      <h2 id="senza-riporto">Una somma senza riporto</h2>
+      <pre><code>  1010
++ 0101
+------
+  1111</code></pre>
+      <p>Partiamo da destra e sommiamo una colonna alla volta. In ogni colonna troviamo 0 + 1 oppure 1 + 0, quindi non serve alcun riporto.</p>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><h3>Controllo in decimale</h3><p>1010<sub>2</sub> vale 10, 0101<sub>2</sub> vale 5 e 1111<sub>2</sub> vale 15. La verifica è quindi <strong>10 + 5 = 15</strong>.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="con-riporto">
+      <p class="eyebrow">10 minuti · Secondo esempio</p>
+      <h2 id="con-riporto">Una somma con il riporto</h2>
+      <pre><code>    111    ← riporti
+    0101
+  + 0011
+  --------
+    1000</code></pre>
+      <p>Procediamo sempre da destra verso sinistra:</p>
+      <ol class="steps">
+        <li><strong>Prima colonna: 1 + 1 = 10<sub>2</sub>.</strong><p>Scriviamo 0 e riportiamo 1.</p></li>
+        <li><strong>Seconda colonna: 0 + 1 + 1 di riporto = 10<sub>2</sub>.</strong><p>Scriviamo 0 e riportiamo ancora 1.</p></li>
+        <li><strong>Terza colonna: 1 + 0 + 1 di riporto = 10<sub>2</sub>.</strong><p>Scriviamo 0 e riportiamo ancora 1.</p></li>
+        <li><strong>Ultima colonna: 0 + 0 + 1 di riporto = 1.</strong><p>Scriviamo 1 e otteniamo 1000<sub>2</sub>.</p></li>
+      </ol>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Non saltare le colonne</h3><p>Scrivi i numeri ben allineati e lavora sempre da destra verso sinistra.</p></div></aside>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><h3>Controllo in decimale</h3><p>0101<sub>2</sub> vale 5, 0011<sub>2</sub> vale 3 e 1000<sub>2</sub> vale 8: <strong>5 + 3 = 8</strong>.</p></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="tre-uno">
+      <p class="eyebrow">Un caso da riconoscere</p>
+      <h2 id="tre-uno">Che cosa succede con 1 + 1 + 1?</h2>
+      <p>Dopo un riporto può capitare di dover sommare tre cifre uguali a 1:</p>
+      <p><strong>1 + 1 + 1 = 11<sub>2</sub></strong></p>
+      <p>Il risultato è 11<sub>2</sub>: scriviamo 1 nella colonna corrente e riportiamo 1 nella colonna successiva.</p>
+    </section>
+
+    <section id="insieme" class="section" aria-labelledby="facciamolo">
+      <p class="eyebrow">10 minuti · Attività guidata</p>
+      <h2 id="facciamolo">Facciamolo insieme</h2>
+      <div class="card-grid">
+        <article class="card">
+          <h3>0011 + 0100</h3>
+          <pre><code>  0011
++ 0100
+------
+  0111</code></pre>
+          <p>Da destra: 1 + 0 = 1, poi 1 + 0 = 1, quindi 0 + 1 = 1 e infine 0 + 0 = 0.</p>
+          <p><strong>Verifica:</strong> 3 + 4 = 7.</p>
+        </article>
+        <article class="card">
+          <h3>0110 + 0011</h3>
+          <pre><code>     11    ← riporti
+    0110
+  + 0011
+  --------
+    1001</code></pre>
+          <p>Da destra: 0 + 1 = 1. Poi 1 + 1 = 10<sub>2</sub>: scriviamo 0 e riportiamo 1.</p>
+          <p>Nella colonna seguente 1 + 0 + 1 = 10<sub>2</sub>: scriviamo 0 e riportiamo 1. Nell’ultima colonna scriviamo il riporto.</p>
+          <p><strong>Verifica:</strong> 6 + 3 = 9.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="prova-tu" class="section" aria-labelledby="esercizi">
+      <p class="eyebrow">10 minuti · Attività individuale</p>
+      <h2 id="esercizi">Adesso prova tu</h2>
+      <p><strong>Nucleo principale:</strong> completa almeno i primi tre esercizi. Se termini prima, continua con gli esercizi 4 e 5 e prova infine la sfida.</p>
+      <p>Incolonna e calcola le cinque somme. Per le prime due scrivi anche:</p>
+      <ol>
+        <li>il risultato in binario;</li>
+        <li>il valore decimale del primo operando;</li>
+        <li>il valore decimale del secondo operando;</li>
+        <li>il valore decimale del risultato e la verifica della somma.</li>
+      </ol>
+      <div class="card-grid">
+        <article class="card"><h3>1</h3><p><strong>0010 + 0101</strong></p></article>
+        <article class="card"><h3>2</h3><p><strong>0101 + 0010</strong></p></article>
+        <article class="card"><h3>3</h3><p><strong>0011 + 0011</strong></p></article>
+        <article class="card"><h3>4</h3><p><strong>0111 + 0001</strong></p></article>
+        <article class="card"><h3>5</h3><p><strong>1010 + 0111</strong></p></article>
+      </div>
+      <details><summary>Controlla le soluzioni</summary><ol><li>0111<sub>2</sub> = 7<sub>10</sub>; verifica: 2 + 5 = 7.</li><li>0111<sub>2</sub> = 7<sub>10</sub>; verifica: 5 + 2 = 7.</li><li>0110<sub>2</sub> = 6<sub>10</sub>.</li><li>1000<sub>2</sub> = 8<sub>10</sub>.</li><li>10001<sub>2</sub> = 17<sub>10</sub>.</li></ol></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="sfida">
+      <p class="eyebrow">Facoltativa · Per chi termina prima</p>
+      <h2 id="sfida">Prevedi il risultato</h2>
+      <p>Senza svolgere subito tutti i passaggi, prova a prevedere il risultato di:</p>
+      <p><strong>1111<sub>2</sub> + 0001<sub>2</sub></strong></p>
+      <details><summary>Mostra il risultato</summary><p>Il riporto passa attraverso tutte le colonne: <strong>1111<sub>2</sub> + 0001<sub>2</sub> = 10000<sub>2</sub></strong>. In decimale, 15 + 1 = 16.</p></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="riepilogo">
+      <p class="eyebrow">In breve</p>
+      <h2 id="riepilogo">Cosa abbiamo imparato</h2>
+      <ul>
+        <li>Il computer può eseguire operazioni usando numeri binari.</li>
+        <li>L’addizione binaria si svolge da destra verso sinistra.</li>
+        <li>Quando calcoliamo 1 + 1, scriviamo 0 e riportiamo 1.</li>
+        <li>Possiamo verificare il risultato trasformando i numeri in decimale.</li>
+      </ul>
+      <h3>Domande rapide</h3>
+      <details><summary>Quanto vale 1 + 1 in binario?</summary><p>Vale 10<sub>2</sub>: si scrive 0 e si riporta 1.</p></details>
+      <details><summary>Che cosa significa riporto?</summary><p>È la cifra che passa alla colonna successiva, a sinistra.</p></details>
+      <details><summary>Perché 111<sub>2</sub> + 1<sub>2</sub> = 1000<sub>2</sub>?</summary><p>In ogni colonna 1 + 1 produce 0 e un riporto. Il riporto continua fino a creare la nuova cifra 1 a sinistra.</p></details>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../03-binario-decimale/index.html">← Lezione 3.03</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe terza</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
