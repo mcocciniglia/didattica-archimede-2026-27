@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 2.2 di TPSIT quinta: dal server TCP iterativo a un thread per ogni client, con un esperimento guidato usando due client contemporaneamente.">
+  <title>Lezione 2.2 — Due client, davvero insieme</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT quinta</a><span aria-hidden="true">/</span><span>Lezione 2.2</span></nav>
+      <p class="eyebrow">Lezione 2.2 · M2 · TPSIT · Classe quinta</p>
+      <h1>Due client, davvero insieme: il server concorrente</h1>
+      <p class="lead">Dal server iterativo a un thread per ogni client.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">Durata: 1 ora</span>
+        <span role="listitem">Strumenti: Python e Telnet</span>
+        <span role="listitem">3 terminali · localhost</span>
+        <span role="listitem">Prerequisito: 2.1</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="ripartiamo">
+      <p class="eyebrow">Ripartiamo dalla 2.1</p>
+      <h2 id="ripartiamo">B era collegato, ma doveva aspettare A</h2>
+      <p>Nella <a href="../02-1-server-iterativo-prova/index.html">Lezione 2.1</a> abbiamo lasciato aperto il Client A e collegato anche il Client B. La connessione di B poteva essere già nella coda, ma il programma server continuava a servire A.</p>
+      <ol class="steps">
+        <li><strong>A rimane collegato.</strong><p>Il server resta nel ciclo di <code>recv()</code> e <code>sendall()</code> dedicato ad A.</p></li>
+        <li><strong>B si collega e attende.</strong><p>Il programma non è ancora tornato a una nuova <code>accept()</code>.</p></li>
+        <li><strong>A chiude la connessione.</strong><p>Soltanto allora il ciclo interno termina.</p></li>
+        <li><strong>Il server torna ad <code>accept()</code>.</strong><p>B viene finalmente accettato e servito.</p></li>
+      </ol>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Domanda guida</p><h3>Come può il server tornare subito ad <code>accept()</code> senza aspettare che A abbia terminato?</h3></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Che cosa saprai spiegare e verificare</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Due lavori separati</h3><p>Distinguere il thread principale, che accetta le connessioni, dal thread che comunica con un client.</p></article>
+        <article class="card"><h3>Due tipi di socket</h3><p>Distinguere l’unico socket <code>server</code> dai diversi socket <code>conn</code> restituiti da <code>accept()</code>.</p></article>
+        <article class="card"><h3>Due client serviti</h3><p>Verificare che B riceva risposte mentre A è ancora collegato.</p></article>
+      </div>
+    </section>
+
+    <section id="idea" class="section reading" aria-labelledby="separare-lavori">
+      <p class="eyebrow">L’idea</p>
+      <h2 id="separare-lavori">Separare i due lavori</h2>
+      <p>Il server deve continuare ad accettare nuove connessioni e, nello stesso intervallo di tempo, comunicare con i client già connessi. Affidiamo questi compiti a percorsi di esecuzione distinti:</p>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><h3>Il thread principale accetta le connessioni; un nuovo thread si occupa di ciascun client.</h3></div></aside>
+
+      <figure class="figure">
+        <div class="card">
+          <p class="eyebrow">Unico socket server</p>
+          <h3>Thread principale</h3>
+          <p>Esegue il ciclo con <code>accept()</code> e affida ogni nuova connessione.</p>
+        </div>
+        <div class="card-grid">
+          <article class="card"><p class="eyebrow">Socket <code>conn</code> di A</p><h3>Thread A</h3><p>Esegue <code>recv()</code> e <code>sendall()</code> per il Client A.</p></article>
+          <article class="card"><p class="eyebrow">Socket <code>conn</code> di B</p><h3>Thread B</h3><p>Esegue <code>recv()</code> e <code>sendall()</code> per il Client B.</p></article>
+        </div>
+        <figcaption class="caption">Il socket <code>server</code> resta unico. Ogni chiamata riuscita ad <code>accept()</code> produce invece un nuovo socket <code>conn</code>, dedicato a uno specifico client.</figcaption>
+      </figure>
+
+      <p class="eyebrow">Parole nuove</p>
+      <div class="definition"><strong>Thread</strong><p>È un percorso di esecuzione all’interno del programma. Qui ne creiamo uno con un solo compito: gestire il dialogo con uno specifico client.</p></div>
+      <div class="definition"><strong>Concorrenza</strong><p>È l’organizzazione che permette a più attività di avanzare nello stesso intervallo di tempo. Non significa che ogni istruzione venga eseguita nello stesso preciso istante.</p></div>
+    </section>
+
+    <section class="section reading" aria-labelledby="socket-diversi">
+      <p class="eyebrow">Non confondere i ruoli</p>
+      <h2 id="socket-diversi">Un socket ascolta, gli altri comunicano</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Socket <code>server</code></h3><p>È uno solo. Viene preparato con <code>bind()</code> e <code>listen(1)</code>; il thread principale lo usa per eseguire più volte <code>accept()</code>.</p></article>
+        <article class="card"><h3>Socket <code>conn</code></h3><p>È il socket della comunicazione con un client. Ogni <code>accept()</code> riuscita restituisce un nuovo <code>conn</code> e il relativo <code>addr</code>.</p></article>
+      </div>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Attenzione a <code>listen(1)</code></h3><p>Il parametro di <code>listen(1)</code> riguarda la coda delle connessioni in attesa di essere accettate. Non limita a uno il numero di client già accettati e gestiti dai thread.</p></div></aside>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Non creiamo un nuovo server per ogni client.</h3><p><code>listen()</code> viene eseguito una sola volta e non viene chiamato nei thread dei client. Il thread principale continua invece a ripetere <code>accept()</code>.</p></div></aside>
+    </section>
+
+    <section id="codice" class="section" aria-labelledby="funzione-client">
+      <p class="eyebrow">Prima modifica</p>
+      <h2 id="funzione-client">Separiamo la gestione del client</h2>
+      <p>Spostiamo il lavoro che prima si trovava direttamente nel ciclo principale dentro una funzione. Il comportamento del dialogo non cambia:</p>
+      <pre><code>def gestisci_client(conn, addr):
+    print("Client connesso:", addr)
+
+    with conn:
+        while True:
+            dati = conn.recv(1024)
+
+            if not dati:
+                break
+
+            messaggio = dati.decode().strip()
+            print("Ricevuto da", addr, ":", messaggio)
+
+            risposta = "Hai scritto: " + messaggio
+            conn.sendall((risposta + "\n").encode())
+
+    print("Client disconnesso:", addr)</code></pre>
+      <p>La funzione riceve il socket <code>conn</code> e l’indirizzo <code>addr</code> di un solo client. Poi ripete le stesse operazioni già conosciute: riceve, costruisce la risposta e la invia.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="nuovo-thread">
+      <p class="eyebrow">Seconda modifica</p>
+      <h2 id="nuovo-thread">Creiamo e avviamo un thread</h2>
+      <p>All’inizio del programma importiamo il modulo necessario:</p>
+      <pre><code>import threading</code></pre>
+      <p>Dopo ogni <code>accept()</code> prepariamo un thread e lo avviamo:</p>
+      <pre><code>thread = threading.Thread(
+    target=gestisci_client,
+    args=(conn, addr)
+)
+
+thread.start()</code></pre>
+      <div class="card-grid">
+        <article class="card"><h3><code>target</code></h3><p>Indica la funzione che il nuovo thread dovrà eseguire.</p></article>
+        <article class="card"><h3><code>args</code></h3><p>Contiene i dati da passare alla funzione: il socket <code>conn</code> e l’indirizzo <code>addr</code>.</p></article>
+        <article class="card"><h3><code>start()</code></h3><p>Avvia il nuovo thread. Il thread principale può quindi proseguire e tornare rapidamente ad <code>accept()</code>.</p></article>
+      </div>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3><code>start()</code> non è una chiamata diretta alla funzione.</h3><p>Se scrivessimo <code>gestisci_client(conn, addr)</code>, il thread principale eseguirebbe tutta la funzione e aspetterebbe la fine del client. Torneremmo così al comportamento sequenziale del server iterativo.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="server-completo">
+      <p class="eyebrow">Il programma completo</p>
+      <h2 id="server-completo">Il server concorrente</h2>
+      <p>Il dialogo con il client è stato spostato in <code>gestisci_client()</code>. Sono state aggiunte l’importazione di <code>threading</code>, la creazione del thread e la chiamata a <code>start()</code>.</p>
+      <div class="hero-actions"><a class="button" href="server.py" download>Scarica server.py</a></div>
+      <pre><code>import socket
+import threading
+
+
+HOST = "127.0.0.1"
+PORT = 50000
+
+
+def gestisci_client(conn, addr):
+    print("Client connesso:", addr)
+
+    with conn:
+        while True:
+            dati = conn.recv(1024)
+
+            if not dati:
+                break
+
+            messaggio = dati.decode().strip()
+            print("Ricevuto da", addr, ":", messaggio)
+
+            risposta = "Hai scritto: " + messaggio
+            conn.sendall((risposta + "\n").encode())
+
+    print("Client disconnesso:", addr)
+
+
+def main():
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
+        server.bind((HOST, PORT))
+        server.listen(1)
+
+        print(f"Server in ascolto su {HOST}:{PORT}")
+
+        while True:
+            conn, addr = server.accept()
+
+            thread = threading.Thread(
+                target=gestisci_client,
+                args=(conn, addr)
+            )
+
+            thread.start()
+
+
+if __name__ == "__main__":
+    main()</code></pre>
+
+      <div class="table-wrap">
+        <table>
+          <caption>Che cosa cambia rispetto al server iterativo</caption>
+          <thead><tr><th scope="col">Parte</th><th scope="col">Prima</th><th scope="col">Adesso</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Gestione del client</th><td>Era dentro il ciclo principale.</td><td>È spostata in <code>gestisci_client()</code>.</td></tr>
+            <tr><th scope="row">Dopo <code>accept()</code></th><td>Il programma gestiva direttamente <code>conn</code>.</td><td>Il programma affida <code>conn</code> a un nuovo thread.</td></tr>
+            <tr><th scope="row">Ciclo principale</th><td>Aspettava la disconnessione del client.</td><td>Torna rapidamente alla successiva <code>accept()</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section reading" aria-labelledby="due-sequenze">
+      <p class="eyebrow">Confrontiamo il flusso</p>
+      <h2 id="due-sequenze">Da una sequenza a due attività concorrenti</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Server iterativo</h3><p><code>accept A → gestisci A → A termina → accept B → gestisci B</code></p><p>B può essere collegato, ma deve aspettare la fine di A.</p></article>
+        <article class="card"><h3>Server concorrente</h3><p><code>accept A → avvia thread A → accept B → avvia thread B</code></p><p>I thread A e B possono avanzare nello stesso intervallo di tempo.</p></article>
+      </div>
+    </section>
+
+    <section id="esperimento" class="section" aria-labelledby="prova-due-client">
+      <p class="eyebrow">Esperimento centrale</p>
+      <h2 id="prova-due-client">Due client serviti senza aspettare</h2>
+      <p><strong>Prodotto atteso:</strong> una prova osservabile nella quale A e B ricevono risposta mentre entrambe le connessioni rimangono aperte.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Prima di eseguire</p><h3>Quando B invierà il suo primo messaggio, dovrà ancora aspettare che A chiuda?</h3><p>Scrivi la tua previsione e indica quale riga del nuovo programma la giustifica.</p></div></aside>
+      <ol class="steps">
+        <li><strong>Avvia il server.</strong><pre><code>python server.py</code></pre><p>Se necessario, usa <code>py server.py</code>. Attendi il messaggio di ascolto.</p></li>
+        <li><strong>Apri il Client A.</strong><pre><code>telnet 127.0.0.1 50000</code></pre></li>
+        <li><strong>Lascia A connesso.</strong><p>Non chiudere Telnet.</p></li>
+        <li><strong>Apri e collega il Client B.</strong><pre><code>telnet 127.0.0.1 50000</code></pre><p>Non chiudere A.</p></li>
+        <li><strong>Invia un messaggio da A.</strong><p>Verifica che A riceva la risposta.</p></li>
+        <li><strong>Invia un messaggio da B.</strong><p>Verifica che anche B riceva subito la risposta.</p></li>
+        <li><strong>Torna ad A.</strong><p>Invia un altro messaggio: A deve continuare a ricevere risposte.</p></li>
+        <li><strong>Osserva il terminale del server.</strong><p>Individua i messaggi di connessione e i messaggi ricevuti dai due client. Usa l’indirizzo e la porta mostrati nei messaggi di connessione per riconoscere da quale client arrivano i dati.</p></li>
+      </ol>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><strong>Per terminare la prova</strong><p>Chiudi entrambe le connessioni client, poi interrompi il server con <kbd>Ctrl</kbd>+<kbd>C</kbd> nel suo terminale.</p></div></aside>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><strong>Se Telnet non è disponibile</strong><p>Usa, come nella Lezione 2.1, due istanze del client predisposto dal docente. Non serve creare un nuovo client Python.</p></div></aside>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Risultato atteso</p><h3>B non deve più aspettare che A chiuda la connessione.</h3><p>Il thread principale ha accettato B mentre il thread A continuava a gestire A.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="confronto-finale">
+      <p class="eyebrow">Confronto finale</p>
+      <h2 id="confronto-finale">Che cosa è cambiato rispetto alla 2.1?</h2>
+      <div class="table-wrap">
+        <table>
+          <caption>Server iterativo e server concorrente</caption>
+          <thead><tr><th scope="col">Server iterativo</th><th scope="col">Server concorrente</th></tr></thead>
+          <tbody>
+            <tr><td>Un client viene servito alla volta.</td><td>Più client possono essere serviti.</td></tr>
+            <tr><td>Il ciclo principale resta occupato con il client.</td><td>Il client viene affidato a un thread.</td></tr>
+            <tr><td>Il nuovo <code>accept()</code> arriva dopo la fine del client.</td><td>Il thread principale torna rapidamente ad <code>accept()</code>.</td></tr>
+            <tr><td>B può aspettare A.</td><td>B può essere gestito mentre A è ancora connesso.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Il Transmission Control Protocol (TCP) non è diventato diverso.</h3><p>Abbiamo modificato l’organizzazione del programma server: il socket di ascolto resta unico, mentre ogni connessione viene affidata al proprio thread.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="verifica-finale">
+      <p class="eyebrow">Controlla</p>
+      <h2 id="verifica-finale">Cinque domande rapide</h2>
+      <ol>
+        <li>Quale thread esegue il ciclo con <code>accept()</code>?</li>
+        <li>Perché il server può tornare rapidamente ad <code>accept()</code>?</li>
+        <li>Quale socket viene passato al nuovo thread?</li>
+        <li><code>listen()</code> viene eseguito per ogni client?</li>
+        <li>Che cosa succederebbe se, al posto di <code>thread.start()</code>, chiamassimo direttamente <code>gestisci_client(conn, addr)</code>?</li>
+      </ol>
+    </section>
+
+    <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Da ricordare</p><h2>Accettare nel thread principale, comunicare nei thread dei client</h2><ul><li><code>listen()</code> viene eseguito una sola volta.</li><li>Il thread principale ripete <code>accept()</code>.</li><li>Ogni <code>accept()</code> riuscita restituisce un nuovo <code>conn</code>.</li><li>Il nuovo thread riceve quel <code>conn</code> e gestisce il client.</li><li>Il socket <code>server</code> resta unico e continua ad ascoltare.</li></ul></div></aside>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../02-1-server-iterativo-prova/index.html">← Lezione 2.1</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe quinta</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
