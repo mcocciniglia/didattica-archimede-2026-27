@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 4.00 di TPSIT per la classe quarta: console del browser, variabili, primo file JavaScript, modifica del DOM e risposta al click.">
+  <title>4.00 — Dalla pagina statica al primo JavaScript</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT quarta</a><span aria-hidden="true">/</span><span>4.00</span></nav>
+      <p class="eyebrow">4.00 · Modulo 1 · 2 ore in laboratorio</p>
+      <h1>Dalla pagina statica al primo JavaScript</h1>
+      <p class="lead">HTML ci permette di costruire una pagina. Ma come facciamo a farle fare qualcosa?</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">TPSIT · Classe quarta</span>
+        <span role="listitem">Strumenti: browser ed editor di codice</span>
+        <span role="listitem">Prerequisito: una semplice pagina HTML</span>
+        <span role="listitem">Prodotto: una pagina che reagisce a un click</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="domanda-iniziale">
+      <p class="eyebrow">10 minuti · Partiamo da una domanda</p>
+      <h2 id="domanda-iniziale">Come può una pagina reagire?</h2>
+      <p>Una pagina può mostrare un testo e un pulsante. Oggi faremo in modo che il testo cambi quando l’utente preme quel pulsante.</p>
+      <pre><code>HTML       → struttura e contenuto
+CSS        → aspetto
+JavaScript → comportamento</code></pre>
+      <p><strong>JavaScript</strong> è un linguaggio di programmazione. In questo primo percorso lo useremo direttamente nel browser per rendere interattive le pagine Web.</p>
+      <p>Può modificare un testo, controllare un dato inserito dall’utente, aprire un menu o aggiornare un contenuto senza riscrivere manualmente il documento HTML.</p>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Che cosa saprai fare</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Eseguire</h3><p>Aprire la console del browser e provare semplici istruzioni JavaScript.</p></article>
+        <article class="card"><h3>Collegare</h3><p>Usare un file <code>script.js</code> separato e verificare che venga caricato dalla pagina.</p></article>
+        <article class="card"><h3>Modificare</h3><p>Individuare un elemento HTML e cambiarne il testo con JavaScript.</p></article>
+        <article class="card"><h3>Far reagire</h3><p>Fare in modo che un click sul pulsante produca un cambiamento visibile.</p></article>
+      </div>
+    </section>
+
+    <section id="console" class="section" aria-labelledby="prima-console">
+      <p class="eyebrow">15 minuti · Esperimento 1</p>
+      <h2 id="prima-console">Proviamo JavaScript nella console</h2>
+      <p>Apri gli strumenti per sviluppatori del browser e scegli la scheda <strong>Console</strong>. Scrivi ed esegui una riga alla volta:</p>
+      <pre><code>2 + 3</code></pre>
+      <pre><code>10 * 4</code></pre>
+      <pre><code>"ciao"</code></pre>
+      <pre><code>console.log("Ciao quarta!");</code></pre>
+      <div class="definition"><strong>Console</strong><p>È uno spazio degli strumenti per sviluppatori nel quale possiamo eseguire istruzioni e leggere i messaggi prodotti dal codice.</p></div>
+      <p><code>console.log()</code> mostra un valore nella console. È utile mentre sviluppiamo e controlliamo il programma.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Prima di eseguire</p><h3>Cosa comparirà?</h3><p>Modifica il messaggio tra virgolette, formula una previsione e poi premi Invio.</p></div></aside>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Prova rapida</p><h3>Due messaggi personali</h3><p>Fai visualizzare nella console il tuo nome e il nome della classe, usando due istruzioni <code>console.log()</code>.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="variabili">
+      <p class="eyebrow">15 minuti · Esperimento 2</p>
+      <h2 id="variabili">Diamo un nome ai valori</h2>
+      <p>Esegui il blocco una volta e osserva prima i valori iniziali, poi quelli riassegnati:</p>
+      <pre><code>let nome = "Anna";
+let eta = 16;
+
+console.log(nome);
+console.log(eta);
+
+nome = "Luca";
+eta = 17;
+
+console.log(nome);
+console.log(eta);</code></pre>
+      <p>In <code>let nome = "Anna";</code>, <code>nome</code> è il nome della variabile, il segno <code>=</code> assegna il valore e <code>"Anna"</code> è una stringa, cioè un testo. <code>16</code>, senza virgolette, è un numero.</p>
+      <p><code>let</code> dichiara la variabile. Per cambiarne successivamente il valore non dobbiamo scrivere nuovamente <code>let</code>.</p>
+      <div class="definition"><strong>Variabile</strong><p>È un nome associato a un valore che il programma può usare e, quando serve, riassegnare.</p></div>
+      <pre><code>let a = 5;
+let b = 3;
+
+console.log(a + b);</code></pre>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Prima di eseguire</p><h3>Numero o testo?</h3><p>Prevedi il risultato. Poi scrivi <code>a = "5";</code>, senza ripetere <code>let</code>, esegui di nuovo <code>console.log(a + b);</code> e osserva che cosa cambia.</p></div></aside>
+      <p>Possiamo anche dichiarare un nome che non vogliamo riassegnare:</p>
+      <pre><code>const scuola = "Archimede";</code></pre>
+      <p>Usiamo <code>const</code> quando non vogliamo assegnare in seguito un nuovo valore a quel nome.</p>
+      <h3>Mini-esercizio</h3>
+      <p>Crea le tre dichiarazioni seguenti con i tuoi valori e mostrale nella console:</p>
+      <pre><code>let nomeStudente = "Mario";
+let annoNascita = 2010;
+const nomeScuola = "Archimede";
+
+console.log(nomeStudente);
+console.log(annoNascita);
+console.log(nomeScuola);</code></pre>
+    </section>
+
+    <section id="pagina" class="section" aria-labelledby="file-javascript">
+      <p class="eyebrow">15 minuti · Esperimento 3</p>
+      <h2 id="file-javascript">Dalla console a un vero file</h2>
+      <p>Crea una cartella e due file con questa struttura:</p>
+      <pre><code>primo-js/
+├── index.html
+└── script.js</code></pre>
+      <p>Inserisci in <code>index.html</code>:</p>
+      <pre><code>&lt;!doctype html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Il mio primo JavaScript&lt;/title&gt;
+    &lt;script src="script.js" defer&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;h1&gt;La mia prima pagina con JavaScript&lt;/h1&gt;
+    &lt;p&gt;Apri la console del browser.&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <p>Inserisci in <code>script.js</code>:</p>
+      <pre><code>console.log("JavaScript è stato caricato!");</code></pre>
+      <ol class="steps">
+        <li><strong>Apri <code>index.html</code> nel browser.</strong><p>La pagina mostra titolo e paragrafo.</p></li>
+        <li><strong>Apri la console.</strong><p>Controlla dove compare il messaggio scritto nel file JavaScript.</p></li>
+        <li><strong>Modifica il messaggio.</strong><p>Salva <code>script.js</code>, ricarica la pagina e verifica il nuovo risultato.</p></li>
+      </ol>
+      <p>Nell’elemento <code>&lt;script&gt;</code>, l’attributo <code>src</code> indica il file JavaScript. <code>defer</code> permette al browser di eseguire lo script dopo aver analizzato il documento HTML.</p>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Checkpoint</p><h3>Il collegamento funziona</h3><p>La prova è superata quando ogni modifica salvata in <code>script.js</code> compare nella console dopo il ricaricamento.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="modifica-pagina">
+      <p class="eyebrow">20 minuti · Esperimento 4</p>
+      <h2 id="modifica-pagina">JavaScript modifica la pagina</h2>
+      <p>Sostituisci il contenuto del <code>&lt;body&gt;</code> con:</p>
+      <pre><code>&lt;h1 id="titolo"&gt;Pagina statica&lt;/h1&gt;
+
+&lt;p id="messaggio"&gt;
+    Questo testo è scritto nell'HTML.
+&lt;/p&gt;</code></pre>
+      <p>Ora sostituisci il contenuto di <code>script.js</code> con:</p>
+      <pre><code>const titolo = document.getElementById("titolo");
+
+titolo.textContent = "La pagina è stata modificata da JavaScript";</code></pre>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Prima di eseguire</p><h3>Secondo te, cosa cambierà?</h3><p>Indica una parte precisa della pagina, poi salva e ricarica.</p></div></aside>
+      <div class="definition"><strong>Document Object Model (DOM)</strong><p>Il DOM è la rappresentazione della pagina HTML che JavaScript può leggere e modificare.</p></div>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Osserva</p><h3>Quale testo vedi adesso?</h3><p>Il browser non mostra più esattamente il titolo scritto nel file HTML: JavaScript lo ha modificato dopo il caricamento.</p></div></aside>
+      <p>Aggiungi in fondo a <code>script.js</code>:</p>
+      <pre><code>const messaggio = document.getElementById("messaggio");
+
+messaggio.textContent = "Anche questo testo è stato modificato.";</code></pre>
+      <p><code>getElementById()</code> individua l’elemento che possiede l’<code>id</code> indicato. <code>textContent</code> permette di leggerne o cambiarne il testo.</p>
+    </section>
+
+    <section class="section" aria-labelledby="click">
+      <p class="eyebrow">20 minuti · Esperimento 5</p>
+      <h2 id="click">La pagina reagisce all’utente</h2>
+      <p>Aggiungi nel <code>&lt;body&gt;</code>:</p>
+      <pre><code>&lt;button id="pulsante"&gt;Cambia messaggio&lt;/button&gt;
+
+&lt;p id="risultato"&gt;
+    Non hai ancora premuto il pulsante.
+&lt;/p&gt;</code></pre>
+      <p>Aggiungi in fondo a <code>script.js</code>:</p>
+      <pre><code>const pulsante = document.getElementById("pulsante");
+const risultato = document.getElementById("risultato");
+
+pulsante.addEventListener("click", function () {
+    risultato.textContent = "Hai premuto il pulsante!";
+});</code></pre>
+      <div class="definition"><strong>Evento</strong><p>È qualcosa che accade nella pagina. In questo esperimento l’evento è il <code>click</code> dell’utente.</p></div>
+      <p><code>addEventListener</code> indica al browser che cosa deve fare quando avviene un evento. Per ora ci basta sapere che il codice tra le parentesi graffe verrà eseguito quando l’utente farà click.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Prima di eseguire</p><h3>Quando cambierà il paragrafo?</h3><p>Prevedi che cosa vedrai subito dopo il ricaricamento e che cosa vedrai soltanto dopo il click.</p></div></aside>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Osserva</p><h3>La pagina ora è interattiva</h3><p>Premi il pulsante più volte: il cambiamento avviene in risposta a una tua azione.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="parole-nuove">
+      <p class="eyebrow">Parole nuove</p>
+      <h2 id="parole-nuove">Quattro idee da riconoscere</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Console</h3><p>Lo spazio del browser in cui proviamo istruzioni e leggiamo messaggi.</p></article>
+        <article class="card"><h3>Variabile</h3><p>Un nome associato a un valore usato dal programma.</p></article>
+        <article class="card"><h3>DOM</h3><p>La rappresentazione della pagina HTML che JavaScript può leggere e modificare.</p></article>
+        <article class="card"><h3>Evento</h3><p>Qualcosa che accade nella pagina, per esempio il click su un pulsante.</p></article>
+      </div>
+      <p>Oggi ci basta riconoscere queste idee nel codice. Le approfondiremo nelle lezioni successive.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="errori-frequenti">
+      <p class="eyebrow">Se qualcosa non funziona</p>
+      <h2 id="errori-frequenti">Quattro controlli rapidi</h2>
+      <ul>
+        <li>Hai salvato sia <code>index.html</code> sia <code>script.js</code>?</li>
+        <li><code>src="script.js"</code> corrisponde esattamente al nome del file?</li>
+        <li>Gli <code>id</code> scritti in JavaScript sono identici a quelli presenti nell’HTML?</li>
+        <li>La console mostra un messaggio di errore? Leggi la riga indicata prima di modificare altro.</li>
+      </ul>
+    </section>
+
+    <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><p class="eyebrow">Tempi flessibili</p><h2>Obiettivo minimo della lezione</h2><p>Arrivare a una pagina che modifica un testo in risposta al click dell’utente. Il laboratorio individuale e la sfida finale possono essere completati se il tempo lo consente oppure ripresi successivamente.</p></div></aside>
+
+    <section id="laboratorio" class="section" aria-labelledby="pagina-dinamica">
+      <p class="eyebrow">20 minuti · Laboratorio individuale</p>
+      <h2 id="pagina-dinamica">La mia prima pagina dinamica</h2>
+      <p><strong>Consegna:</strong> crea una piccola pagina con un titolo, un paragrafo e almeno un pulsante. Usa un file HTML e un file JavaScript separato. Quando l’utente preme il pulsante, JavaScript deve modificare il testo del paragrafo.</p>
+      <pre><code>Prima:
+Oggi stiamo imparando JavaScript.
+
+[ Cambia messaggio ]
+
+Dopo:
+La pagina ha reagito al mio click!</code></pre>
+      <p>Scegli liberamente i due messaggi. Procedi un passo alla volta e ricarica la pagina dopo ogni modifica.</p>
+      <details><summary>Suggerimento 1 — individua il paragrafo</summary><pre><code>document.getElementById(...)</code></pre><p>Controlla che l’<code>id</code> usato tra parentesi sia presente nel paragrafo HTML.</p></details>
+      <details><summary>Suggerimento 2 — reagisci al click</summary><pre><code>addEventListener("click", ...)</code></pre><p>Nel codice eseguito al click, assegna il nuovo testo a <code>textContent</code>.</p></details>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Criteri di completamento</p><h3>Il risultato minimo è pronto quando…</h3><ul><li>i due file sono salvati nella stessa cartella;</li><li>la console conferma che JavaScript è caricato senza errori;</li><li>il testo cambia soltanto quando premi il pulsante;</li><li>sai indicare l’elemento HTML modificato dal codice.</li></ul></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="sfida">
+      <p class="eyebrow">Facoltativa · Per chi termina prima</p>
+      <h2 id="sfida">Aggiungi il pulsante “Ripristina”</h2>
+      <p>Aggiungi un secondo pulsante che riporti il paragrafo al testo originale. Non servono concetti nuovi: assegna un <code>id</code> al nuovo pulsante e riusa gli stessi passaggi già provati.</p>
+    </section>
+
+    <section class="section" aria-labelledby="riepilogo-visuale">
+      <p class="eyebrow">5 minuti · Chiusura</p>
+      <h2 id="riepilogo-visuale">Dal file all’interazione</h2>
+      <pre><code>index.html
+    │
+    │ carica
+    ▼
+script.js
+    │
+    │ legge / modifica
+    ▼
+pagina nel browser</code></pre>
+      <pre><code>UTENTE
+   │
+   │ click
+   ▼
+EVENTO
+   │
+   ▼
+JAVASCRIPT
+   │
+   ▼
+MODIFICA DELLA PAGINA</code></pre>
+      <div class="table-wrap">
+        <table>
+          <caption>Gli elementi usati nella lezione</caption>
+          <thead><tr><th scope="col">Elemento</th><th scope="col">A cosa serve</th></tr></thead>
+          <tbody>
+            <tr><th scope="row"><code>console.log()</code></th><td>Mostra un valore nella console.</td></tr>
+            <tr><th scope="row"><code>let</code></th><td>Dichiara una variabile.</td></tr>
+            <tr><th scope="row"><code>const</code></th><td>Dichiara un nome che non vogliamo riassegnare.</td></tr>
+            <tr><th scope="row"><code>&lt;script&gt;</code></th><td>Collega JavaScript alla pagina.</td></tr>
+            <tr><th scope="row"><code>getElementById()</code></th><td>Individua un elemento HTML.</td></tr>
+            <tr><th scope="row"><code>textContent</code></th><td>Legge o cambia il testo.</td></tr>
+            <tr><th scope="row"><code>addEventListener()</code></th><td>Fa reagire il codice a un evento.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section reading" aria-labelledby="domande-finali">
+      <p class="eyebrow">Verifica orale</p>
+      <h2 id="domande-finali">Otto domande finali</h2>
+      <ol>
+        <li>Qual è il ruolo di HTML?</li>
+        <li>Qual è il ruolo di JavaScript?</li>
+        <li>A cosa serve la console?</li>
+        <li>A cosa serve <code>console.log()</code>?</li>
+        <li>Come colleghiamo <code>script.js</code> a <code>index.html</code>?</li>
+        <li>Che cosa fa <code>document.getElementById()</code>?</li>
+        <li>Che cosa significa l’evento <code>"click"</code>?</li>
+        <li>Che differenza hai osservato tra una pagina statica e quella realizzata oggi?</li>
+      </ol>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../../index.html">← Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe quarta</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
