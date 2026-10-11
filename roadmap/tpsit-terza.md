@@ -62,6 +62,12 @@ Le lezioni usano codici `3.01`, `3.02` e successivi. Il sito contiene
 materiali consultabili e dati anonimizzati; Moodle gestisce consegne,
 valutazioni e file riservati.
 
+### Approfondimenti collegati
+
+- **Lezione 3.02:** “Oltre il sistema decimale: basi numeriche e alfabeti
+  personalizzati”, documentazione dell’estensione svolta in laboratorio con
+  Google Fogli, dalle basi variabili all’uso delle lettere come cifre.
+
 ## Prime quattro settimane
 
 1. Tour del sito e di Moodle, accessi e struttura della consegna.
@@ -75,4 +81,3 @@ valutazioni e file riservati.
 - provare e congelare l'ambiente Linux;
 - mantenere una configurazione minima e uniforme;
 - verificare sempre l'eseguibilità dei materiali prima della pubblicazione.
-

@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Approfondimento della Lezione 3.02 di TPSIT: conversioni in basi diverse e uso delle lettere come cifre in un sistema posizionale in base 26.">
+  <title>Approfondimento — Basi numeriche e alfabeti personalizzati</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#base-26">Base 26</a>
+        <a href="#foglio">Google Fogli</a>
+        <a href="#prova-tu">Prova tu</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT terza</a><span aria-hidden="true">/</span><a href="../../lezioni/02-algoritmo-conversione-fogli/index.html">Lezione 3.02</a><span aria-hidden="true">/</span><span>Approfondimento</span></nav>
+      <p class="eyebrow">Approfondimento · Modulo 3.1</p>
+      <h1>Oltre il sistema decimale: basi numeriche e alfabeti personalizzati</h1>
+      <p class="lead">Dalla conversione binaria alle cifre rappresentate con lettere: un algoritmo, tante basi.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">TPSIT · Classe terza</span>
+        <span role="listitem">Collegato alla Lezione 3.02</span>
+        <span role="listitem">Strumento: Google Fogli</span>
+        <span role="listitem">Prerequisito: divisioni successive</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="esperienza">
+      <p class="eyebrow">Esperienza di laboratorio</p>
+      <h2 id="esperienza">Come si è evoluto il nostro foglio</h2>
+      <p>Nella <a href="../../lezioni/02-algoritmo-conversione-fogli/index.html">Lezione 3.02</a> siamo partiti dalle conversioni manuali da decimale a binario. Poi abbiamo affidato a Google Fogli le divisioni successive usando <code>QUOZIENTE</code>, <code>RESTO</code> e i riferimenti alle celle.</p>
+      <p>Quando la base è diventata un dato contenuto in una cella, lo stesso algoritmo ha iniziato a funzionare anche con basi diverse. In laboratorio abbiamo sperimentato questa idea fino alla base 16 e abbiamo usato una funzione di estrazione per trasformare ogni resto nel simbolo della cifra corrispondente.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><h3>La domanda da cui ripartiamo</h3><p>Se sappiamo convertire un numero in binario, perché non possiamo utilizzare lo stesso algoritmo per convertirlo in base 8 o in base 16?</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="tante-basi">
+      <p class="eyebrow">A · Un algoritmo, tante basi</p>
+      <h2 id="tante-basi">I passaggi restano uguali</h2>
+      <p class="section-intro">Nelle divisioni successive cambiano soltanto il divisore, i possibili valori dei resti e i simboli usati per rappresentarli.</p>
+      <div class="card-grid">
+        <article class="card"><h3>Divisore</h3><p>È la base scelta: 2 per il binario, 8 per l’ottale, 16 per l’esadecimale.</p></article>
+        <article class="card"><h3>Resti possibili</h3><p>Vanno sempre da 0 fino a base − 1. In base 16 vanno quindi da 0 a 15.</p></article>
+        <article class="card"><h3>Simboli</h3><p>Da 0 a 9 bastano le cifre consuete; per i valori da 10 a 15 usiamo A, B, C, D, E e F.</p></article>
+      </div>
+      <h3>Esempio: 255 in base 16</h3>
+      <ol class="steps">
+        <li><strong>255 ÷ 16 = 15 con resto 15.</strong><p>Il resto 15 si rappresenta con il simbolo <strong>F</strong>.</p></li>
+        <li><strong>15 ÷ 16 = 0 con resto 15.</strong><p>Anche questo resto corrisponde a <strong>F</strong>.</p></li>
+        <li><strong>Leggiamo i resti dal basso verso l’alto.</strong><p>Otteniamo <strong>255<sub>10</sub> = FF<sub>16</sub></strong>.</p></li>
+      </ol>
+    </section>
+
+    <section id="base-26" class="section" aria-labelledby="cifre-simboli">
+      <p class="eyebrow">B · Le cifre sono simboli</p>
+      <h2 id="cifre-simboli">Dal nostro laboratorio a un sistema inventato</h2>
+      <p>In laboratorio abbiamo costruito l’alfabeto delle cifre usando prima le cifre decimali, da 0 a 9, e poi le lettere dell’alfabeto italiano tradizionale. In questo modo avevamo a disposizione simboli sufficienti per rappresentare anche i resti maggiori di 9.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><h3>E se utilizzassimo esclusivamente le lettere?</h3><p>Con le 21 lettere dell’alfabeto italiano potremmo costruire un sistema in base 21. Con le 26 lettere dell’alfabeto inglese potremmo invece costruire un sistema in base 26.</p></div></aside>
+      <div class="table-wrap">
+        <table>
+          <caption>Confronto tra numeri decimali e rappresentazioni alfabetiche</caption>
+          <thead><tr><th scope="col">Decimale</th><th scope="col">Base 21</th><th scope="col">Base 26</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">0</th><td>A</td><td>A</td></tr>
+            <tr><th scope="row">1</th><td>B</td><td>B</td></tr>
+            <tr><th scope="row">20</th><td>Z</td><td>U</td></tr>
+            <tr><th scope="row">21</th><td>BA</td><td>V</td></tr>
+            <tr><th scope="row">25</th><td>BE</td><td>Z</td></tr>
+            <tr><th scope="row">26</th><td>BF</td><td>BA</td></tr>
+            <tr><th scope="row">27</th><td>BG</td><td>BB</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>Abbiamo cambiato algoritmo oppure soltanto la base e l’alfabeto delle cifre?</strong></p>
+      <div class="definition"><strong>Astrazione</strong><p>Significa riconoscere la struttura comune di problemi diversi. Qui separiamo l’algoritmo, che resta uguale, dai dati che possono cambiare: la base e l’alfabeto delle cifre.</p></div>
+      <h3>Un alfabeto di 26 cifre</h3>
+      <p>Una <strong>cifra</strong> è un simbolo usato per rappresentare un valore. Nel sistema decimale usiamo dieci simboli, da 0 a 9; in quello esadecimale ne usiamo sedici, aggiungendo le lettere da A a F.</p>
+      <p>Possiamo anche definire un sistema in base 26 che usa soltanto le lettere dell’alfabeto inglese:</p>
+      <pre><code>BASE = 26
+ALFABETO = ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+A = 0   B = 1   C = 2   ...   Z = 25</code></pre>
+      <div class="definition"><strong>Perché A rappresenta zero?</strong><p>Ogni sistema posizionale ha bisogno di una cifra per lo zero: serve a indicare che una posizione non contribuisce al valore. Nella convenzione scelta assegniamo questo ruolo ad A. Così abbiamo esattamente 26 cifre, con valori da 0 a 25.</p></div>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><h3>Parole nuove</h3><p>L’<strong>alfabeto delle cifre</strong> è l’insieme dei simboli disponibili. Uno <strong>zero non significativo</strong> occupa una posizione iniziale senza cambiare il valore, come lo zero in 01.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="contare-lettere">
+      <p class="eyebrow">C · Come si conta utilizzando le lettere?</p>
+      <h2 id="contare-lettere">Dopo Z viene BA, non AA</h2>
+      <p>Usando la rappresentazione convenzionale più breve, la sequenza è <strong>A, B, C, …, Z, BA, BB, BC, …</strong>. Dopo aver usato tutte le 26 cifre in una posizione, ne serve una nuova a sinistra.</p>
+      <figure class="figure">
+        <a href="img/contare-base-26.svg" target="_blank" rel="noopener noreferrer" aria-label="Apri a dimensione intera l’infografica su come si conta in base 26"><img src="img/contare-base-26.svg" width="1400" height="720" alt="Sequenza A, B, C, fino a Z uguale 25, poi BA uguale 26 e BB; confronto tra 01 uguale 1 in decimale e AB uguale B in base 26"></a>
+        <figcaption class="caption">Figura 1 — Come si conta in base 26. Z rappresenta 25; il valore successivo, 26, richiede due posizioni e si scrive BA. <a href="img/contare-base-26.svg" target="_blank" rel="noopener noreferrer">Apri l’infografica a dimensione intera<span class="visually-hidden"> in una nuova scheda</span></a>.</figcaption>
+      </figure>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><h3>Professore, ma allora perché dopo Z non viene AA?</h3><p><strong>Studente:</strong> Abbiamo finito le lettere. Non dovremmo ripartire da AA?</p><p><strong>Professore:</strong> Ricorda che A rappresenta zero. In AA entrambe le posizioni valgono zero, quindi AA ha lo stesso valore di A. Per ottenere il valore successivo a Z dobbiamo mettere B nella nuova posizione a sinistra: BA.</p></div></aside>
+      <h3>Perché non scriviamo AA?</h3>
+      <p>Perché A vale zero. Scrivere una A iniziale non cambia il valore, proprio come aggiungere uno zero davanti a un numero decimale:</p>
+      <div class="card-grid">
+        <article class="card"><h3>In decimale</h3><p><strong>1 = 01 = 001</strong></p><p>Gli zeri iniziali non cambiano il valore.</p></article>
+        <article class="card"><h3>Nel nostro sistema in base 26</h3><p><strong>B = AB = AAB</strong></p><p>Le A iniziali rappresentano zeri non significativi.</p></article>
+      </div>
+      <p>Quindi <strong>AA = 0</strong>, <strong>AB = 1</strong>, <strong>AZ = 25</strong> e <strong>BA = 26</strong>. Se decidiamo di mostrare sempre almeno due lettere, la sequenza appare come <strong>AA, AB, AC, …, AZ, BA, BB, …</strong>; è la stessa successione di valori, soltanto completata a sinistra.</p>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Due modi di scrivere, un solo valore</h3><p>Nella forma convenzionale più breve, dopo Z viene BA. AA non è il successore di Z: è una forma a due lettere del valore zero.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="posizione">
+      <p class="eyebrow">D · Il valore dipende dalla posizione</p>
+      <h2 id="posizione">A destra unità, a sinistra gruppi da 26</h2>
+      <p class="section-intro">Le due posizioni funzionano come le unità e le decine del sistema decimale, ma ogni passaggio vale 26 volte la posizione alla sua destra.</p>
+      <div class="card-grid">
+        <article class="card">
+          <h3>BA<sub>26</sub> = 26<sub>10</sub></h3>
+          <div class="table-wrap"><table><caption>Valore delle posizioni di BA</caption><thead><tr><th scope="col">Cifra</th><th scope="col">Valore</th><th scope="col">Peso</th><th scope="col">Contributo</th></tr></thead><tbody><tr><th scope="row">B</th><td>1</td><td>26</td><td>1 × 26 = 26</td></tr><tr><th scope="row">A</th><td>0</td><td>1</td><td>0 × 1 = 0</td></tr></tbody></table></div>
+          <p><strong>26 + 0 = 26</strong></p>
+        </article>
+        <article class="card">
+          <h3>BB<sub>26</sub> = 27<sub>10</sub></h3>
+          <div class="table-wrap"><table><caption>Valore delle posizioni di BB</caption><thead><tr><th scope="col">Cifra</th><th scope="col">Valore</th><th scope="col">Peso</th><th scope="col">Contributo</th></tr></thead><tbody><tr><th scope="row">B</th><td>1</td><td>26</td><td>1 × 26 = 26</td></tr><tr><th scope="row">B</th><td>1</td><td>1</td><td>1 × 1 = 1</td></tr></tbody></table></div>
+          <p><strong>26 + 1 = 27</strong></p>
+        </article>
+      </div>
+    </section>
+
+    <section id="foglio" class="section" aria-labelledby="torniamo-foglio">
+      <p class="eyebrow">E · Torniamo al nostro foglio Google</p>
+      <h2 id="torniamo-foglio">Dal procedimento manuale all’algoritmo automatico</h2>
+      <figure class="figure">
+        <a href="midb.png" target="_blank" rel="noopener noreferrer" aria-label="Apri a dimensione intera lo screenshot con la funzione MIDB"><img src="midb.png" width="1285" height="413" alt="Screenshot di Google Fogli con conversione manuale, base modificabile richiamata dalla cella F1, formule automatiche QUOZIENTE e RESTO e colonna CIFRA che usa MIDB"></a>
+        <figcaption class="caption">Figura 2 — Un passaggio intermedio dell’attività, ancora in base 16: la parte manuale converte 37, mentre quella automatica converte 255. Sono due esempi diversi dello stesso algoritmo. Alla versione automatica è stata aggiunta la colonna CIFRA, che usa <code>MIDB</code> per associare un simbolo a ogni resto. Questa schermata prepara il lavoro successivo, ma non mostra la soluzione del compito in base 26 con sole lettere. <a href="midb.png" target="_blank" rel="noopener noreferrer">Apri lo screenshot a dimensione intera<span class="visually-hidden"> in una nuova scheda</span></a>.</figcaption>
+      </figure>
+      <ol class="steps">
+        <li><strong>Conversione manuale.</strong><p>Nelle colonne B e C sono annotati i quozienti e i resti calcolati passo dopo passo.</p></li>
+        <li><strong>Conversione automatica.</strong><p>Nelle colonne E e F lo stesso procedimento è espresso con formule che possono essere trascinate verso il basso.</p></li>
+        <li><strong>Cella della base.</strong><p>Le formule leggono il divisore dalla cella <code>$F$1</code>. Cambiando quel valore cambiano i resti possibili, non l’algoritmo.</p></li>
+        <li><strong>Quozienti e resti.</strong><p>Il quoziente alimenta la divisione successiva; ogni resto diventa una cifra del risultato.</p></li>
+        <li><strong>Colonna CIFRA.</strong><p>Nella colonna G compare il simbolo associato al resto della stessa riga.</p></li>
+        <li><strong>Dal valore al simbolo.</strong><p><code>MIDB</code> estrae dalla stringa delle cifre un simbolo lungo un byte. La posizione iniziale deve essere almeno 1, mentre i resti partono da 0: perciò usiamo <strong>resto + 1</strong>. Con le cifre e le lettere latine mostrate nel foglio, ogni simbolo occupa un byte.</p></li>
+      </ol>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Per passare alla base 26 servono due modifiche</h3><p>Non basta impostare la base a 26: bisogna anche sostituire l’alfabeto delle cifre con <code>ABCDEFGHIJKLMNOPQRSTUVWXYZ</code>, nel quale A rappresenta 0 e Z rappresenta 25.</p></div></aside>
+      <pre><code>NUMERO
+   ↓
+DIVISIONE PER LA BASE
+   ↓
+RESTO
+   ↓
+INDIVIDUAZIONE DEL SIMBOLO
+   ↓
+CIFRA DEL NUOVO SISTEMA</code></pre>
+      <p>Le cifre ottenute devono essere lette <strong>dal basso verso l’alto</strong>, nello stesso ordine usato per i resti. Eventuali A iniziali rappresentano zeri non significativi e possono essere omesse nella forma più breve.</p>
+      <details><summary>Il modello della funzione usata</summary><p><code>MIDB</code> riceve la stringa da cui estrarre, la posizione iniziale e il numero di byte da prelevare. Nel nostro caso la posizione dipende dal resto e la lunghezza è un byte. I riferimenti esatti alle celle e l’alfabeto da usare dipendono da come hai organizzato il tuo foglio.</p></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="esempio-completo">
+      <p class="eyebrow">F · Un esempio completo</p>
+      <h2 id="esempio-completo">Convertiamo 255 in base 26</h2>
+      <ol class="steps">
+        <li><strong>255 = 9 × 26 + 21.</strong><p>Il primo resto è 21, che nell’alfabeto scelto corrisponde a <strong>V</strong>.</p></li>
+        <li><strong>9 = 0 × 26 + 9.</strong><p>Il secondo resto è 9, che corrisponde a <strong>J</strong>. Il quoziente è diventato 0, quindi ci fermiamo.</p></li>
+        <li><strong>Leggiamo dal basso verso l’alto.</strong><p>Prima J, poi V: <strong>255<sub>10</sub> = JV<sub>26</sub></strong>.</p></li>
+      </ol>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><h3>Verifica</h3><p>J vale 9 e occupa la posizione con peso 26; V vale 21 e occupa la posizione con peso 1. Quindi <strong>9 × 26 + 21 = 255</strong>.</p></div></aside>
+    </section>
+
+    <section id="prova-tu" class="section" aria-labelledby="mettiti-prova">
+      <p class="eyebrow">G · Mettiti alla prova</p>
+      <h2 id="mettiti-prova">Controlla se hai capito</h2>
+      <ol>
+        <li>Quale valore rappresenta Z?</li>
+        <li>Perché AA e A hanno lo stesso valore?</li>
+        <li>Quanto vale BA?</li>
+        <li>Come rappresenteresti 27?</li>
+        <li>Perché dobbiamo conoscere la base per interpretare correttamente un numero?</li>
+      </ol>
+      <h3>Piccola verifica sul foglio</h3>
+      <p>Riprendi il foglio costruito in laboratorio e crea una copia di lavoro. Scegli un numero decimale diverso da 255 e convertilo in <strong>base 26 usando esclusivamente le lettere da A a Z</strong>, con A = 0. Controlla che:</p>
+      <ul class="presentation-checklist">
+        <li>la base 26 sia letta da una cella e non scritta direttamente in ogni formula;</li>
+        <li>quozienti e resti si aggiornino fino al quoziente 0;</li>
+        <li>l’alfabeto delle cifre sia <code>ABCDEFGHIJKLMNOPQRSTUVWXYZ</code> e ogni resto sia trasformato nel simbolo corrispondente;</li>
+        <li>il risultato sia ricostruito leggendo le cifre dal basso verso l’alto;</li>
+        <li>la verifica posizionale restituisca il numero iniziale.</li>
+      </ul>
+      <details><summary>Aiuto 1 — da dove iniziare</summary><p>Prima di modificare le formule, scrivi in una cella l’alfabeto <code>ABCDEFGHIJKLMNOPQRSTUVWXYZ</code> e verifica quale simbolo occupa le posizioni 1, 10 e 26.</p></details>
+      <details><summary>Aiuto 2 — il passaggio chiave</summary><p>Il resto 0 deve selezionare il primo carattere della stringa. Cerca quindi il collegamento tra il valore del resto e la posizione richiesta dalla funzione di estrazione.</p></details>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">✎</span><div><h3>Il foglio deve mostrare il tuo ragionamento</h3><p>Non trovi qui la formula completa con tutti i riferimenti: devi adattare la logica alle celle del tuo foglio e saper spiegare ogni passaggio.</p></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="idea-fondamentale">
+      <p class="eyebrow">In breve</p>
+      <h2 id="idea-fondamentale">L’idea fondamentale</h2>
+      <p><strong>Un sistema di numerazione è definito dalla base, dai simboli utilizzati e dalle regole con cui questi simboli assumono valore in base alla posizione.</strong></p>
+      <p>L’algoritmo delle divisioni successive non dipende dal modo in cui disegniamo le cifre: produce valori di resto. È l’alfabeto scelto che trasforma poi ciascun valore nel simbolo corrispondente.</p>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione del materiale"><a href="../../lezioni/02-algoritmo-conversione-fogli/index.html">← Lezione 3.02</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe terza</strong></p><p>Approfondimento della Lezione 3.02 · Anno scolastico 2026/27</p></div></footer>
+</body>
+</html>
