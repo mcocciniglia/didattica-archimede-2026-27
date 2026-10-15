@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 4.01 di TPSIT per la classe quarta: usare dati, tipi e calcoli JavaScript per mostrare il totale di un piccolo acquisto.">
+  <title>4.01 — Dai dati al risultato: un piccolo preventivo con JavaScript</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT quarta</a><span aria-hidden="true">/</span><span>4.01</span></nav>
+      <p class="eyebrow">4.01 · Modulo 1 · 2 ore in laboratorio</p>
+      <h1>Dai dati al risultato: un piccolo preventivo con JavaScript</h1>
+      <p class="lead">Come trasformiamo il nome, il prezzo e la quantità di un prodotto in un totale comprensibile?</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">TPSIT · Classe quarta</span>
+        <span role="listitem">Strumenti: browser ed editor di codice</span>
+        <span role="listitem">Prerequisito: 4.00</span>
+        <span role="listitem">Risultato: totale</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><p class="eyebrow">Tempi indicativi</p><h2>Prima il risultato minimo</h2><p>I tempi sono indicativi. L’obiettivo principale è realizzare e comprendere il preventivo funzionante. Se occorre più tempo, le prove individuali possono essere completate nell’incontro successivo; l’estensione sul costo di consegna resta facoltativa.</p></div></aside>
+
+    <section class="section reading" aria-labelledby="richiamo">
+      <p class="eyebrow">10 minuti · Riprendiamo la pagina precedente</p>
+      <h2 id="richiamo">Prima il click, poi il calcolo</h2>
+      <p>Ripartiamo da due file separati: l’HTML contiene un pulsante e un paragrafo; JavaScript individua questi elementi e reagisce al click.</p>
+      <p>Crea una nuova cartella chiamata <code>preventivo-js</code>, conservando il lavoro della lezione 4.00. Inserisci nella nuova cartella i due file <code>index.html</code> e <code>script.js</code> riportati qui sotto. Riprendiamo il meccanismo del click già incontrato, usando tutti la stessa base.</p>
+      <h3><code>index.html</code> — crea questo file</h3>
+      <pre><code>&lt;!doctype html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Piccolo preventivo&lt;/title&gt;
+    &lt;script src="script.js" defer&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Piccolo preventivo&lt;/h1&gt;
+    &lt;button id="calcola" type="button"&gt;Calcola il totale&lt;/button&gt;
+    &lt;p id="risultato"&gt;Il totale comparirà qui.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <h3><code>script.js</code> — crea questo file</h3>
+      <pre><code>const pulsante = document.getElementById("calcola");
+const risultato = document.getElementById("risultato");
+
+pulsante.addEventListener("click", function () {
+    risultato.textContent = "Il pulsante funziona.";
+});</code></pre>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Checkpoint 1</p><h3>La base funziona</h3><p>Salva entrambi i file, apri <code>index.html</code>, ricarica la pagina e premi il pulsante. Il paragrafo deve mostrare <q>Il pulsante funziona.</q></p></div></aside>
+    </section>
+
+    <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><p class="eyebrow">Tre azioni diverse</p><h2>Salva, ricarica, premi</h2><ol><li><strong>Modifica e salva</strong> il file: il nuovo codice viene scritto sul disco.</li><li><strong>Ricarica la pagina</strong>: il browser esegue di nuovo <code>script.js</code> e ripristina i valori iniziali scritti nel file.</li><li><strong>Premi il pulsante</strong>: soltanto ora viene eseguito il codice dentro il gestore del click.</li></ol><p>Cancellare i messaggi visibili nella console libera la schermata, ma non cancella le variabili. Per ripartire dai valori iniziali devi ricaricare la pagina.</p></div></aside>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Che cosa saprai fare</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Riconoscere</h3><p>Distinguere dichiarazione, valore, assegnazione e riassegnazione in poche righe di codice.</p></article>
+        <article class="card"><h3>Prevedere</h3><p>Calcolare a mente il risultato di un’espressione e confrontarlo con la console.</p></article>
+        <article class="card"><h3>Elaborare</h3><p>Moltiplicare prezzo unitario e quantità nel momento in cui avviene il click.</p></article>
+        <article class="card"><h3>Mostrare</h3><p>Comporre un messaggio con prodotto, quantità e totale e inserirlo nella pagina.</p></article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="dati">
+      <p class="eyebrow">20 minuti · Diamo significato ai dati</p>
+      <h2 id="dati">Un nome e tre valori</h2>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><p class="eyebrow">Esperimento in console</p><h3>Il pulsante resta in pausa</h3><p>In questi esperimenti lavoriamo soltanto nella console: il pulsante non modifica più il testo perché stiamo sostituendo il codice che gestiva il click. È previsto. Ripristineremo il suo funzionamento nella sezione «Calcoliamo quando avviene il click».</p></div></aside>
+      <p>Per il nostro preventivo servono il nome del prodotto, il suo prezzo unitario e la quantità. <strong>In questo passaggio sostituisci tutto il contenuto di <code>script.js</code></strong> con il blocco seguente: così non accumuli dichiarazioni duplicate.</p>
+      <pre><code>const prodotto = "Quaderno";
+const prezzoUnitario = 4;
+let quantita = 3;
+
+console.log(prodotto);
+console.log(prezzoUnitario);
+console.log(quantita);</code></pre>
+      <div class="card-grid">
+        <article class="card"><h3>Dichiarazione</h3><p><code>let quantita</code> crea il nome <code>quantita</code> nel programma.</p></article>
+        <article class="card"><h3>Valore</h3><p><code>3</code> è il dato inizialmente associato a quel nome.</p></article>
+        <article class="card"><h3>Assegnazione</h3><p>Il segno <code>=</code> assegna il valore che si trova a destra al nome che si trova a sinistra.</p></article>
+      </div>
+      <p>Usiamo <code>const</code> per <code>prodotto</code> e <code>prezzoUnitario</code> perché, durante una singola esecuzione, non vogliamo assegnare loro un altro valore. Usiamo <code>let</code> per <code>quantita</code> perché tra poco la cambieremo.</p>
+      <p><code>const</code> impedisce di assegnare un nuovo valore allo stesso nome durante l’esecuzione. Puoi comunque modificare il valore iniziale nel file, salvare e ricaricare la pagina: inizierà una nuova esecuzione con il nuovo valore.</p>
+      <h3>Riassegna un valore</h3>
+      <p><strong>Aggiungi in fondo a <code>script.js</code></strong> queste righe. Non ripetere <code>let</code>.</p>
+      <pre><code>quantita = 5;
+console.log(quantita);</code></pre>
+      <p>Questa è una <strong>riassegnazione</strong>: il nome esiste già e riceve un nuovo valore.</p>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Checkpoint 2</p><h3>Prevedi prima di ricaricare</h3><p>Quali quattro valori compariranno nella console, e in quale ordine? Scrivi la previsione, poi salva e ricarica la pagina.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="calcolo">
+      <p class="eyebrow">20 minuti · Calcoliamo e prevediamo</p>
+      <h2 id="calcolo">Dal prezzo e dalla quantità al totale</h2>
+      <p>Il totale si ottiene moltiplicando il prezzo unitario per la quantità. <strong>Sostituisci tutto <code>script.js</code></strong> con questo esperimento completo.</p>
+      <pre><code>const prodotto = "Quaderno";
+const prezzoUnitario = 4;
+let quantita = 3;
+
+let totale = prezzoUnitario * quantita;
+
+console.log(prezzoUnitario);
+console.log(quantita);
+console.log(totale);</code></pre>
+      <p>Prima di eseguire, completa a voce: <q>4 euro per 3 quaderni dà un totale di…</q>. Poi salva, ricarica e confronta la previsione con la console.</p>
+      <h3>Il totale non cambia da solo</h3>
+      <p><strong>Aggiungi in fondo</strong> le righe seguenti e prevedi entrambi i valori stampati.</p>
+      <pre><code>quantita = 5;
+console.log(totale);
+
+totale = prezzoUnitario * quantita;
+console.log(totale);</code></pre>
+      <p>Dopo <code>quantita = 5</code>, la variabile <code>totale</code> contiene ancora <code>12</code>: JavaScript non torna indietro a ripetere automaticamente il calcolo già eseguito. Soltanto la nuova assegnazione <code>totale = prezzoUnitario * quantita</code> produce <code>20</code>.</p>
+      <div class="table-wrap">
+        <table>
+          <caption>Che cosa contiene ogni nome durante l’esperimento</caption>
+          <thead><tr><th scope="col">Momento</th><th scope="col"><code>quantita</code></th><th scope="col"><code>totale</code></th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Dopo il primo calcolo</th><td>3</td><td>12</td></tr>
+            <tr><th scope="row">Dopo la riassegnazione della quantità</th><td>5</td><td>12</td></tr>
+            <tr><th scope="row">Dopo il nuovo calcolo</th><td>5</td><td>20</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Checkpoint 3</p><h3>Cambia un solo valore</h3><p>Sostituisci il prezzo <code>4</code> con <code>6</code>. Senza eseguire, prevedi i due totali; poi salva, ricarica e verifica.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="numeri-testi">
+      <p class="eyebrow">15 minuti · Numeri e testi</p>
+      <h2 id="numeri-testi">Le virgolette cambiano il significato</h2>
+      <p>Apri la console e prova una riga alla volta. Prima di premere Invio, indica il risultato atteso.</p>
+      <pre><code>5 + 3
+"5" + 3
+typeof 5
+typeof "5"</code></pre>
+      <p><code>5 + 3</code> usa due numeri e produce <code>8</code>. <code>"5" + 3</code> parte invece da una stringa, cioè un testo: con <code>+</code> JavaScript unisce i valori e produce il testo <code>"53"</code>. <code>typeof</code> è qui soltanto uno strumento di osservazione: mostra <code>"number"</code> per un numero e <code>"string"</code> per un testo.</p>
+      <h3>Le parentesi stabiliscono che cosa calcolare prima</h3>
+      <pre><code>"Totale: " + 5 + 3
+"Totale: " + (5 + 3)</code></pre>
+      <p>La prima espressione viene letta da sinistra e produce <code>"Totale: 53"</code>. Nella seconda, le parentesi fanno eseguire prima <code>5 + 3</code>; il risultato è <code>"Totale: 8"</code>.</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">?</span><div><p class="eyebrow">Controllo rapido</p><h3>Numero o stringa?</h3><p>Quale risultato prevedi per <code>"Pezzi: " + (2 + 4)</code>? Quale parte viene calcolata per prima?</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="pagina-risultato">
+      <p class="eyebrow">25 minuti · Il risultato compare nella pagina</p>
+      <h2 id="pagina-risultato">Calcoliamo quando avviene il click</h2>
+      <p>Ora costruiamo il prodotto minimo della lezione. <strong>Sostituisci interamente entrambi i file</strong> con le versioni seguenti.</p>
+      <h3><code>index.html</code> — sostituisci tutto il file</h3>
+      <pre><code>&lt;!doctype html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Piccolo preventivo&lt;/title&gt;
+    &lt;script src="script.js" defer&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Piccolo preventivo&lt;/h1&gt;
+    &lt;p&gt;Premi il pulsante per conoscere il totale.&lt;/p&gt;
+    &lt;button id="calcola" type="button"&gt;Calcola il totale&lt;/button&gt;
+    &lt;p id="risultato"&gt;Il totale comparirà qui.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <h3><code>script.js</code> — sostituisci tutto il file</h3>
+      <pre><code>const prodotto = "Quaderno";
+const prezzoUnitario = 4;
+let quantita = 3;
+
+const pulsante = document.getElementById("calcola");
+const risultato = document.getElementById("risultato");
+
+pulsante.addEventListener("click", function () {
+    const totale = prezzoUnitario * quantita;
+
+    risultato.textContent = prodotto + ": " + quantita
+        + " pezzi, totale " + totale + " euro.";
+});</code></pre>
+      <p>Il calcolo si trova <strong>dentro</strong> il gestore del click: viene quindi eseguito quando premi il pulsante e usa i valori presenti in quel momento. La concatenazione con <code>+</code> unisce testi e valori in un unico messaggio.</p>
+      <ol class="steps">
+        <li><strong>Prevedi.</strong><p>Con i dati iniziali, scrivi il messaggio che ti aspetti di vedere.</p></li>
+        <li><strong>Salva.</strong><p>Salva sia <code>index.html</code> sia <code>script.js</code>.</p></li>
+        <li><strong>Ricarica.</strong><p>Controlla che il paragrafo mostri ancora il messaggio iniziale.</p></li>
+        <li><strong>Premi.</strong><p>Fai click su <q>Calcola il totale</q> e confronta il risultato con la previsione.</p></li>
+      </ol>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><p class="eyebrow">Checkpoint 4 · Risultato minimo</p><h3>Il preventivo funziona</h3><p>Il risultato minimo è raggiunto quando il click mostra <q>Quaderno: 3 pezzi, totale 12 euro.</q> e la console non segnala errori.</p></div></aside>
+    </section>
+
+    <section class="section" aria-labelledby="prove-individuali">
+      <p class="eyebrow">20 minuti · Variante individuale e prove</p>
+      <h2 id="prove-individuali">Personalizza e verifica tre volte</h2>
+      <p>Modifica nel codice il prodotto, il prezzo unitario e la quantità. Per il nucleo essenziale usa prezzi interi. A ogni prova: completa prima la previsione, salva, ricarica, premi il pulsante e registra ciò che osservi.</p>
+      <div class="table-wrap">
+        <table>
+          <caption>Registro delle tre prove individuali</caption>
+          <thead><tr><th scope="col">Prova</th><th scope="col">Dati iniziali</th><th scope="col">Risultato atteso</th><th scope="col">Risultato osservato</th><th scope="col">Esito</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">1</th><td>Prodotto, prezzo, quantità</td><td>Da prevedere</td><td>Da osservare</td><td>Coincide / da correggere</td></tr>
+            <tr><th scope="row">2</th><td>Prodotto, prezzo, quantità</td><td>Da prevedere</td><td>Da osservare</td><td>Coincide / da correggere</td></tr>
+            <tr><th scope="row">3</th><td>Prodotto, prezzo, quantità</td><td>Da prevedere</td><td>Da osservare</td><td>Coincide / da correggere</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <details><summary>Aiuto 1 — individua i tre dati</summary><p>Le prime tre righe di <code>script.js</code> contengono prodotto, prezzo unitario e quantità. Modifica soltanto i valori a destra del segno <code>=</code>.</p></details>
+      <details><summary>Aiuto 2 — controlla il calcolo</summary><p>Dentro il gestore deve esserci <code>const totale = prezzoUnitario * quantita;</code>. Il simbolo della moltiplicazione in JavaScript è <code>*</code>.</p></details>
+      <details><summary>Aiuto 3 — controlla il collegamento con la pagina</summary><p>Gli identificatori <code>calcola</code> e <code>risultato</code> devono essere scritti nello stesso modo nell’HTML e nelle chiamate a <code>getElementById()</code>.</p></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="errori-frequenti">
+      <p class="eyebrow">Se qualcosa non funziona</p>
+      <h2 id="errori-frequenti">Cinque controlli rapidi</h2>
+      <ul>
+        <li>Hai modificato e salvato il file giusto?</li>
+        <li>Hai ricaricato la pagina dopo il salvataggio?</li>
+        <li>Hai premuto il pulsante dopo il ricaricamento?</li>
+        <li>Hai dichiarato una sola volta ciascun nome, senza copiare blocchi uno sotto l’altro?</li>
+        <li>La console indica una riga con un errore di nome, virgolette o parentesi?</li>
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="alternativa-carta">
+      <p class="eyebrow">Alternativa senza computer</p>
+      <h2 id="alternativa-carta">Segui i valori sulla carta</h2>
+      <p>Per ogni caso, calcola il totale e scrivi il messaggio che comparirebbe dopo il click.</p>
+      <div class="table-wrap">
+        <table>
+          <caption>Dati per la previsione su carta</caption>
+          <thead><tr><th scope="col">Prodotto</th><th scope="col">Prezzo unitario</th><th scope="col">Quantità</th><th scope="col">Totale e messaggio previsto</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Penna</th><td>2</td><td>4</td><td>Da completare</td></tr>
+            <tr><th scope="row">Cartellina</th><td>3</td><td>5</td><td>Da completare</td></tr>
+            <tr><th scope="row">Risma</th><td>6</td><td>2</td><td>Da completare</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <details><summary>Controlla i risultati</summary><p>I totali sono, nell’ordine, <strong>8</strong>, <strong>15</strong> e <strong>12</strong> euro. Per esempio: <q>Penna: 4 pezzi, totale 8 euro.</q></p></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="estensione">
+      <p class="eyebrow">Facoltativa · Per chi termina prima</p>
+      <h2 id="estensione">Aggiungi un costo fisso di consegna</h2>
+      <p><strong>Aggiungi</strong> vicino agli altri dati la riga seguente:</p>
+      <pre><code>const costoConsegna = 2;</code></pre>
+      <p>Poi, <strong>dentro il gestore, sostituisci soltanto la riga del calcolo</strong> con:</p>
+      <pre><code>const totale = prezzoUnitario * quantita + costoConsegna;</code></pre>
+      <p>Prevedi il nuovo totale con i dati iniziali, quindi salva, ricarica e premi il pulsante. Questa estensione viene dopo il risultato minimo e non è necessaria per completare la lezione.</p>
+    </section>
+
+    <section class="section" aria-labelledby="versione-completa">
+      <p class="eyebrow">Riferimento finale</p>
+      <h2 id="versione-completa">I due file completi e coerenti</h2>
+      <p>Se durante le prove il codice si è confuso, confrontalo con questa versione minima finale. Non aggiungerla sotto il codice esistente: <strong>sostituisci l’intero contenuto del file corrispondente</strong>.</p>
+      <h3><code>index.html</code></h3>
+      <pre><code>&lt;!doctype html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Piccolo preventivo&lt;/title&gt;
+    &lt;script src="script.js" defer&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Piccolo preventivo&lt;/h1&gt;
+    &lt;p&gt;Premi il pulsante per conoscere il totale.&lt;/p&gt;
+    &lt;button id="calcola" type="button"&gt;Calcola il totale&lt;/button&gt;
+    &lt;p id="risultato"&gt;Il totale comparirà qui.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <h3><code>script.js</code></h3>
+      <pre><code>const prodotto = "Quaderno";
+const prezzoUnitario = 4;
+let quantita = 3;
+
+const pulsante = document.getElementById("calcola");
+const risultato = document.getElementById("risultato");
+
+pulsante.addEventListener("click", function () {
+    const totale = prezzoUnitario * quantita;
+
+    risultato.textContent = prodotto + ": " + quantita
+        + " pezzi, totale " + totale + " euro.";
+});</code></pre>
+    </section>
+
+    <section class="section" aria-labelledby="parole">
+      <p class="eyebrow">Parole da consolidare</p>
+      <h2 id="parole">Quattro idee da riconoscere nel codice</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Dichiarazione</h3><p>Crea un nome che il programma potrà usare, per esempio <code>let quantita</code>.</p></article>
+        <article class="card"><h3>Assegnazione</h3><p>Associa un valore a un nome mediante il segno <code>=</code>.</p></article>
+        <article class="card"><h3>Tipo</h3><p>Descrive la natura di un valore; qui osserviamo numeri e stringhe.</p></article>
+        <article class="card"><h3>Espressione</h3><p>Una combinazione di valori e operatori che produce un risultato, come <code>4 * 3</code>.</p></article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="verifica-finale">
+      <p class="eyebrow">10 minuti · Correzione e verifica finale</p>
+      <h2 id="verifica-finale">Cinque domande brevi</h2>
+      <ol>
+        <li>Quale valore contiene <code>quantita</code> dopo <code>let quantita = 3;</code>?</li>
+        <li>Perché possiamo scrivere <code>quantita = 5;</code> senza ripetere <code>let</code>?</li>
+        <li>Che differenza c’è tra <code>5 + 3</code> e <code>"5" + 3</code>?</li>
+        <li>Perché il totale viene calcolato dentro il gestore del click?</li>
+        <li>Che cosa accade, nell’ordine, quando salvi, ricarichi e premi il pulsante?</li>
+      </ol>
+      <details><summary>Soluzione 1 — il valore</summary><p><code>quantita</code> contiene il numero <code>3</code>, assegnato durante la dichiarazione.</p></details>
+      <details><summary>Soluzione 2 — la riassegnazione</summary><p><code>let</code> ha già dichiarato il nome. Scrivere di nuovo soltanto <code>quantita = 5</code> sostituisce il valore; ripetere <code>let</code> nello stesso blocco creerebbe una dichiarazione duplicata.</p></details>
+      <details><summary>Soluzione 3 — numero e testo</summary><p><code>5 + 3</code> somma due numeri e produce <code>8</code>. <code>"5" + 3</code> parte da una stringa e concatena i valori, producendo <code>"53"</code>.</p></details>
+      <details><summary>Soluzione 4 — il momento del calcolo</summary><p>Il codice nel gestore viene eseguito al click. Calcolare lì significa usare i valori presenti in quel momento, invece di conservare un totale calcolato in precedenza.</p></details>
+      <details><summary>Soluzione 5 — le tre azioni</summary><p>Il salvataggio registra il codice; il ricaricamento esegue nuovamente lo script e ripristina i valori iniziali; il click attiva il gestore e produce il totale visibile. Pulire la console non modifica questi valori.</p></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="riepilogo">
+      <p class="eyebrow">In breve</p>
+      <h2 id="riepilogo">Dal dato al risultato visibile</h2>
+      <pre><code>prodotto + prezzo + quantità
+              │
+              │ click
+              ▼
+     prezzo × quantità
+              │
+              ▼
+   messaggio nella pagina</code></pre>
+      <ul>
+        <li><code>let</code> permette una riassegnazione; <code>const</code> impedisce di assegnare un nuovo valore allo stesso nome.</li>
+        <li>Numeri e stringhe producono comportamenti diversi con l’operatore <code>+</code>.</li>
+        <li>Le parentesi fanno eseguire prima l’espressione che racchiudono.</li>
+        <li>Un risultato già calcolato non si aggiorna da solo quando cambia un dato.</li>
+        <li>Nel preventivo il calcolo avviene al click e <code>textContent</code> mostra il messaggio.</li>
+      </ul>
+    </section>
+
+    <section class="section reading" aria-labelledby="casa">
+      <p class="eyebrow">A casa · Anche senza computer</p>
+      <h2 id="casa">Prevedi due preventivi</h2>
+      <p>Scegli due prodotti di uso quotidiano. Per ciascuno scrivi nome, prezzo unitario intero e quantità; calcola il totale e componi il messaggio che la pagina dovrebbe mostrare. Concludi con due frasi: una spiega perché il calcolo è dentro il gestore del click, l’altra distingue ricaricare la pagina da cancellare la console.</p>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../00-primo-javascript/index.html">← Lezione 4.00</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe quarta</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
