@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Destinatari A, CC e CCN</title>
+  <desc id="desc">Tre destinatari fittizi mostrano il ruolo e la visibilità degli indirizzi nei campi A, CC e CCN.</desc>
+  <defs>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#1267b1"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="125%"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#071a33" flood-opacity="0.18"/></filter>
+  </defs>
+  <rect width="1200" height="760" rx="28" fill="#f3f7fc"/>
+  <text x="60" y="64" fill="#0d3569" font-family="Atkinson Hyperlegible, Segoe UI, sans-serif" font-size="34" font-weight="800">A, CC e CCN: chi vede che cosa?</text>
+  <text x="60" y="100" fill="#41546d" font-family="Atkinson Hyperlegible, Segoe UI, sans-serif" font-size="21">Tutti i nomi e gli indirizzi sono fittizi.</text>
+
+  <g filter="url(#shadow)" font-family="Atkinson Hyperlegible, Segoe UI, sans-serif">
+    <rect x="58" y="142" width="250" height="164" rx="20" fill="#0d3569"/>
+    <circle cx="183" cy="194" r="28" fill="#f6b95f"/>
+    <text x="183" y="203" text-anchor="middle" fill="#0d3569" font-size="23" font-weight="900">M</text>
+    <text x="183" y="247" text-anchor="middle" fill="#ffffff" font-size="23" font-weight="800">Mittente</text>
+    <text x="183" y="277" text-anchor="middle" fill="#d9e7f7" font-size="17">scrive e vede tutti</text>
+
+    <rect x="418" y="132" width="320" height="184" rx="20" fill="#ffffff" stroke="#287bbf" stroke-width="4"/>
+    <circle cx="468" cy="184" r="28" fill="#dcecff"/><text x="468" y="193" text-anchor="middle" fill="#0d3569" font-size="22" font-weight="900">A</text>
+    <text x="515" y="177" fill="#0d3569" font-size="25" font-weight="850">Ada</text>
+    <text x="515" y="207" fill="#41546d" font-size="18">ada@scuola.example</text>
+    <text x="452" y="257" fill="#172b45" font-size="20" font-weight="800">Destinataria principale</text>
+    <text x="452" y="285" fill="#41546d" font-size="18">Il messaggio richiede la sua attenzione.</text>
+
+    <rect x="822" y="132" width="320" height="184" rx="20" fill="#ffffff" stroke="#ad5708" stroke-width="4"/>
+    <circle cx="872" cy="184" r="28" fill="#fff0dd"/><text x="872" y="193" text-anchor="middle" fill="#7b3d05" font-size="19" font-weight="900">CC</text>
+    <text x="919" y="177" fill="#0d3569" font-size="25" font-weight="850">Bruno</text>
+    <text x="919" y="207" fill="#41546d" font-size="18">bruno@scuola.example</text>
+    <text x="856" y="257" fill="#172b45" font-size="20" font-weight="800">Riceve una copia visibile</text>
+    <text x="856" y="285" fill="#41546d" font-size="18">È informato, ma non è</text>
+    <text x="856" y="309" fill="#41546d" font-size="18">il destinatario principale.</text>
+
+    <rect x="418" y="365" width="320" height="184" rx="20" fill="#ffffff" stroke="#21734b" stroke-width="4"/>
+    <circle cx="468" cy="417" r="28" fill="#e5f4eb"/><text x="468" y="426" text-anchor="middle" fill="#15573a" font-size="17" font-weight="900">CCN</text>
+    <text x="515" y="410" fill="#0d3569" font-size="25" font-weight="850">Carla</text>
+    <text x="515" y="440" fill="#41546d" font-size="18">carla@scuola.example</text>
+    <text x="452" y="490" fill="#172b45" font-size="20" font-weight="800">Riceve una copia nascosta</text>
+    <text x="452" y="518" fill="#41546d" font-size="18">Ada e Bruno non vedono</text>
+    <text x="452" y="542" fill="#41546d" font-size="18">il suo indirizzo.</text>
+  </g>
+
+  <path d="M308 212H408" fill="none" stroke="#1267b1" stroke-width="4" marker-end="url(#arrowBlue)"/>
+  <path d="M308 245C325 340 365 345 418 345H720C770 345 800 300 812 245" fill="none" stroke="#1267b1" stroke-width="4" marker-end="url(#arrowBlue)"/>
+  <path d="M255 306C300 421 350 451 408 451" fill="none" stroke="#1267b1" stroke-width="4" stroke-dasharray="10 8" marker-end="url(#arrowBlue)"/>
+
+  <g font-family="Atkinson Hyperlegible, Segoe UI, sans-serif">
+    <rect x="58" y="592" width="1084" height="112" rx="18" fill="#0d3569"/>
+    <text x="92" y="631" fill="#ffffff" font-size="23" font-weight="850">Quando Ada e Bruno aprono il messaggio vedono:</text>
+    <rect x="92" y="651" width="238" height="35" rx="17" fill="#dcecff"/><text x="211" y="675" text-anchor="middle" fill="#0d3569" font-size="17" font-weight="800">A: Ada ✓</text>
+    <rect x="346" y="651" width="238" height="35" rx="17" fill="#fff0dd"/><text x="465" y="675" text-anchor="middle" fill="#7b3d05" font-size="17" font-weight="800">CC: Bruno ✓</text>
+    <rect x="600" y="651" width="295" height="35" rx="17" fill="#e5f4eb"/><text x="747" y="675" text-anchor="middle" fill="#15573a" font-size="17" font-weight="800">CCN: Carla nascosta</text>
+    <text x="925" y="675" fill="#f6b95f" font-size="18" font-weight="850">Il mittente vede tutti.</text>
+  </g>
+</svg>

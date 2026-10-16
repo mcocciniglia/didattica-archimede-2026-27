@@ -141,7 +141,7 @@ prerequisiti.
 | Produttività | Documenti, Fogli, Presentazioni | Applicazioni web uniformi e collaborative |
 | Hardware | Simulatore Von Neumann | Memoria, registri, CPU e ciclo di esecuzione |
 | Algoritmi | Flowgorithm portable | Diagrammi eseguibili con feedback immediato |
-| Tastiera | RapidTyping facoltativo | Cinque minuti in incontri selezionati |
+| Tastiera | Tutore Dattilo | Venti minuti in incontri selezionati, compresi nelle due ore |
 
 ## Valutazione
 
@@ -167,13 +167,18 @@ Rubrica: **4 Autonomo**, **3 Adeguato**, **2 Parziale**, **1 Iniziale**.
 Il recupero usa consegne da 30–40 minuti su una sola competenza, file iniziale
 predisposto, correzione guidata e seconda possibilità.
 
-## Prime sei lezioni
+## Prime lezioni e verifica iniziale
 
 | Codice | Focus | Laboratorio | Uscita |
 | --- | --- | --- | --- |
-| 0A | Cloud e Drive | Accesso, cartelle, nomi e condivisione | Struttura Drive |
-| 0B | Ergonomia e sicurezza | Postazione, rischi e carrellino | Checklist |
-| 1 | Dentro il computer | Componenti, hardware e software | Scheda componenti |
-| 2 | Von Neumann | Simulazione del ciclo | Traccia del ciclo |
-| 3 | Memorie e capacità | RAM, massa e unità | Tabella comparativa |
-| 4 | Periferiche e scelta | Input/output e configurazione | Scelta motivata |
+| 1 · U0 | Ambiente digitale di lavoro | Classroom, Drive, Documenti Google e Tutore Dattilo | Documento organizzato e consegnato |
+| 2 · U0 | File, cartelle e organizzazione | Drive, nomi, estensioni, PDF e Classroom | Cartella ordinata e PDF consegnato |
+| 3 · U1 | Dentro il computer | Hardware, software, dati e flusso input-elaborazione-output | Carta d’identità della postazione |
+| Verifica 1 · margine trasversale | Lezioni 1 e 2 e approfondimento Gmail | Operazioni pratiche e brevi domande | Evidenza individuale |
+| 4 · U1 | Von Neumann | Simulazione del ciclo | Traccia del ciclo |
+| 5 · U1 | Memorie e capacità | RAM, massa e unità | Tabella comparativa |
+| 6 · U1 | Periferiche e scelta | Input/output e configurazione | Scelta motivata |
+
+La lezione 3 utilizza 2 delle 8 ore previste per U1. La verifica iniziale usa
+il margine trasversale; le 4 ore di pausa didattica restano già comprese nelle
+60 ore pianificate.

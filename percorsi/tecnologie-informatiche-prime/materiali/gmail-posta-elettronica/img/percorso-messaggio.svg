@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Il percorso di un messaggio</title>
+  <desc id="desc">La composizione viene salvata automaticamente nelle bozze. Se si chiude senza inviare resta una bozza; se si invia, compare nella Posta inviata e arriva nella Posta in arrivo del destinatario.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1267b1"/></marker>
+    <marker id="arrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#ad5708"/></marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="125%"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#071a33" flood-opacity="0.18"/></filter>
+  </defs>
+  <rect width="1200" height="760" rx="28" fill="#edf4fc"/>
+  <text x="60" y="64" fill="#0d3569" font-family="Atkinson Hyperlegible, Segoe UI, sans-serif" font-size="34" font-weight="800">Il percorso di un messaggio</text>
+  <text x="60" y="100" fill="#41546d" font-family="Atkinson Hyperlegible, Segoe UI, sans-serif" font-size="21">Salvare una bozza non significa inviare.</text>
+
+  <g filter="url(#shadow)" font-family="Atkinson Hyperlegible, Segoe UI, sans-serif">
+    <rect x="60" y="185" width="230" height="150" rx="20" fill="#ffffff" stroke="#287bbf" stroke-width="3"/>
+    <circle cx="108" cy="232" r="25" fill="#dcecff"/><text x="108" y="240" text-anchor="middle" fill="#0d3569" font-size="21" font-weight="900">1</text>
+    <text x="145" y="239" fill="#0d3569" font-size="24" font-weight="850">Composizione</text>
+    <text x="92" y="283" fill="#41546d" font-size="18">Scrivi destinatario,</text>
+    <text x="92" y="310" fill="#41546d" font-size="18">oggetto e testo.</text>
+
+    <rect x="365" y="185" width="250" height="150" rx="20" fill="#ffffff" stroke="#287bbf" stroke-width="3"/>
+    <circle cx="413" cy="232" r="25" fill="#dcecff"/><text x="413" y="240" text-anchor="middle" fill="#0d3569" font-size="21" font-weight="900">2</text>
+    <text x="450" y="228" fill="#0d3569" font-size="23" font-weight="850">Salvataggio</text>
+    <text x="450" y="256" fill="#0d3569" font-size="23" font-weight="850">automatico</text>
+    <text x="397" y="301" fill="#41546d" font-size="18">Gmail aggiorna la bozza.</text>
+
+    <rect x="690" y="185" width="210" height="150" rx="20" fill="#ffffff" stroke="#ad5708" stroke-width="3"/>
+    <circle cx="738" cy="232" r="25" fill="#fff0dd"/><text x="738" y="240" text-anchor="middle" fill="#7b3d05" font-size="21" font-weight="900">3</text>
+    <text x="775" y="240" fill="#7b3d05" font-size="24" font-weight="850">Bozze</text>
+    <text x="722" y="283" fill="#41546d" font-size="18">Il messaggio è salvato,</text>
+    <text x="722" y="310" fill="#41546d" font-size="18">ma non è stato inviato.</text>
+
+    <rect x="944" y="185" width="196" height="150" rx="20" fill="#0d3569"/>
+    <circle cx="990" cy="232" r="25" fill="#f6b95f"/><text x="990" y="240" text-anchor="middle" fill="#0d3569" font-size="21" font-weight="900">4</text>
+    <text x="1025" y="240" fill="#ffffff" font-size="24" font-weight="850">Invia</text>
+    <text x="977" y="283" fill="#d9e7f7" font-size="18">Solo dopo aver</text>
+    <text x="977" y="310" fill="#d9e7f7" font-size="18">controllato tutto.</text>
+
+    <rect x="635" y="520" width="235" height="145" rx="20" fill="#ffffff" stroke="#21734b" stroke-width="3"/>
+    <circle cx="683" cy="566" r="25" fill="#e5f4eb"/><text x="683" y="574" text-anchor="middle" fill="#15573a" font-size="21" font-weight="900">5</text>
+    <text x="720" y="574" fill="#15573a" font-size="23" font-weight="850">Posta inviata</text>
+    <text x="670" y="616" fill="#41546d" font-size="18">Conserva la copia</text>
+    <text x="670" y="643" fill="#41546d" font-size="18">del messaggio spedito.</text>
+
+    <rect x="930" y="520" width="250" height="145" rx="20" fill="#ffffff" stroke="#21734b" stroke-width="3"/>
+    <circle cx="978" cy="566" r="25" fill="#e5f4eb"/><text x="978" y="574" text-anchor="middle" fill="#15573a" font-size="21" font-weight="900">6</text>
+    <text x="1015" y="559" fill="#15573a" font-size="22" font-weight="850">Posta in arrivo</text>
+    <text x="1015" y="587" fill="#15573a" font-size="22" font-weight="850">del destinatario</text>
+    <text x="963" y="633" fill="#41546d" font-size="18">Il messaggio è ricevuto.</text>
+
+    <rect x="85" y="493" width="420" height="190" rx="20" fill="#fff8e8" stroke="#ad5708" stroke-width="3"/>
+    <text x="120" y="540" fill="#7b3d05" font-size="23" font-weight="850">Se chiudi senza premere Invia</text>
+    <text x="120" y="579" fill="#41546d" font-size="19">Il messaggio resta in Bozze.</text>
+    <text x="120" y="611" fill="#41546d" font-size="19">Puoi riaprirlo e continuare.</text>
+    <rect x="120" y="634" width="330" height="32" rx="16" fill="#ffe1a7"/>
+    <text x="285" y="656" text-anchor="middle" fill="#7b3d05" font-size="17" font-weight="850">NESSUN MESSAGGIO È STATO INVIATO</text>
+  </g>
+
+  <path d="M290 260H355" fill="none" stroke="#1267b1" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M615 260H680" fill="none" stroke="#1267b1" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M900 260H934" fill="none" stroke="#1267b1" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M1040 335V425H752V510" fill="none" stroke="#1267b1" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M870 592H920" fill="none" stroke="#1267b1" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M790 335C785 410 575 403 505 470" fill="none" stroke="#ad5708" stroke-width="4" stroke-dasharray="10 8" marker-end="url(#arrowAmber)"/>
+  <rect x="548" y="425" width="214" height="34" rx="17" fill="#edf4fc"/>
+  <text x="655" y="448" text-anchor="middle" fill="#7b3d05" font-family="Atkinson Hyperlegible, Segoe UI, sans-serif" font-size="18" font-weight="800">chiudi senza inviare</text>
+</svg>
