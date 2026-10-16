@@ -404,6 +404,28 @@ main {
   margin-bottom: 0;
 }
 
+.infographic {
+  margin: 1.75rem 0;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.infographic img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.infographic figcaption {
+  padding: 0.85rem 0.35rem 0.1rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
 .path-card {
   display: flex;
   min-height: 19rem;
@@ -790,11 +812,13 @@ html[data-theme="dark"] .callout.success {
   .path-card,
   .module-card,
   .component-card,
-  .presentation-step {
+  .presentation-step,
+  .infographic {
     box-shadow: none;
   }
 
-  .presentation-step {
+  .presentation-step,
+  .infographic {
     break-inside: avoid;
   }
 
