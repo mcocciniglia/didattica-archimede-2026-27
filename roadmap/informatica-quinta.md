@@ -57,6 +57,13 @@ consecutive si cambia attività dopo circa 100 minuti.
 VS Code, PHP, MariaDB e DBeaver; query diagnostiche; pagina dinamica minima;
 convenzioni di cartelle, nomi, README, consegne e commit.
 
+#### Disponibilità dei materiali
+
+È disponibile nell’indice del percorso la Lezione 5 — **Validare i dati
+ricevuti: dal form a dati affidabili** (M0, circa 2 ore).
+La disponibilità del materiale non attesta che la lezione sia già stata svolta
+in classe e non modifica la pianificazione annuale.
+
 ### M1 — Progettazione concettuale · 14 ore
 
 Analisi di requisiti ambigui, domande al committente, E-R, cardinalità,

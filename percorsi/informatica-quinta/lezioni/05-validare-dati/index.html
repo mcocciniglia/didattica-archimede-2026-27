@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 5 di Informatica per le classi quinte: presenza dei parametri, campi vuoti, validazione di email ed età in PHP e visualizzazione sicura dei dati.">
+  <title>Lezione 5 — Validare i dati ricevuti: dal form a dati affidabili</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#presenza">Presenza</a>
+        <a href="#validazione">Validazione</a>
+        <a href="#laboratorio">Laboratorio</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">Informatica quinta</a><span aria-hidden="true">/</span><span>Lezione 5</span></nav>
+      <p><strong>Lezione 5 · M0 · Informatica · Classi quinte</strong></p>
+      <h1>Validare i dati ricevuti: dal form a dati affidabili</h1>
+      <p class="lead">Un dato arrivato al server non è ancora un dato accettabile. Impariamo a controllarlo prima di confermare una scheda.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">Durata: circa 2 ore</span>
+        <span role="listitem">Strumenti: PHP, editor, terminale e browser</span>
+        <span role="listitem">Prerequisiti: Lezioni 3 e 4</span>
+        <span role="listitem">Prodotto: Scheda di registrazione</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="richiamo">
+      <p class="eyebrow">Da dove partiamo</p>
+      <h2 id="richiamo">Ricevere non basta</h2>
+      <p>Nella <a href="../03-array-associativi-get-post/index.html">Lezione 3</a> abbiamo letto coppie chiave-valore da <code>$_POST</code>. Nella <a href="../04-form-post/index.html">Lezione 4</a> abbiamo inviato un form con POST e incontrato i primi controlli sui campi vuoti. Ora chiediamoci: un’età scritta come <code>"diciotto"</code> è utilizzabile solo perché è arrivata a PHP?</p>
+      <p>Procederemo così: <strong>Osserva → Formula un’ipotesi → Prova → Comprendi → Modifica → Verifica.</strong> Prima di aprire ogni aiuto, scrivi che cosa ti aspetti e confrontalo con il risultato.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Che cosa saprai fare</h2>
+      <ul>
+        <li>Distinguere un parametro assente, un testo vuoto e un testo di soli spazi con <code>isset()</code>, <code>trim()</code> e condizioni <code>if/else</code>.</li>
+        <li>Controllare formato dell’email ed età intera tra 14 e 100 anni con <code>filter_var()</code> e confronti rigorosi.</li>
+        <li>Spiegare perché i controlli nel browser vanno ripetuti sul server.</li>
+        <li>Mostrare errori specifici oppure una conferma, preparando il testo con <code>htmlspecialchars()</code>.</li>
+      </ul>
+    </section>
+
+    <aside class="callout"><span class="callout-icon" aria-hidden="true">⏱</span><div>
+      <h2>Che cosa completare nelle due ore</h2>
+      <p><strong>Indispensabile in classe:</strong> svolgi le osservazioni delle fasi A–D con la guida del docente, leggi il confronto tra conversione e validazione, completa lo scheletro del laboratorio a due file e le prove essenziali, poi rispondi alle cinque domande finali. Nei piccoli esempi basta una prova corretta e una errata: riutilizzerai gli stessi controlli nel laboratorio.</p>
+      <p><strong>Approfondimento facoltativo o lavoro domestico:</strong> ripeti tutte le varianti dei piccoli esempi, svolgi le prove aggiuntive, studia il controllo del tipo dei parametri e affronta la sfida del form che conserva i dati. Queste attività non sono richieste per completare il percorso essenziale.</p>
+    </div></aside>
+
+    <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div>
+      <p><strong>Parole nuove</strong></p><h2>Quattro idee per orientarti</h2>
+      <ul>
+        <li><strong>Parametro:</strong> una coppia nome-valore inviata al server, per esempio <code>eta=18</code>.</li>
+        <li><strong>Validazione:</strong> controllare che un dato rispetti regole dichiarate, per esempio un’età intera tra 14 e 100.</li>
+        <li><strong>Confronto rigoroso:</strong> confrontare sia il valore sia il tipo, cioè la categoria del dato: testo, numero intero o valore logico.</li>
+        <li><strong>Visualizzazione sicura in HTML:</strong> inserire il testo ricevuto nella pagina evitando che venga interpretato come tag HTML.</li>
+      </ul>
+      <p>Le funzioni saranno spiegate quando le useremo: oggi servono a rispondere a queste quattro domande, un passo alla volta.</p>
+    </div></aside>
+
+    <section id="problema" class="section reading" aria-labelledby="osserva">
+      <p class="eyebrow">A · Osserva e formula un’ipotesi</p>
+      <h2 id="osserva">Una scheda che accetta tutto</h2>
+      <ol class="steps">
+        <li><strong>Prepara una nuova cartella <code>lezione5-validazione</code>.</strong><p>Aprila nell’editor. Crea al suo interno <code>index.html</code> e <code>elabora.php</code>, allo stesso livello. Sono i file del tuo esercizio locale: il sito della lezione mostra il codice, ma non esegue PHP.</p></li>
+        <li><strong>Avvia PHP dalla cartella.</strong><p>Usa l’ambiente PHP 8.x predisposto in laboratorio. Nel terminale, usa <code>dir</code> per controllare che siano presenti i due file, poi esegui:</p><pre><code>php -S localhost:8000</code></pre><p>Se usi XAMPP e <code>php</code> non viene riconosciuto, come nella Lezione 1:</p><pre><code>C:\xampp\php\php.exe -S localhost:8000</code></pre></li>
+        <li><strong>Apri il form dal server.</strong><p>Visita <code>http://localhost:8000/<wbr>index.html</code>. Lascia aperto il terminale; per arrestare il server premi <kbd>Ctrl</kbd>+<kbd>C</kbd>. Il doppio clic sul file PHP non esegue il programma.</p></li>
+      </ol>
+      <h3>Il primo <code>index.html</code></h3>
+      <p>Per osservare tutti gli errori, iniziamo con tre campi di testo senza controlli HTML.</p>
+      <pre data-example="form-iniziale"><code>&lt;!doctype html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Scheda di registrazione — prova&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Scheda di registrazione&lt;/h1&gt;
+  &lt;form action="elabora.php" method="post"&gt;
+    &lt;p&gt;&lt;label for="nome"&gt;Nome&lt;/label&gt;
+    &lt;input type="text" id="nome" name="nome"&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;label for="email"&gt;Email&lt;/label&gt;
+    &lt;input type="text" id="email" name="email"&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;label for="eta"&gt;Età&lt;/label&gt;
+    &lt;input type="text" id="eta" name="eta"&gt;&lt;/p&gt;
+    &lt;button type="submit"&gt;Invia&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <h3>Il primo <code>elabora.php</code></h3>
+      <p>Questo programma visualizza i valori senza controllarli. È una prova da correggere, da usare soltanto in locale con testi inventati semplici.</p>
+      <pre data-example="ricezione-senza-controlli"><code>&lt;?php
+$nome = $_POST["nome"];
+$email = $_POST["email"];
+$eta = $_POST["eta"];
+
+echo "&lt;p&gt;Nome: " . $nome . "&lt;/p&gt;";
+echo "&lt;p&gt;Email: " . $email . "&lt;/p&gt;";
+echo "&lt;p&gt;Età: " . $eta . "&lt;/p&gt;";
+?&gt;</code></pre>
+      <ol>
+        <li>Invia tutti i campi vuoti. Il programma distingue “ricevuto” da “valido”?</li>
+        <li>Scrivi tre spazi nel nome. Il campo sembra vuoto: il valore ricevuto è proprio <code>""</code>?</li>
+        <li>Prova <code>mario.example.com</code> come email e <code>diciotto</code> come età. Che cosa accetta PHP?</li>
+        <li>Apri direttamente <code>http://localhost:8000/elabora.php</code> nella barra degli indirizzi. Quale metodo stai usando? Quali chiavi mancano?</li>
+      </ol>
+      <p>Annota per ogni prova: <strong>dato inviato, previsione, risultato osservato</strong>. Non correggere ancora tutto insieme. L’accesso diretto può produrre avvisi sulle chiavi mancanti; la loro visibilità dipende dalla configurazione di PHP.</p>
+    </section>
+
+    <section id="presenza" class="section reading" aria-labelledby="presente-vuoto">
+      <p class="eyebrow">B · Prova e comprendi</p>
+      <h2 id="presente-vuoto">Il parametro c’è? E che cosa contiene?</h2>
+      <p><code>isset()</code> restituisce un valore logico: <code>true</code> (vero) se il valore esiste e non è <code>null</code>, <code>false</code> (falso) altrimenti. <code>null</code> indica l’assenza di un valore. Nei nostri campi di testo, una stringa vuota è comunque presente.</p>
+      <p>Una <strong>stringa</strong> è un testo: <code>""</code> contiene zero caratteri, mentre <code>"   "</code> contiene tre spazi. <code>trim()</code> elimina spazi e alcuni caratteri di spaziatura, come tabulazioni e ritorni a capo, all’inizio e alla fine; conserva gli spazi interni. Non controlla se un nome è accettabile.</p>
+      <p>Sostituisci temporaneamente <code>elabora.php</code> con questo esempio. <code>if</code> esegue un ramo se la condizione è vera; <code>else</code> esegue il ramo alternativo.</p>
+      <pre data-example="presenza-nome"><code>&lt;?php
+if (isset($_POST["nome"])) {
+    $nome = trim($_POST["nome"]);
+
+    if ($nome === "") {
+        echo "Inserisci il nome: non bastano gli spazi.";
+    } else {
+        echo "Il nome è presente e non è vuoto.";
+    }
+} else {
+    echo "Il parametro nome non è stato ricevuto.";
+}
+?&gt;</code></pre>
+      <p>Questo piccolo esempio e il percorso essenziale lavorano con i normali campi di testo del nostro form. Il controllo aggiuntivo del tipo dei parametri è spiegato nell’<a href="#approfondimento-tipo">approfondimento facoltativo</a> e mantenuto nella soluzione completa.</p>
+      <div class="table-wrap"><table>
+        <caption>Fai una previsione prima di ripetere le prove con il nome</caption>
+        <thead><tr><th scope="col">Richiesta</th><th scope="col"><code>isset()</code></th><th scope="col">Dopo <code>trim()</code></th><th scope="col">Controllo</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Parametro assente</th><td><code>false</code></td><td>Non eseguito</td><td>Parametro mancante</td></tr>
+          <tr><th scope="row"><code>nome=""</code></th><td><code>true</code></td><td><code>""</code></td><td>Nome vuoto</td></tr>
+          <tr><th scope="row"><code>nome="   "</code></th><td><code>true</code></td><td><code>""</code></td><td>Nome vuoto dopo la pulizia</td></tr>
+          <tr><th scope="row"><code>nome="   Mario   "</code></th><td><code>true</code></td><td><code>"Mario"</code></td><td>Supera la regola “non vuoto”</td></tr>
+        </tbody>
+      </table></div>
+      <p><code>===</code> significa “stesso valore e stesso tipo”. Per esempio, il numero <code>0</code> e il valore logico <code>false</code> sono diversi. <code>!==</code> verifica invece che valore o tipo siano diversi. Il solo <code>=</code> assegna un valore: non è un confronto.</p>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3><code>isset()</code> non approva il contenuto</h3><p>Anche <code>""</code>, <code>"   "</code> e <code>"email-sbagliata"</code> sono valori presenti. Nella Lezione 4 <code>?? ""</code> forniva un valore alternativo: qui usiamo <code>isset()</code> per distinguere esplicitamente un parametro mancante da uno presente ma vuoto.</p></div></aside>
+      <p><strong>Controllo:</strong> se il nome è <code>"Mario Rossi"</code>, quale spazio deve conservare <code>trim()</code>? Prova prima di rispondere.</p>
+    </section>
+
+    <section id="validazione" class="section reading" aria-labelledby="regole">
+      <p class="eyebrow">C · Comprendi e modifica</p>
+      <h2 id="regole">Dichiariamo le regole di accettazione</h2>
+      <p>Per questa scheda accettiamo un nome non vuoto dopo <code>trim()</code>, un’email con formato riconosciuto e un’età intera da 14 a 100 inclusi. Sono regole del nostro esercizio: superarle non dimostra che le informazioni siano vere.</p>
+      <h3>Email: controllare il formato</h3>
+      <p><code>filter_var()</code> applica un controllo scelto al valore. La costante <code>FILTER_VALIDATE_EMAIL</code>, un nome fisso fornito da PHP, seleziona il controllo del formato email. In questo uso la funzione restituisce l’email se il controllo riesce, oppure <code>false</code> se fallisce.</p>
+      <p>Per una prova indipendente, crea <code>prova-email.php</code> nella stessa cartella e apri <code>http://localhost:8000/prova-email.php</code>. Poi cambia il testo dell’email e ricarica.</p>
+      <pre data-example="prova-email"><code>&lt;?php
+$email = trim("mario@example.com");
+
+if ($email === "") {
+    echo "Inserisci l’email.";
+} else {
+    if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+        echo "Inserisci un’email nel formato nome@example.com.";
+    } else {
+        echo "Il formato dell’email è accettato.";
+    }
+}
+?&gt;</code></pre>
+      <p>Prova anche <code>""</code>, <code>"mario.example.com"</code> e <code>"  mario@example.com  "</code>. Il controllo non verifica che la casella esista o appartenga a chi compila.</p>
+
+      <h3>Età: prima intero, poi intervallo</h3>
+      <p>I normali campi del form arrivano come stringhe, anche se contengono cifre. <code>FILTER_VALIDATE_INT</code> seleziona il controllo per un numero intero: <code>filter_var()</code> restituisce un intero oppure <code>false</code>. Solo dopo controlliamo i limiti.</p>
+      <p>Crea <code>prova-eta.php</code> e apri <code>http://localhost:8000/prova-eta.php</code>. Cambia <code>"18"</code> con <code>"diciotto"</code>, <code>"18.5"</code>, <code>"0"</code>, <code>"13"</code>, <code>"14"</code>, <code>"100"</code> e <code>"101"</code>.</p>
+      <pre data-example="prova-eta"><code>&lt;?php
+$etaTesto = trim("18");
+$eta = filter_var($etaTesto, FILTER_VALIDATE_INT);
+
+if ($eta === false) {
+    echo "Inserisci un’età espressa con un numero intero.";
+} else {
+    if ($eta &lt; 14 || $eta &gt; 100) {
+        echo "L’età deve essere compresa tra 14 e 100 anni.";
+    } else {
+        echo "Età accettata: " . $eta;
+    }
+}
+?&gt;</code></pre>
+      <p><code>||</code> significa “oppure”: basta che l’età sia minore di 14 <em>oppure</em> maggiore di 100 per rifiutarla. Le parentesi graffe delimitano le istruzioni di ogni ramo.</p>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Lo zero non è <code>false</code></h3><p><code>filter_var("0", FILTER_VALIDATE_INT)</code> restituisce l’intero <code>0</code>: è un intero valido, ma fuori dall’intervallo della scheda. Usa <code>$eta === false</code> per individuare il fallimento. Scrivere soltanto <code>if (!$eta)</code> confonderebbe lo zero con <code>false</code>; <code>!</code> significa “non”.</p></div></aside>
+      <h3>Convertire non significa validare</h3>
+      <p><code>(int)</code> forza la conversione in intero, anche perdendo una parte del testo o la parte decimale. <code>filter_var()</code> con <code>FILTER_VALIDATE_INT</code> verifica invece che il testo rappresenti un intero. Non correggere silenziosamente un dato sbagliato per farlo passare.</p>
+      <div class="table-wrap"><table>
+        <caption>Stessi input, due operazioni diverse</caption>
+        <thead><tr><th scope="col">Input <code>$testo</code></th><th scope="col"><code>(int) $testo</code></th><th scope="col"><code>filter_var($testo, FILTER_VALIDATE_INT)</code></th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>"18"</code></th><td>Intero <code>18</code></td><td>Intero <code>18</code></td></tr>
+          <tr><th scope="row"><code>"18anni"</code></th><td>Intero <code>18</code>: perde il suffisso</td><td><code>false</code>: testo non accettato</td></tr>
+          <tr><th scope="row"><code>"18.5"</code></th><td>Intero <code>18</code>: perde la parte decimale</td><td><code>false</code>: non è un intero</td></tr>
+          <tr><th scope="row"><code>"0"</code></th><td>Intero <code>0</code></td><td>Intero <code>0</code>, diverso da <code>false</code></td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>Prima di continuare:</strong> per <code>"0"</code> deve comparire l’errore “non intero” o “fuori intervallo”? Motiva la risposta usando i due controlli.</p>
+    </section>
+
+    <section id="browser-server" class="section reading" aria-labelledby="html-php">
+      <p class="eyebrow">D · Metti alla prova la regola</p>
+      <h2 id="html-php">Il browser aiuta, PHP decide</h2>
+      <p>Nel linguaggio HyperText Markup Language (HTML), <code>required</code> richiede un valore, <code>type="email"</code> controlla il formato nel browser, <code>type="number"</code> propone un numero e <code>min</code>/<code>max</code> fissano i limiti. Per gli interi specifichiamo anche <code>step="1"</code>, cioè incrementi di un’unità.</p>
+      <p>Sostituisci il contenuto di <code>index.html</code> con il form seguente. È anche il form del laboratorio finale.</p>
+      <pre data-example="form-finale"><code>&lt;!doctype html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Scheda di registrazione&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Scheda di registrazione&lt;/h1&gt;
+  &lt;p&gt;Tutti i campi sono obbligatori. Età ammessa: da 14 a 100 anni.&lt;/p&gt;
+  &lt;form action="elabora.php" method="post"&gt;
+    &lt;p&gt;&lt;label for="nome"&gt;Nome&lt;/label&gt;
+    &lt;input type="text" id="nome" name="nome" required&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;label for="email"&gt;Email&lt;/label&gt;
+    &lt;input type="email" id="email" name="email" required&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;label for="eta"&gt;Età (14–100 anni)&lt;/label&gt;
+    &lt;input type="number" id="eta" name="eta"
+           min="14" max="100" step="1" required&gt;&lt;/p&gt;
+    &lt;button type="submit"&gt;Invia&lt;/button&gt;
+  &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <ol class="steps">
+        <li><strong>Prova un invio non valido.</strong><p>Lascia il nome vuoto o scrivi 13 come età. Il browser impedisce l’invio? Il solo <code>required</code> blocca un nome di tre spazi?</p></li>
+        <li><strong>Apri gli strumenti per sviluppatori del browser (DevTools).</strong><p>Sul tuo form locale, fai clic destro sul campo età e scegli “Ispeziona”. Nella scheda Elementi individua l’elemento <code>input</code> dell’età.</p></li>
+        <li><strong>Modifica un attributo temporaneamente.</strong><p>Fai doppio clic sul valore di <code>min="14"</code>, sostituisci 14 con 0 e conferma. Nel form scrivi 13, compila gli altri campi e invia. La modifica nel browser non cambia il file salvato.</p></li>
+        <li><strong>Confronta i risultati.</strong><p>Il programma della fase B controlla soltanto il nome: rileva l’età errata? Ripeti questa prova dopo il laboratorio: PHP dovrà rifiutare 13 anche se il browser lo invia.</p></li>
+        <li><strong>Ripristina il form.</strong><p>Riapri <code>http://localhost:8000/<wbr>index.html</code> e ricarica per recuperare gli attributi del file originale.</p></li>
+      </ol>
+      <p><strong>Fermati e spiega:</strong> che differenza c’è tra cambiare <code>min</code> con DevTools nell’HTML del browser e modificare <code>index.html</code>, il file servito dal server? Quale modifica ritrovi dopo aver ricaricato la pagina e perché?</p>
+      <details><summary>Confronta la tua spiegazione</summary><p>DevTools modifica la copia della pagina già caricata nel browser; non riscrive il file sul server. Ricaricando, il browser riceve nuovamente il file originale. Se invece modifichi e salvi <code>index.html</code> nella cartella servita da PHP, la successiva richiesta riceve quella versione aggiornata. In entrambi i casi PHP deve controllare i dati ricevuti.</p></details>
+      <p>Una richiesta Hypertext Transfer Protocol (HTTP) è il messaggio inviato dal browser al server. Chi la invia può modificare campi e vincoli: i dati non diventano affidabili perché provengono da un form. <strong>I controlli HTML aiutano a compilare; i controlli PHP verificano ciò che arriva.</strong></p>
+
+      <h3>Validare e visualizzare sono due operazioni diverse</h3>
+      <p><code>htmlspecialchars()</code> trasforma caratteri speciali come <code>&lt;</code>, <code>&gt;</code> e le virgolette in rappresentazioni che il browser mostra come testo. Serve quando inseriamo un dato nell’HTML, anche se il dato ha già superato la validazione.</p>
+      <pre data-example="testo-in-html"><code>&lt;?php
+$nome = "&lt;b&gt;Mario&lt;/b&gt;";
+echo "&lt;p&gt;" . htmlspecialchars($nome, ENT_QUOTES, 'UTF-8') . "&lt;/p&gt;";
+?&gt;</code></pre>
+      <p><code>ENT_QUOTES</code> include sia le virgolette singole sia quelle doppie; <code>UTF-8</code> indica la codifica dei caratteri, la stessa dichiarata nella pagina. Se salvi l’esempio in <code>prova-testo.php</code> e lo apri dal server, vedrai letteralmente <code>&lt;b&gt;Mario&lt;/b&gt;</code>, non un nome in grassetto. La funzione <strong>non valida</strong> un nome e non controlla un’email: prepara il testo per la visualizzazione in HTML.</p>
+    </section>
+
+    <section id="laboratorio" class="section reading" aria-labelledby="scheda">
+      <p class="eyebrow">E · Modifica e verifica</p>
+      <h2 id="scheda">Laboratorio — Scheda di registrazione</h2>
+      <p><strong>Percorso essenziale:</strong> conserva il form finale in <code>index.html</code> e ricostruisci <code>elabora.php</code>. Il flusso deve restare <strong>form → richiesta POST → controlli PHP → errori oppure conferma</strong>. “Registrazione” è il nome della scheda: i dati non vengono salvati.</p>
+      <ol class="steps">
+        <li><strong>Controlla il metodo.</strong><p>Come nella Lezione 4, usa <code>$_SERVER["REQUEST_METHOD"] === "POST"</code>. Se apri direttamente lo script con GET, mostra “Apri il form e invialo con POST”, senza leggere le chiavi di <code>$_POST</code>.</p></li>
+        <li><strong>Controlla ogni parametro prima di leggerlo.</strong><p>Per nome, email ed età usa <code>isset()</code>. Se manca una chiave, mostra quale parametro manca e imposta <code>$datiValidi = false;</code>. Nel percorso essenziale usa i normali campi del form, senza modificarne il tipo di dato inviato.</p></li>
+        <li><strong>Pulisci i bordi e controlla il vuoto.</strong><p>Applica <code>trim()</code> solo dopo il controllo precedente. Usa <code>=== ""</code> per dare un messaggio specifico per ciascun campo obbligatorio.</p></li>
+        <li><strong>Applica le regole.</strong><p>Per l’email usa <code>FILTER_VALIDATE_EMAIL</code>. Per l’età distingui “non intero” da “fuori dall’intervallo 14–100”. Non convertire il testo con <code>(int)</code> per approvarlo.</p></li>
+        <li><strong>Conferma solo se tutto è valido.</strong><p>Puoi usare <code>$datiValidi = true;</code> e assegnare <code>false</code> ogni volta che trovi un errore. Mostra la conferma soltanto se il valore finale è ancora <code>true</code>. Prepara nome ed email con <code>htmlspecialchars(..., ENT_QUOTES, 'UTF-8')</code>; l’età validata è ormai un intero.</p></li>
+        <li><strong>Esegui le prove essenziali qui sotto.</strong><p>Prima prevedi il messaggio, poi prova e registra l’esito. Correggi un problema alla volta e ripeti il caso fallito. Le prove aggiuntive e il controllo del tipo sono facoltativi.</p></li>
+      </ol>
+      <h3>Parti da questo scheletro di <code>elabora.php</code></h3>
+      <p>Sostituisci il codice della prova iniziale con questa pagina. <strong>TODO</strong> significa “da fare”: il controllo del nome è già compilato; completa email, età e riepilogo nell’ordine indicato. Per i primi due TODO sostituisci l’intero blocco provvisorio con i controlli, mantenendo <code>$datiValidi = false;</code> in ogni ramo di errore.</p>
+      <pre data-example="elabora-scheletro"><code>&lt;!doctype html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Esito della scheda — da completare&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Esito della scheda&lt;/h1&gt;
+&lt;?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $datiValidi = true;
+
+    // Nome: controllo già compilato per il campo di testo del form.
+    if (isset($_POST["nome"])) {
+        $nome = trim($_POST["nome"]);
+        if ($nome === "") {
+            echo "&lt;p&gt;Inserisci il nome: non bastano gli spazi.&lt;/p&gt;";
+            $datiValidi = false;
+        }
+    } else {
+        echo "&lt;p&gt;Parametro nome non ricevuto.&lt;/p&gt;";
+        $datiValidi = false;
+    }
+
+    // TODO 1: sostituisci le due righe provvisorie seguenti.
+    // Controlla isset per email; poi trim, vuoto e formato email.
+    // Usa $email per il testo e mostra errori specifici.
+    echo "&lt;p&gt;Controllo email da completare.&lt;/p&gt;";
+    $datiValidi = false;
+
+    // TODO 2: sostituisci le due righe provvisorie seguenti.
+    // Controlla isset per eta; poi trim, vuoto, intero e limiti 14–100.
+    // Usa $etaTesto per il testo e $eta per l’intero validato.
+    echo "&lt;p&gt;Controllo età da completare.&lt;/p&gt;";
+    $datiValidi = false;
+
+    if ($datiValidi === true) {
+        echo "&lt;h2&gt;Scheda confermata&lt;/h2&gt;";
+        echo "&lt;p&gt;Nome: " . htmlspecialchars($nome, ENT_QUOTES, 'UTF-8') . "&lt;/p&gt;";
+        // TODO 3: aggiungi email con htmlspecialchars e l’età validata.
+    }
+} else {
+    echo "&lt;p&gt;Apri il form e invialo con POST.&lt;/p&gt;";
+}
+?&gt;
+  &lt;p&gt;&lt;a href="index.html"&gt;Torna al form&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <p>Lo scheletro si esegue già, ma <strong>non conferma nessun invio finché i controlli TODO sono incompleti</strong>. I messaggi provvisori e le relative assegnazioni a <code>false</code> servono proprio a evitarlo. I controlli aggiuntivi della soluzione di riferimento si possono studiare dopo aver completato questo esercizio locale.</p>
+      <details><summary>Aiuto 1 — come distinguere assenza e vuoto?</summary><p>Usa prima <code>isset()</code>. Nel ramo in cui il parametro esiste, usa <code>trim()</code> e confronta con <code>""</code>, come nel controllo del nome già compilato. Un parametro mancante non deve essere letto direttamente.</p></details>
+      <details><summary>Aiuto 2 — che cosa succede con più errori?</summary><p>Prepara <code>$datiValidi = true;</code> prima dei tre gruppi di controlli. Ogni errore mostra un messaggio e imposta <code>$datiValidi = false;</code>. Un campo corretto non deve riportare la variabile a <code>true</code>. Alla fine usa <code>if ($datiValidi === true)</code> per mostrare il riepilogo.</p></details>
+
+      <h3>Prove essenziali nelle due ore</h3>
+      <p>Usa solo dati inventati. Nelle prove che il browser impedisce, modifica temporaneamente il form con DevTools: rimuovi <code>required</code> per inviare vuoto, cambia <code>type</code> in <code>text</code> per email o età, oppure cambia <code>min</code>/<code>max</code>. Per omettere un parametro rimuovi il suo attributo <code>name</code>. Ricarica il form tra una prova e l’altra.</p>
+      <div class="table-wrap"><table>
+        <caption>Varia un campo per volta; negli altri usa Mario, mario@example.com e 18</caption>
+        <thead><tr><th scope="col">Prova</th><th scope="col">Esito PHP atteso</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Dati corretti; età 14 e poi 100</th><td>Conferma con i tre valori; entrambi i limiti sono inclusi.</td></tr>
+          <tr><th scope="row">Nome vuoto o di soli spazi</th><td>Messaggio sul nome, nessuna conferma.</td></tr>
+          <tr><th scope="row">Email vuota; poi <code>mario.example.com</code></th><td>Prima campo obbligatorio, poi formato errato.</td></tr>
+          <tr><th scope="row">Età vuota; poi <code>diciotto</code> o <code>18.5</code></th><td>Prima campo obbligatorio, poi richiesta di un intero.</td></tr>
+          <tr><th scope="row">Età <code>0</code>, <code>13</code> o <code>101</code></th><td>Intero fuori intervallo, nessuna conferma.</td></tr>
+          <tr><th scope="row">POST senza <code>email</code></th><td>Parametro mancante identificato, nessun avviso di chiave assente.</td></tr>
+          <tr><th scope="row">Accesso diretto a <code>elabora.php</code></th><td>Invito a usare il form, nessuna lettura dei campi.</td></tr>
+          <tr><th scope="row">Nome <code>&lt;b&gt;Mario&lt;/b&gt;</code>, altri dati validi</th><td>Tag mostrati letteralmente nel riepilogo, senza grassetto.</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>Il percorso essenziale è completo quando</strong> hai sostituito tutti i TODO, ogni prova essenziale produce l’esito atteso, i campi hanno etichette, gli errori indicano che cosa correggere e il riepilogo compare solo con tre valori accettati. Conserva i due file e una breve tabella con prove ed esiti per il confronto in classe.</p>
+
+      <details><summary>Prove aggiuntive — facoltative o per casa</summary><ul>
+        <li>Ripeti la prova del parametro mancante prima con <code>nome</code> e poi con <code>eta</code>: deve comparire il messaggio relativo alla chiave assente.</li>
+        <li>Invia insieme un nome di soli spazi e un’email errata: devono comparire entrambi i messaggi, senza conferma.</li>
+        <li>Invia <code>"   Mario   "</code> e un’email con spazi ai bordi: controlla che <code>trim()</code> li rimuova nel riepilogo.</li>
+      </ul></details>
+
+      <details id="approfondimento-tipo"><summary>Approfondimento facoltativo — parametri di tipo inatteso e <code>is_string()</code></summary>
+        <p>Un normale campo del nostro form invia testo. Una richiesta modificata può invece far arrivare un array, cioè una raccolta di valori, dove ci aspettiamo una stringa. <code>isset()</code> può essere vero anche in questo caso: controlla la presenza, non il tipo.</p>
+        <p><code>is_string()</code> restituisce <code>true</code> se il valore è una stringa e <code>false</code> altrimenti. La soluzione di riferimento lo usa <strong>dopo la verifica della presenza e prima di <code>trim()</code></strong>. Così un array viene rifiutato con un messaggio, senza passarlo a una funzione che richiede testo.</p>
+        <p>Per una prova facoltativa, usa la soluzione completa e cambia temporaneamente con DevTools <code>name="nome"</code> in <code>name="nome[]"</code>. Le parentesi quadre fanno ricevere a PHP un array sotto la chiave <code>nome</code>. L’esito atteso è “Il nome deve essere un testo”, senza avvisi né conferma. Ripristina il form ricaricando la pagina. Non eseguire questa prova sullo scheletro essenziale.</p>
+        <p>Ripeti, se vuoi, per email ed età. Questo controllo aggiuntivo rende più robusta la pagina, ma non è richiesto per completare il laboratorio delle due ore.</p>
+      </details>
+
+      <details><summary>Soluzione di riferimento — apri dopo aver provato <code>elabora.php</code></summary>
+        <p>Usa il form finale già mostrato in <code>index.html</code>. La soluzione completa conserva i controlli del laboratorio e aggiunge <code>is_string()</code> prima di ogni <code>trim()</code>, come spiegato nell’<a href="#approfondimento-tipo">approfondimento facoltativo</a>. Non occorre ricostruire questi controlli aggiuntivi nel percorso essenziale; qui rimangono per rifiutare anche parametri ricevuti come array. <code>elseif</code> significa “altrimenti, se”: verifica una seconda condizione solo se la precedente era falsa.</p>
+        <pre data-example="elabora-finale"><code>&lt;!doctype html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Esito della scheda&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Esito della scheda&lt;/h1&gt;
+&lt;?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $datiValidi = true;
+
+    // Nome: presenza, tipo e contenuto.
+    if (!isset($_POST["nome"])) {
+        echo "&lt;p&gt;Parametro nome non ricevuto. Torna al form.&lt;/p&gt;";
+        $datiValidi = false;
+    } elseif (!is_string($_POST["nome"])) {
+        echo "&lt;p&gt;Il nome deve essere un testo.&lt;/p&gt;";
+        $datiValidi = false;
+    } else {
+        $nome = trim($_POST["nome"]);
+        if ($nome === "") {
+            echo "&lt;p&gt;Inserisci il nome: non bastano gli spazi.&lt;/p&gt;";
+            $datiValidi = false;
+        }
+    }
+
+    // Email: presenza, tipo, contenuto e formato.
+    if (!isset($_POST["email"])) {
+        echo "&lt;p&gt;Parametro email non ricevuto. Torna al form.&lt;/p&gt;";
+        $datiValidi = false;
+    } elseif (!is_string($_POST["email"])) {
+        echo "&lt;p&gt;L’email deve essere un testo.&lt;/p&gt;";
+        $datiValidi = false;
+    } else {
+        $email = trim($_POST["email"]);
+        if ($email === "") {
+            echo "&lt;p&gt;Inserisci l’email.&lt;/p&gt;";
+            $datiValidi = false;
+        } elseif (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+            echo "&lt;p&gt;Inserisci un’email nel formato nome@example.com.&lt;/p&gt;";
+            $datiValidi = false;
+        }
+    }
+
+    // Età: presenza, tipo, contenuto, intero e intervallo.
+    if (!isset($_POST["eta"])) {
+        echo "&lt;p&gt;Parametro eta non ricevuto. Torna al form.&lt;/p&gt;";
+        $datiValidi = false;
+    } elseif (!is_string($_POST["eta"])) {
+        echo "&lt;p&gt;L’età deve essere inviata come testo del campo.&lt;/p&gt;";
+        $datiValidi = false;
+    } else {
+        $etaTesto = trim($_POST["eta"]);
+        if ($etaTesto === "") {
+            echo "&lt;p&gt;Inserisci l’età.&lt;/p&gt;";
+            $datiValidi = false;
+        } else {
+            $eta = filter_var($etaTesto, FILTER_VALIDATE_INT);
+            if ($eta === false) {
+                echo "&lt;p&gt;Inserisci un’età espressa con un numero intero.&lt;/p&gt;";
+                $datiValidi = false;
+            } elseif ($eta &lt; 14 || $eta &gt; 100) {
+                echo "&lt;p&gt;L’età deve essere compresa tra 14 e 100 anni.&lt;/p&gt;";
+                $datiValidi = false;
+            }
+        }
+    }
+
+    // Conferma solo se tutti i controlli sono riusciti.
+    if ($datiValidi === true) {
+        echo "&lt;h2&gt;Scheda confermata&lt;/h2&gt;";
+        echo "&lt;p&gt;Nome: " . htmlspecialchars($nome, ENT_QUOTES, 'UTF-8') . "&lt;/p&gt;";
+        echo "&lt;p&gt;Email: " . htmlspecialchars($email, ENT_QUOTES, 'UTF-8') . "&lt;/p&gt;";
+        echo "&lt;p&gt;Età: " . $eta . "&lt;/p&gt;";
+    }
+} else {
+    echo "&lt;p&gt;Apri il form e invialo con POST.&lt;/p&gt;";
+}
+?&gt;
+  &lt;p&gt;&lt;a href="index.html"&gt;Torna al form&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        <p><code>!isset(...)</code> significa “il parametro non è presente”; <code>!is_string(...)</code> significa “il valore non è una stringa”. Non rimettiamo mai <code>$datiValidi</code> a <code>true</code> dopo un errore.</p>
+      </details>
+    </section>
+
+    <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div>
+      <p><strong>Errori frequenti</strong></p><h2>Se il risultato non torna</h2>
+      <ul>
+        <li><strong>Chiave non definita:</strong> controlla <code>name</code>, metodo POST e <code>isset()</code> prima della lettura.</li>
+        <li><strong>Gli spazi passano:</strong> confronta il risultato di <code>trim()</code> con <code>""</code>, non il testo originale.</li>
+        <li><strong>Errore sull’età zero:</strong> separa <code>=== false</code> dal controllo dei limiti.</li>
+        <li><strong>Conferma anche con errori:</strong> controlla che ogni errore imposti <code>$datiValidi = false</code> e che il riepilogo sia dentro l’ultimo <code>if</code>.</li>
+        <li><strong>Il server non parte:</strong> verifica la cartella e chiudi con <kbd>Ctrl</kbd>+<kbd>C</kbd> il server precedente se usa già la porta 8000.</li>
+      </ul>
+    </div></aside>
+
+    <section class="section reading" aria-labelledby="sfida">
+      <p class="eyebrow">Approfondimento facoltativo o lavoro domestico</p>
+      <h2 id="sfida">Sfida facoltativa — non perdere i dati corretti</h2>
+      <p>Prima fai funzionare i due file. Poi crea nella stessa cartella <code>registrazione.php</code>, una variante che mostra sia il form sia l’esito. Aprila esplicitamente da <code>http://localhost:8000/<wbr>registrazione.php</code>.</p>
+      <ol>
+        <li>Prima dell’HTML inizializza <code>$nome = "";</code>, <code>$email = "";</code> e <code>$etaTesto = "";</code> in un blocco <code>&lt;?php ... ?&gt;</code>.</li>
+        <li>Fai inviare il form a <code>action="registrazione.php"</code>. Esegui i controlli solo quando il metodo è POST: alla prima apertura mostra il form senza errori.</li>
+        <li>Adatta i controlli della soluzione senza eliminare <code>isset()</code> e <code>is_string()</code>. Assegna i testi ricevuti alle variabili solo dopo il controllo del tipo.</li>
+        <li>Nel form inserisci i valori nelle rispettive caselle con <code>htmlspecialchars()</code>, usando sempre le virgolette per l’attributo <code>value</code>. Ecco il campo nome completo:</li>
+      </ol>
+      <pre data-example="campo-ripopolato"><code>&lt;label for="nome"&gt;Nome&lt;/label&gt;
+&lt;input type="text" id="nome" name="nome" required
+       value="&lt;?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?&gt;"&gt;</code></pre>
+      <p>Ripeti per email ed età usando <code>$email</code> e <code>$etaTesto</code>. Questo frammento va nel file unico, dopo l’inizializzazione delle variabili. Verifica con un nome contenente una virgoletta e un’email errata: dopo l’invio fallito il nome deve restare nella casella e l’attributo non deve rompersi. Il riepilogo deve continuare a comparire soltanto con dati validi.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="verifica">
+      <p class="eyebrow">F · Verifica e conclusione</p>
+      <h2 id="verifica">Cinque domande da spiegare a voce</h2>
+      <ol>
+        <li><code>isset()</code> garantisce che un campo non sia vuoto?</li>
+        <li>Perché <code>required</code> non basta?</li>
+        <li>Che cosa restituisce <code>trim("   Mario   ")</code>?</li>
+        <li>Che differenza esiste tra validare un dato e visualizzarlo in sicurezza?</li>
+        <li>Che cosa succede se una richiesta POST non contiene uno dei parametri previsti?</li>
+      </ol>
+      <details><summary>Confronta le risposte dopo aver ragionato</summary><ol>
+        <li>No: una stringa vuota è presente. Occorre controllarne il contenuto.</li>
+        <li>È un vincolo del browser, modificabile da chi invia la richiesta. Il server deve ripetere i controlli.</li>
+        <li>La stringa <code>"Mario"</code>. Gli spazi iniziali e finali sono rimossi.</li>
+        <li>Validare significa verificare regole sui dati; <code>htmlspecialchars()</code> prepara un testo da mostrare nell’HTML senza interpretarlo come tag. Sono operazioni distinte.</li>
+        <li>La lettura diretta della chiave può produrre un avviso. Con <code>isset()</code> la nostra applicazione rileva l’assenza, mostra un messaggio e non conferma la scheda.</li>
+      </ol></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="riepilogo">
+      <p class="eyebrow">Da ricordare</p>
+      <h2 id="riepilogo">Dal dato ricevuto alla conferma</h2>
+      <p><strong>Percorso essenziale: ricevi → controlla la presenza → applica trim → verifica contenuto, formato e limiti → mostra errori oppure conferma.</strong></p>
+      <p>La soluzione completa aggiunge il controllo del tipo prima di <code>trim()</code>: è il passaggio illustrato nell’approfondimento facoltativo.</p>
+      <p><code>trim()</code> pulisce i bordi, <code>filter_var()</code> controlla caratteristiche scelte e <code>htmlspecialchars()</code> prepara il testo per l’HTML. Nessuna di queste operazioni sostituisce le altre.</p>
+      <p>La futura <strong>Lezione 6</strong>, dedicata alla costruzione di una piccola applicazione completa, riprenderà questi controlli. Il materiale non è ancora disponibile.</p>
+      <p class="caption">Per approfondire le funzioni: manuale PHP di <a href="https://www.php.net/manual/en/function.isset.php">isset()</a>, <a href="https://www.php.net/manual/en/function.trim.php">trim()</a>, <a href="https://www.php.net/manual/en/function.filter-var.php">filter_var()</a> e <a href="https://www.php.net/manual/en/function.htmlspecialchars.php">htmlspecialchars()</a>.</p>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../04-form-post/index.html">← Lezione 4</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>Informatica · Classi quinte</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
