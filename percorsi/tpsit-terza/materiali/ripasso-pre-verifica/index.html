@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ripasso laboratoriale senza voto per TPSIT, classe terza: conversioni, algoritmo in Google Fogli e addizione binaria con controlli e aiuti progressivi.">
+  <title>Ripasso pre-verifica — TPSIT terza</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#attivita-a">Attività</a>
+        <a href="#autoverifica">Autoverifica</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT terza</a><span aria-hidden="true">/</span><span>Ripasso pre-verifica</span></nav>
+      <p class="eyebrow">Materiale integrativo · Lezioni 3.01–3.04 · Circa 55 minuti</p>
+      <h1>Ripasso pre-verifica</h1>
+      <p class="lead">Calcola, mostra i passaggi e cerca una prova che il risultato sia corretto.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">TPSIT · Classe terza · A.s. 2026/27</span>
+        <span role="listitem">Quaderno e Google Fogli</span>
+        <span role="listitem">Lavoro individuale e a coppie</span>
+        <span role="listitem">Allenamento senza voto</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container" tabindex="-1">
+    <section class="section reading" aria-labelledby="prima">
+      <h2 id="prima">Prepara il tuo lavoro</h2>
+      <p>Questo laboratorio riprende le conversioni delle lezioni <a href="../../lezioni/01-fondamenti-binario/index.html">3.01</a> e <a href="../../lezioni/03-binario-decimale/index.html">3.03</a>, il foglio della <a href="../../lezioni/02-algoritmo-conversione-fogli/index.html">3.02</a> e le somme della <a href="../../lezioni/04-addizione-binaria/index.html">3.04</a>. Lavoriamo con numeri interi maggiori o uguali a zero.</p>
+      <p>Apri una copia del foglio costruito in 3.02. Se non lo hai, ricostruisci le poche celle indicate nell’attività B in un foglio vuoto. Servono un computer, l’accesso a Google Fogli e una connessione. Sul quaderno scrivi il titolo del ripasso e le lettere delle attività.</p>
+      <aside class="card"><h3>Allenamento formativo</h3><p>Puoi consultare i richiami e chiedere aiuto. Conserva anche i tentativi da correggere: servono a capire dove intervenire. La verifica valutativa sarà un’attività distinta, gestita dal docente.</p></aside>
+      <p><strong>Traguardo:</strong> lascia sul quaderno conversioni con controllo inverso, somme con riporti visibili e una correzione motivata; nel foglio conserva le formule e annota i risultati delle prove. Concludi con un’autoverifica individuale.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="richiamo">
+      <p class="eyebrow">Breve richiamo</p>
+      <h2 id="richiamo">Come puoi accorgerti di un errore?</h2>
+      <p>Due conversioni dello stesso numero danno risultati diversi. Scrivi una frase sul quaderno: quale controllo useresti per decidere quale risultato è corretto?</p>
+      <ul>
+        <li><strong>Decimale → binario:</strong> dividi per 2, conserva il resto e riparti dal quoziente intero. Dopo la divisione che dà quoziente 0, conserva anche il suo resto e fermati. Leggi i resti dall’ultimo al primo.</li>
+        <li><strong>Binario → decimale:</strong> il peso è il valore della posizione. Da destra i pesi sono 1, 2, 4, 8, 16, 32, …; somma quelli associati alle cifre 1, mantenendo le posizioni degli 0.</li>
+        <li><strong>Controllo inverso:</strong> riconverti il risultato nella base iniziale. Devi ritrovare il numero di partenza.</li>
+        <li><strong>Addizione:</strong> allinea le cifre a destra e somma verso sinistra. Il riporto passa alla colonna successiva: con 1 + 1 scrivi 0 e riporti 1; con 1 + 1 + 1 scrivi 1 e riporti 1.</li>
+      </ul>
+      <h3>Un esempio di andata e ritorno</h3>
+      <pre><code>13 ÷ 2 = 6 resto 1
+ 6 ÷ 2 = 3 resto 0
+ 3 ÷ 2 = 1 resto 1
+ 1 ÷ 2 = 0 resto 1</code></pre>
+      <p>Dal basso: <strong>13<sub>10</sub> = 1101<sub>2</sub></strong>. Controllo con i pesi 8, 4, 2, 1: <strong>1 × 8 + 1 × 4 + 0 × 2 + 1 × 1 = 13</strong>.</p>
+      <h3>Un esempio di somma</h3>
+      <p>In <strong>101<sub>2</sub> + 011<sub>2</sub></strong>, da destra scrivi 0 e riporti 1; nella seconda colonna 0 + 1 + 1 dà ancora 0 e riporto 1; nella terza 1 + 0 + 1 dà 0 e riporto 1. Il riporto finale crea una nuova cifra a sinistra: <strong>1000<sub>2</sub></strong>. Controllo: 5 + 3 = 8.</p>
+    </section>
+
+    <section id="attivita-a" class="section reading" aria-labelledby="conversioni">
+      <p class="eyebrow">Attività A · Prima a mano</p>
+      <h2 id="conversioni">Converti e torna al punto di partenza</h2>
+      <ol class="steps">
+        <li><strong>Converti 26<sub>10</sub> in binario.</strong><p>Scrivi ogni divisione con il dividendo (il numero da dividere), il quoziente intero e il resto. Segna la divisione che ti fa fermare, poi indica con una freccia l’ordine di lettura dei resti.</p></li>
+        <li><strong>Controlla il risultato.</strong><p>Scrivi sotto le cifre binarie i loro pesi e somma i contributi. Confronta il totale con 26: se cambia, cerca il primo passaggio errato.</p></li>
+        <li><strong>Parti dalla direzione opposta: 10101<sub>2</sub>.</strong><p>Annota tutti i pesi, anche quelli corrispondenti agli 0, e calcola il valore decimale. Riconvertilo in binario con le divisioni successive e confronta le cifre ottenute con quelle iniziali.</p></li>
+      </ol>
+      <p><strong>Lascia una traccia:</strong> due percorsi completi di andata e ritorno, con passaggi e confronto finale.</p>
+      <details><summary>Aiuto A1 — scegli il punto di partenza</summary><p>Per 26 parti da 26 ÷ 2. Per 10101 parti invece dall’ultima cifra a destra, che ha peso 1.</p></details>
+      <details><summary>Aiuto A2 — prepara lo schema</summary><p>Per le divisioni usa tre colonne: numero da dividere, quoziente, resto. Per i pesi usa due righe allineate: cifre e pesi. Un bit 0 occupa comunque una posizione.</p></details>
+      <details><summary>Aiuto A3 — controlla un passaggio</summary><p>La prima divisione di 26 dà quoziente 13 e resto 0: infatti 26 = 13 × 2 + 0. Il resto 0 va conservato. Continua dividendo 13.</p></details>
+    </section>
+
+    <section id="attivita-b" class="section" aria-labelledby="foglio">
+      <p class="eyebrow">Attività B · Dal calcolo al foglio</p>
+      <h2 id="foglio">Riprendi le celle della lezione 3.02</h2>
+      <p>Un algoritmo è una sequenza ordinata di istruzioni. Qui il foglio ripete le divisioni. La base è un <strong>parametro</strong>: un dato modificabile senza riscrivere l’algoritmo. Mantieni questa disposizione, con il numero in E3 e la base in H2.</p>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Celle e formule del foglio, scorrimento orizzontale se necessario">
+        <table>
+          <caption>Stesse formule di 3.02; per il ripasso il numero iniziale è 26</caption>
+          <thead><tr><th scope="col">Cella</th><th scope="col">Inserisci</th><th scope="col">Funzione</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">H2</th><td><code>2</code></td><td>Base.</td></tr>
+            <tr><th scope="row">E3</th><td><code>26</code></td><td>Numero iniziale (in 3.02 era 255).</td></tr>
+            <tr><th scope="row">E4</th><td><code>=QUOZIENTE(E3;$H$2)</code></td><td>Quoziente intero: continua nella riga successiva.</td></tr>
+            <tr><th scope="row">F3</th><td><code>=RESTO(E3;$H$2)</code></td><td>Resto della divisione del numero sulla stessa riga.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><code>$H$2</code> è il riferimento alla base: i simboli <code>$</code> mantengono ferme colonna e riga durante il trascinamento. Le formule riportate usano i nomi italiani delle funzioni e il separatore <code>;</code>, come in 3.02.</p>
+      <ol class="steps">
+        <li><strong>Ripeti con il trascinamento.</strong><p>Trascina E4 fino a E10 e F3 fino a F9 usando il quadratino all’angolo della cella selezionata. Controlla che E5 contenga <code>=QUOZIENTE(E4;$H$2)</code> e F4 contenga <code>=RESTO(E4;$H$2)</code>. Il numero cambia riga, la base resta H2.</p></li>
+        <li><strong>Trova il confine dei resti utili.</strong><p>Per 26 individua il primo quoziente 0 nella colonna E. Annota l’indirizzo di quella cella e quello dell’ultimo resto utile in F. Trascrivi i resti dal basso verso l’alto e confrontali con l’attività A.</p></li>
+        <li><strong>Collauda i casi 1, 0 e 32.</strong><p>Cambia soltanto E3, una prova alla volta, lasciando H2 = 2. Sul quaderno registra per ciascuna prova: numero, cella del primo quoziente 0, ultima cella F utile, risultato binario e controllo con i pesi.</p></li>
+        <li><strong>Spiega la base come parametro.</strong><p>Confronta sul quaderno <code>=QUOZIENTE(E3;2)</code> con <code>=QUOZIENTE(E3;$H$2)</code>: in quale versione puoi cambiare la base modificando una sola cella? Indica la cella e spiega perché il trascinamento deve mantenerne fermo il riferimento. Il collaudo con un’altra base è nell’attività facoltativa.</p></li>
+      </ol>
+      <aside class="card"><h3>Arresto logico e trascinamento sono cose diverse</h3><p>Per un numero iniziale positivo, se il primo quoziente 0 compare in E di una certa riga, <strong>l’ultimo resto utile è in F della riga precedente</strong>. E contiene il quoziente nella riga successiva alla divisione. Il resto della divisione finale va incluso.</p><p>Le formule trascinate continuano a calcolare anche dopo quel punto e producono altri zeri: non fanno parte della conversione. Gli zeri interni ai resti utili, invece, vanno mantenuti.</p><p><strong>Numero iniziale 0:</strong> E3 è il dato iniziale, non un quoziente prodotto. Conserva un solo resto, F3 = 0, e scrivi 0<sub>2</sub>. E4 dà già quoziente 0; non leggere una sequenza di zeri fino a F9.</p></aside>
+      <p><strong>Lascia una traccia:</strong> formule conservate nel foglio e quattro registrazioni sul quaderno (26, 1, 0, 32 in base 2), con celle di arresto e controlli, più la spiegazione della base come parametro.</p>
+      <details><summary>Aiuto B1 — guarda una divisione</summary><p>La divisione del numero in E3 produce due risultati: il quoziente in E4 e il resto in F3. Sono su righe diverse. Ripeti lo stesso ragionamento sulla riga seguente.</p></details>
+      <details><summary>Aiuto B2 — controlla le formule</summary><p>Seleziona una cella dopo il trascinamento e leggi la formula nella barra. Il primo riferimento deve seguire il numero da dividere; il secondo deve restare <code>$H$2</code>. Cerca errori di riferimento prima di rifare tutti i calcoli.</p></details>
+      <details><summary>Aiuto B3 — un esempio del confine</summary><p>Con il solo numero 2 in E3 e base 2: E4 = 1, E5 = 0; F3 = 0, F4 = 1. Leggi F4, poi F3: ottieni 10<sub>2</sub>. F5 non è un resto utile.</p></details>
+    </section>
+
+    <section id="attivita-c" class="section reading" aria-labelledby="somme">
+      <p class="eyebrow">Attività C · Dalla somma semplice ai riporti</p>
+      <h2 id="somme">Scrivi anche ciò che riporti</h2>
+      <p>Calcola in colonna <strong>0101<sub>2</sub> + 0010<sub>2</sub></strong>, poi <strong>0111<sub>2</sub> + 0011<sub>2</sub></strong>.</p>
+      <ol class="steps">
+        <li><strong>Allinea e somma da destra.</strong><p>Scrivi i riporti sopra la colonna che li riceve. Dove nasce un riporto, annota il calcolo della colonna, compreso il riporto in ingresso. Conserva anche l’eventuale riporto finale a sinistra.</p></li>
+        <li><strong>Controlla in decimale.</strong><p>Per ciascuna somma mostra i pesi del primo numero, del secondo e del risultato. Scrivi l’uguaglianza decimale che verifica l’operazione.</p></li>
+      </ol>
+      <p><strong>Lascia una traccia:</strong> due somme in colonna e due controlli completi. Per la seconda indica la colonna nella quale sommi tre cifre 1.</p>
+      <details><summary>Aiuto C1 — allineamento</summary><p>La cifra più a destra di entrambi i numeri ha peso 1. Gli zeri a sinistra aiutano ad allineare; non cambiano il valore.</p></details>
+      <details><summary>Aiuto C2 — conta tutte le cifre</summary><p>In una colonna devi sommare le due cifre e l’eventuale riporto in ingresso. Con 1 + 1 + 1 = 11<sub>2</sub>, scrivi 1 e riporti 1.</p></details>
+      <details><summary>Aiuto C3 — riparti dal primo riporto</summary><p>Nella seconda somma, la colonna di peso 1 contiene 1 + 1: scrivi 0 e porta 1 nella colonna di peso 2. Calcola quella colonna includendo il riporto.</p></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="confronto">
+      <p class="eyebrow">Confronto tra pari</p>
+      <h2 id="confronto">Controlla un procedimento, poi correggi</h2>
+      <ol>
+        <li>A coppie, uno spiega la conversione di 26 e il confine dei resti nel foglio; l’altro controlla passaggi, celle e conversione inversa. Poi scambiate i ruoli sulla seconda somma.</li>
+        <li>Chi controlla indica un passaggio preciso da confermare o correggere e ne spiega il motivo. Ogni autore annota l’esito sul proprio quaderno, senza cancellare il tentativo iniziale.</li>
+        <li>Scegliete uno dei tentativi errati qui sotto. Scrivete: passaggio errato → regola da applicare → procedimento corretto → controllo. Se avete finito, esaminate anche l’altro.</li>
+      </ol>
+      <p><strong>Tentativo errato 1:</strong> dopo il trascinamento, in E5 compare <code>=QUOZIENTE(E4;H3)</code>. La base scelta è ancora in H2.</p>
+      <p><strong>Tentativo errato 2:</strong> «0111<sub>2</sub> + 0011<sub>2</sub> = 0110<sub>2</sub>». Chi ha calcolato ha annotato solo il riporto della prima colonna da destra.</p>
+      <p><strong>Lascia una traccia:</strong> l’esito del controllo del compagno e una correzione motivata. Se il tuo lavoro era corretto, indica il passaggio che lo dimostra.</p>
+    </section>
+
+    <section id="autoverifica" class="section reading" aria-labelledby="da-solo">
+      <p class="eyebrow">Autoverifica individuale · Senza voto</p>
+      <h2 id="da-solo">Prova senza aiuti e senza il compagno</h2>
+      <p>Chiudi i suggerimenti e copri gli esempi. Scrivi i passaggi, poi confronta il lavoro con la correzione guidata dal docente.</p>
+      <ol>
+        <li>Converti 14<sub>10</sub> in binario con le divisioni successive. Controlla con i pesi.</li>
+        <li>Nel foglio di 3.02 il primo quoziente 0 è in E7 e il numero iniziale è positivo. Da quale cella F inizi a leggere? Scrivi anche la formula che deve trovarsi in E5 e spiega il ruolo di <code>$H$2</code>.</li>
+        <li>Calcola 0101<sub>2</sub> + 0011<sub>2</sub> con riporti visibili e controllo in decimale.</li>
+      </ol>
+      <p>Dopo la correzione, indica per ciascun punto <strong>autonomo</strong>, <strong>con aiuto</strong> oppure <strong>da riprendere</strong>. Annota un errore corretto o un passaggio confermato e scegli un esercizio da rifare prima della verifica.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="facoltativa">
+      <p class="eyebrow">Attività facoltativa separata</p>
+      <h2 id="facoltativa">Altre basi, soltanto dopo il lavoro essenziale</h2>
+      <p>Solo dopo aver completato attività e autoverifica, scegli un’estensione già svolta in laboratorio. Se non l’hai svolta, rifai un passaggio del nucleo essenziale che richiede ancora aiuto.</p>
+      <h3>Base 8 · Dal laboratorio di 3.02</h3>
+      <p>Rimetti 26 in E3 e cambia soltanto H2 da 2 a 8. Registra quozienti e resti, ultimo resto utile e risultato con la base indicata; controllalo con i pesi 8 e 1. Spiega perché non hai cambiato formule e ripristina H2 = 2.</p>
+      <h3>Base 26 · Dal laboratorio sugli alfabeti</h3>
+      <p>Se hai già svolto il laboratorio sugli <a href="../basi-alfabeti-personalizzati/index.html">alfabeti personalizzati</a>, riprendi una copia di quel foglio. Converti 52<sub>10</sub> in base 26 con l’alfabeto da A a Z, dove A = 0.</p>
+      <p>Conserva divisioni, resti, associazione tra resto e simbolo e ordine di lettura. Controlla il risultato con i pesi 26 e 1. Usa la disposizione delle celle del tuo foglio dell’approfondimento: può essere diversa da E3/H2.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="chiusura">
+      <h2 id="chiusura">Prima di chiudere</h2>
+      <p>Controlla che il foglio sia salvato, con le formule conservate e H2 ripristinata a 2. Tieni insieme quaderno, registrazioni delle prove e correzioni: ti indicano che cosa sai già spiegare e che cosa devi ancora allenare.</p>
+      <p><strong>Da ricordare:</strong> conserva tutti i resti utili, rispetta le posizioni, includi ogni riporto e usa il percorso inverso per controllare.</p>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione del materiale"><a href="../../index.html">← Indice TPSIT terza</a><a href="../../lezioni/04-addizione-binaria/index.html">Rivedi la lezione 3.04 →</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe terza · Materiale integrativo</strong></p><p>Anno scolastico 2026/27 · Istituto Archimede</p></div></footer>
+</body>
+</html>
