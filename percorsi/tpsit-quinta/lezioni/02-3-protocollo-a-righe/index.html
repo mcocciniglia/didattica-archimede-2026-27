@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 2.3 di TPSIT quinta: flusso TCP, confini dei messaggi e progettazione di un protocollo a righe. Attività guidata di 60 minuti.">
+  <title>Lezione 2.3 — Dove finisce un messaggio?</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+
+  <section class="hero"><div class="container">
+    <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT quinta</a><span aria-hidden="true">/</span><span>Lezione 2.3</span></nav>
+    <p class="eyebrow">Lezione 2.3 · M2 · TPSIT · Classe quinta</p>
+    <h1>Dove finisce un messaggio?</h1>
+    <p class="lead">Progettare un protocollo a righe prima di scrivere il prossimo server.</p>
+    <div class="meta-list"><span>Durata: 60 minuti</span><span>Quaderno o editor di testo</span><span>Prerequisito: lezione 2.2</span></div>
+  </div></section>
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="richiamo"><p class="eyebrow">Da dove partiamo</p><h2 id="richiamo">Più client, una domanda ancora aperta</h2>
+      <p>Nella <a href="../02-2-server-concorrente/index.html">lezione 2.2</a> il thread principale accetta le connessioni e un thread dedicato comunica con ciascun client. Un thread è un percorso di esecuzione interno al programma. Questa organizzazione permette a B di essere servito mentre A rimane collegato.</p>
+      <p>Ora guardiamo il dialogo di un solo client. Se invia due richieste, come capisce il server dove finisce la prima e comincia la seconda?</p>
+      <pre><code>dati = conn.recv(1024)
+messaggio = dati.decode().strip()</code></pre>
+      <p>Questo frammento del server precedente è una semplificazione didattica: tratta ogni blocco ricevuto come un messaggio completo. Le prove brevi possono riuscire, ma questa corrispondenza non è garantita.</p>
+    </section>
+    <section class="section" aria-labelledby="obiettivi"><p class="eyebrow">Al termine</p><h2 id="obiettivi">Che cosa saprai fare</h2><div class="card-grid">
+      <article class="card"><h3>Separare i messaggi</h3><p>Ricostruire due richieste anche quando arrivano in blocchi diversi.</p></article>
+      <article class="card"><h3>Scrivere le regole</h3><p>Definire richieste, risposte, fine messaggio e comportamento sugli errori.</p></article>
+      <article class="card"><h3>Preparare le prove</h3><p>Distinguere un comando errato da una richiesta ancora incompleta.</p></article>
+    </div></section>
+    <section class="section reading" aria-labelledby="flusso"><p class="eyebrow">Il problema</p><h2 id="flusso">TCP conserva l’ordine dei byte, non i confini delle richieste</h2>
+      <p>Il <strong>Transmission Control Protocol (TCP)</strong> trasporta un flusso ordinato di byte: una sequenza di dati. Una chiamata a <code>recv(1024)</code> restituisce al massimo 1024 byte disponibili; può restituirne meno e non aspetta necessariamente di raggiungere 1024.</p>
+      <p>Il client può chiamare due volte <code>sendall()</code>, mentre il server può ricevere quei dati con una, due o più chiamate a <code>recv()</code>. <code>sendall()</code> gestisce l’invio dei byte, ma non aggiunge un separatore tra le richieste.</p>
+      <p>Supponiamo di inviare <code>PING\n</code> e poi <code>ECHO ciao\n</code>. In questa pagina <code>\n</code> rappresenta un unico carattere di fine riga, non i due caratteri barra inversa e lettera n.</p>
+      <div class="table-wrap"><table><caption>Tre possibili suddivisioni dello stesso flusso ricevuto</caption><thead><tr><th scope="col">Caso</th><th scope="col">Blocchi restituiti da recv()</th></tr></thead><tbody>
+      <tr><th scope="row">A</th><td><code>"PING\n"</code>, poi <code>"ECHO ciao\n"</code></td></tr>
+      <tr><th scope="row">B</th><td><code>"PING\nECHO ciao\n"</code> in un solo blocco</td></tr>
+      <tr><th scope="row">C</th><td><code>"PI"</code>, poi <code>"NG\nECHO ci"</code>, poi <code>"ao\n"</code></td></tr>
+      </tbody></table></div>
+      <p>Le virgolette mostrano i confini dei blocchi nell’esempio e non viaggiano sulla rete. In tutti e tre i casi il contenuto applicativo è identico. Il server deve ricostruire le stesse due richieste.</p>
+    </section>
+    <section class="section reading" aria-labelledby="parole"><h2 id="parole">Parole nuove</h2>
+      <div class="definition"><strong>Protocollo applicativo</strong><p>Le regole condivise da client e server sul contenuto e sull’ordine del dialogo: che cosa si può chiedere e come si risponde.</p></div>
+      <div class="definition"><strong>Framing</strong><p>La regola che permette di riconoscere dove inizia e finisce ciascun messaggio dentro il flusso.</p></div>
+      <div class="definition"><strong>Delimitatore</strong><p>Un segno scelto per indicare un confine. Nel nostro protocollo il carattere di fine riga <code>\n</code> termina ogni messaggio.</p></div>
+      <div class="definition"><strong>Buffer</strong><p>Un’area di memoria dove conservare temporaneamente i byte ricevuti, finché si può ricostruire un messaggio completo.</p></div>
+    </section>
+    <section class="section reading" aria-labelledby="regole"><p class="eyebrow">Un esempio completo</p><h2 id="regole">Il protocollo Riga/1</h2>
+      <p><strong>Riga/1 è un protocollo didattico inventato per questa attività.</strong> Riutilizza l’echo, cioè il servizio che restituisce il testo ricevuto, e aggiunge un comando per verificare il dialogo.</p>
+      <ol class="steps">
+        <li><strong>Una richiesta e una risposta per volta.</strong><p>Il client invia una riga e attende una riga di risposta prima di inviare la richiesta successiva. I casi con due richieste unite servono comunque a verificare la ricostruzione del flusso.</p></li>
+        <li><strong>Testo codificato in UTF-8.</strong><p>UTF-8 è la regola che trasforma i caratteri in byte e viceversa. Negli esempi usiamo caratteri semplici; un carattere accentato può occupare più byte.</p></li>
+        <li><strong>Ogni messaggio termina con LF, scritto <code>\n</code>.</strong><p>LF significa <em>Line Feed</em>, il carattere di fine riga scelto qui. Il testo del messaggio non può contenerlo. Per questa specifica non si aggiunge un carattere di ritorno carrello <code>\r</code>: un client Telnet può quindi richiedere un adattamento, che oggi non realizziamo.</p></li>
+        <li><strong>I comandi sono maiuscoli e gli spazi contano.</strong><p><code>ECHO</code> è seguito da un solo spazio separatore e da un testo non vuoto. Il resto del testo viene restituito senza eliminare spazi iniziali o finali.</p></li>
+        <li><strong>Una riga sconosciuta riceve un errore.</strong><p>Il server risponde <code>ERR comando\n</code> e mantiene aperta la connessione. Una riga vuota o <code>ECHO</code> senza testo sono richieste non valide.</p></li>
+        <li><strong>Il client chiude quando ha finito.</strong><p>Se <code>recv()</code> restituisce <code>b''</code>, il peer ha chiuso la propria direzione di invio. Se rimangono byte senza fine riga, la richiesta è incompleta e non viene eseguita.</p></li>
+      </ol>
+      <div class="table-wrap"><table><caption>Richieste e risposte esatte di Riga/1</caption><thead><tr><th scope="col">Richiesta</th><th scope="col">Risposta</th><th scope="col">Significato</th></tr></thead><tbody>
+        <tr><td><code>PING\n</code></td><td><code>PONG\n</code></td><td>Verifica che l’applicazione risponda.</td></tr>
+        <tr><td><code>ECHO ciao\n</code></td><td><code>OK ciao\n</code></td><td>Restituisce il testo.</td></tr>
+        <tr><td><code>SALUTA\n</code></td><td><code>ERR comando\n</code></td><td>Comando sconosciuto.</td></tr>
+      </tbody></table></div>
+      <p>Per questa prima specifica assumiamo byte UTF-8 validi e righe brevi, entro 80 byte prima del delimitatore. La gestione di codifiche non valide, righe troppo lunghe e attese eccessive sarà un’estensione del laboratorio. Questa versione serve a progettare il dialogo, non è ancora un servizio pronto per la rete pubblica.</p>
+    </section>
+    <section class="section reading" aria-labelledby="svolto"><p class="eyebrow">Esempio svolto</p><h2 id="svolto">Conservare ciò che manca</h2>
+      <p>Seguiamo il caso C. Il buffer parte vuoto e contiene solo byte non ancora consumati.</p>
+      <ol class="steps">
+        <li><strong>Arriva <code>PI</code>.</strong><p>Il buffer contiene <code>PI</code>. Manca <code>\n</code>: non eseguiamo alcun comando.</p></li>
+        <li><strong>Arriva <code>NG\nECHO ci</code>.</strong><p>Il buffer diventa <code>PING\nECHO ci</code>. Estraiamo <code>PING</code>, togliamo il suo delimitatore e produciamo <code>PONG\n</code>. Conserviamo <code>ECHO ci</code>.</p></li>
+        <li><strong>Arriva <code>ao\n</code>.</strong><p>Il buffer diventa <code>ECHO ciao\n</code>. Estraiamo la riga e produciamo <code>OK ciao\n</code>. Il buffer torna vuoto.</p></li>
+      </ol>
+      <p>Se un blocco contiene più righe complete, le estraiamo tutte, nell’ordine. Conserviamo sempre l’eventuale parte finale incompleta. Lavoriamo prima sui byte e decodifichiamo la riga completa: anche i byte di un carattere UTF-8 possono essere divisi tra due ricezioni.</p>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Non usare strip() per trovare i confini</h3><p><code>strip()</code> elimina caratteri alle estremità del testo, ma non ricostruisce righe divise né separa due richieste unite. Può inoltre cancellare spazi che fanno parte del testo di <code>ECHO</code>.</p></div></aside>
+    </section>
+    <section class="section" aria-labelledby="guidata"><p class="eyebrow">Attività guidata</p><h2 id="guidata">Disegna il ricevitore</h2>
+      <p><strong>Prodotto atteso:</strong> uno schema di ricezione e una tabella di traccia, su quaderno o in un file di testo. Non occorre avviare Python o Telnet.</p>
+      <ol class="steps"><li>Disegna un buffer inizialmente vuoto.</li><li>Aggiungi il blocco appena ricevuto, senza perdere quello precedente.</li><li>Controlla se esiste un <code>\n</code>. Se manca, conserva tutto e attendi altri byte.</li><li>Se esiste, estrai la prima riga completa e rimuovi dal buffer soltanto quella riga e il suo delimitatore.</li><li>Interpreta la riga, prepara la risposta e torna al controllo del buffer prima di ricevere altri dati.</li></ol>
+      <p>Applica lo schema a questi blocchi: <code>"PING\nE"</code>, <code>"CHO sole\nPI"</code>, <code>"NG\n"</code>. Per ogni arrivo annota: buffer dopo l’aggiunta, righe estratte, risposte e buffer residuo.</p>
+      <details><summary>Aiuto — da dove ripartire?</summary><p>Il terzo blocco va aggiunto al residuo del secondo. Non ricominciare con un buffer vuoto a ogni ricezione.</p></details>
+    </section>
+    <section class="section reading" aria-labelledby="autonoma"><p class="eyebrow">Ora prova tu</p><h2 id="autonoma">Prepara quattro casi di collaudo</h2>
+      <p>Scrivi una tabella con: byte ricevuti, risposta prevista, dati da conservare e motivo. Usa le regole Riga/1 per analizzare:</p>
+      <ol><li><code>"ECHO mare\n"</code> in un solo blocco.</li><li><code>"SALUTA\nPING\n"</code> in un solo blocco.</li><li><code>"ECHO lu"</code>, poi <code>"na\n"</code>.</li><li><code>"PING"</code>, poi chiusura della direzione di invio del client.</li></ol>
+      <p>Scambia la tabella con un compagno: deve poter ricostruire il comportamento senza chiederti spiegazioni. Correggete insieme eventuali regole ambigue.</p>
+      <details><summary>Aiuto — errore o attesa?</summary><p>Interpreta un comando solo quando la riga è completa. Prima del delimitatore non puoi ancora stabilire quale sarà la richiesta finale.</p></details>
+      <p><strong>Se termini prima:</strong> confronta <code>ECHO ciao\n</code>, <code>ECHO  ciao\n</code> e <code>echo ciao\n</code>. Spiega quali spazi appartengono al testo e perché le maiuscole contano.</p>
+    </section>
+    <section class="section reading" aria-labelledby="errori"><h2 id="errori">Errori da riconoscere</h2><ul>
+      <li><strong>«recv(1024) legge una richiesta».</strong> Legge al massimo 1024 byte; i confini dipendono dal protocollo applicativo.</li>
+      <li><strong>«Il thread risolve anche i messaggi spezzati».</strong> Ogni thread ha comunque bisogno della propria logica di ricostruzione e del proprio buffer.</li>
+      <li><strong>«Se non vedo un fine riga, il comando è sbagliato».</strong> Può essere ancora incompleto. La chiusura con un residuo incompleto è un caso distinto.</li>
+      <li><strong>«Aumento 1024 e il problema sparisce».</strong> La dimensione del blocco non definisce i confini dei messaggi.</li>
+    </ul></section>
+    <section class="section reading" aria-labelledby="verifica"><p class="eyebrow">Controlla</p><h2 id="verifica">Autoverifica e risultato</h2><ol>
+      <li>Due chiamate a sendall() richiedono esattamente due recv()? Motiva.</li><li>Quale regola distingue due messaggi in Riga/1?</li><li>Che cosa conservi se dopo una riga completa rimane <code>EC</code>?</li><li>Perché è utile ricostruire la riga in byte prima di decodificarla?</li><li>Quali regole devono conoscere sia il client sia il server?</li>
+      </ol><p>Il lavoro è completo se la tabella distingue dati completi e incompleti, conserva i residui, produce una risposta per ogni riga completa e descrive il caso di chiusura. Aggiungi al diario una frase sull’errore che sapresti ora evitare.</p>
+    </section>
+    <section class="section reading" aria-labelledby="riepilogo"><h2 id="riepilogo">Da ricordare</h2><p>TCP trasporta byte ordinati. Il protocollo applicativo definisce i messaggi. Il delimitatore indica la fine di una riga; il buffer conserva i byte ancora da completare. Nel prossimo laboratorio queste regole guideranno la modifica del server concorrente.</p><p class="caption">Riferimento tecnico: <a href="https://docs.python.org/3/howto/sockets.html#using-a-socket">Python — Socket Programming HOWTO, uso dei socket</a>.</p></section>
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../02-2-server-concorrente/index.html">← Lezione 2.2</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe quinta</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
