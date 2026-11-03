@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 6 di Informatica quinta: laboratorio PHP di due ore per scegliere un’attività con GET, inviare dati con POST e mostrare errori o riepilogo dopo la validazione lato server.">
+  <title>Lezione 6 — Mini-progetto PHP: GET, POST e validazione</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#flusso">GET e POST</a>
+        <a href="#laboratorio">Laboratorio</a>
+        <a href="#prove">Prove</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">Informatica quinta</a><span aria-hidden="true">/</span><span>Lezione 6</span></nav>
+      <p class="eyebrow">Lezione 6 · M0 · Informatica · Classi quinte</p>
+      <h1>Mini-progetto PHP: GET, POST e validazione</h1>
+      <p class="lead">Scegli un’attività scolastica, compila il modulo e fai decidere al server se mostrare gli errori o il riepilogo.</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">Durata: circa 2 ore</span>
+        <span role="listitem">Strumenti: PHP 8.x, editor, terminale e browser</span>
+        <span role="listitem">Prerequisiti: Lezioni 2–5</span>
+        <span role="listitem">Prodotto: due pagine PHP e tabella delle prove</span>
+      </div>
+      <div class="hero-actions"><a class="button" href="#laboratorio">Avvia il laboratorio</a><a class="button secondary" href="#file-iniziali">Scarica i file iniziali</a></div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container" tabindex="-1">
+    <section class="section reading" aria-labelledby="problema">
+      <p class="eyebrow">Da dove partiamo</p>
+      <h2 id="problema">Un modulo, due attività</h2>
+      <p>La scuola propone un laboratorio di robotica e uno di teatro. Lo studente sceglie un’attività, inserisce nome, email ed età e ottiene una risposta. Se manca un dato o un valore non rispetta le regole, la pagina deve spiegare che cosa correggere.</p>
+      <p>Nella <a href="../05-validare-dati/index.html">Lezione 5</a> hai controllato presenza, testo vuoto, formato dell’email ed età intera. Ora unisci quei controlli al <a href="../02-form-get/index.html">metodo GET</a>, agli <a href="../03-array-associativi-get-post/index.html">array associativi</a> e all’<a href="../04-form-post/index.html">invio con POST</a>.</p>
+      <p><strong>È una simulazione:</strong> userai dati inventati. Il programma mostra una risposta alla richiesta corrente; non salva iscrizioni, non usa database, sessioni o file di archivio. Una conferma sullo schermo non equivale a un’iscrizione registrata.</p>
+      <p>Continuiamo con il metodo <strong>Osserva → Formula un’ipotesi → Prova → Comprendi → Modifica → Verifica</strong>. Prima di ogni test, scrivi che cosa ti aspetti.</p>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Che cosa saprai dimostrare</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Scegliere con GET</h3><p>Aprire lo stesso modulo con due codici attività e rifiutare un codice non previsto.</p></article>
+        <article class="card"><h3>Inviare con POST</h3><p>Trasmettere i dati del modulo e il codice dell’attività alla pagina di elaborazione.</p></article>
+        <article class="card"><h3>Validare sul server</h3><p>Controllare anche richieste modificate, mostrando tutti gli errori rilevati senza confermare dati incompleti.</p></article>
+        <article class="card"><h3>Verificare il risultato</h3><p>Mostrare un riepilogo leggibile e documentare casi corretti, limiti ed errori.</p></article>
+      </div>
+    </section>
+
+    <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div>
+      <p class="eyebrow">Percorso essenziale</p><h2>Un progetto completabile nelle due ore</h2>
+      <p>Il file per la scelta e il modulo è già pronto. Nell’elaborazione trovi già il controllo dell’attività e del nome: completa email, età e riepilogo, poi esegui le prove essenziali. Gli aiuti sono disponibili nei passaggi in cui servono.</p>
+      <p>La variante autonoma si affronta dopo il nucleo essenziale; la conservazione dei campi dopo un errore resta un approfondimento facoltativo.</p>
+    </div></aside>
+
+    <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div>
+      <p class="eyebrow">Parole nuove</p><h2>Due elementi del progetto</h2>
+      <ul>
+        <li><strong>Elenco dei valori ammessi:</strong> le scelte che il server riconosce, qui <code>robotica</code> e <code>teatro</code>. Un testo ricevuto deve appartenere a questo elenco prima di diventare una scelta valida.</li>
+        <li><strong>Campo nascosto:</strong> un controllo HTML con <code>type="hidden"</code>. Non appare come casella da compilare, ma invia il proprio valore insieme al modulo. Chi invia la richiesta può modificarlo.</li>
+      </ul>
+      <p>GET, POST e validazione sono già noti: oggi ne ricostruisci il collegamento in un’unica applicazione.</p>
+    </div></aside>
+
+    <section id="flusso" class="section" aria-labelledby="due-richieste">
+      <p class="eyebrow">A · Osserva e prevedi</p>
+      <h2 id="due-richieste">Segui due richieste distinte</h2>
+      <ol class="steps">
+        <li><strong>Scelta: GET verso <code>attivita.php</code>.</strong><p>Il collegamento <code>attivita.php?attivita=robotica</code> porta il codice nella query string, la parte dell’URL che segue <code>?</code>. PHP legge <code>$_GET["attivita"]</code> e genera il modulo per robotica.</p></li>
+        <li><strong>Invio: POST verso <code>elabora.php</code>.</strong><p>Il modulo invia <code>attivita</code>, <code>nome</code>, <code>email</code> ed <code>eta</code> nel corpo della richiesta, cioè nella parte che contiene i dati inviati. PHP li legge da <code>$_POST</code>.</p></li>
+        <li><strong>Risposta: errori oppure riepilogo.</strong><p>Il server controlla ogni valore ricevuto. Se almeno un controllo fallisce, mostra errori e non genera il riepilogo. Se tutti riescono, restituisce il riepilogo come HTML.</p></li>
+      </ol>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Dati nei due passaggi: tabella scorrevole"><table>
+        <caption>Dove viaggiano i dati nel progetto</caption>
+        <thead><tr><th scope="col">Passaggio</th><th scope="col">Destinazione</th><th scope="col">Lettura in PHP</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Scelta di robotica</th><td><code>attivita.php?attivita=robotica</code></td><td><code>$_GET["attivita"]</code></td></tr>
+          <tr><th scope="row">Invio del modulo</th><td><code>elabora.php</code>, con <code>method="post"</code></td><td><code>$_POST["attivita"]</code> e gli altri campi</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>Prevedi:</strong> dopo l’invio a <code>elabora.php</code>, esisterà ancora <code>$_GET["attivita"]</code>? Nel nostro progetto no: l’azione del modulo non contiene parametri nell’URL. Il campo nascosto trasporta il codice con POST. Le variabili della prima esecuzione PHP non passano automaticamente alla seconda.</p>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Metodo e riservatezza sono aspetti distinti</h3><p>POST non cifra i dati. La protezione della comunicazione richiede HTTPS; in laboratorio usiamo il server locale e dati inventati. Inoltre <code>$_GET</code> legge i parametri dell’URL anche quando il metodo è POST: qui abbiamo scelto di non aggiungerne all’azione.</p></div></aside>
+    </section>
+
+    <section id="file-iniziali" class="section reading" aria-labelledby="prepara">
+      <p class="eyebrow">B · Prepara e prova</p>
+      <h2 id="prepara">Avvia i due file sul server locale</h2>
+      <p>Scarica i sorgenti seguenti: sono file di testo, così puoi leggerli anche dal sito.</p>
+      <ul>
+        <li><a href="materiali/attivita.php.txt" download="attivita.php">Scarica attivita.php — scelta e modulo già pronti</a></li>
+        <li><a href="materiali/elabora.php.txt" download="elabora.php">Scarica elabora.php — elaborazione da completare</a></li>
+        <li><a href="materiali/README.md">Istruzioni dei file iniziali</a></li>
+      </ul>
+      <ol class="steps">
+        <li><strong>Crea una cartella nuova.</strong><p>Chiamala <code>iscrizione-attivita</code> e salvaci i due file. Se mantengono l’estensione <code>.php.txt</code>, mostra le estensioni in Esplora file e togli solo <code>.txt</code>. I nomi finali devono essere <code>attivita.php</code> ed <code>elabora.php</code>.</p></li>
+        <li><strong>Verifica l’ambiente.</strong><p>Apri il terminale in quella cartella ed esegui <code>php -v</code>: usa PHP 8.x già predisposto in laboratorio. Avvia il server con il comando seguente.</p></li>
+      </ol>
+      <pre data-example="avvio"><code>php -S localhost:8000</code></pre>
+      <p>Apri <code>http://localhost:8000/attivita.php</code>. Non aprire il file con doppio clic: PHP deve essere eseguito dal server. Se la porta 8000 è occupata, interrompi il precedente server con <kbd>Ctrl</kbd>+<kbd>C</kbd> oppure usa un’altra porta e cambia anche l’indirizzo nel browser.</p>
+      <p><strong>Checkpoint:</strong> senza parametri vedi le due attività e nessun modulo. Se scegli robotica o teatro compare il modulo con il titolo corrispondente. Un primo invio deve mostrare i messaggi “Controllo email da completare” e “Controllo età da completare”: lo scheletro non conferma ancora nulla.</p>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Il sito ospita la lezione, il PC esegue PHP</h3><p>GitHub Pages serve pagine statiche e i sorgenti da scaricare; non esegue il mini-progetto PHP. Il server locale avviato nel terminale esegue i due file. Non inviare dati reali a servizi esterni per svolgere questo esercizio.</p></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="scelta">
+      <p class="eyebrow">C · Comprendi il codice fornito</p>
+      <h2 id="scelta">Accetta soltanto le attività previste</h2>
+      <p>In entrambi i file l’array associa un codice breve a un titolo:</p>
+      <pre data-example="elenco"><code>$attivita = [
+    "robotica" =&gt; "Laboratorio di robotica",
+    "teatro" =&gt; "Laboratorio di teatro"
+];</code></pre>
+      <p><code>isset($attivita[$codice])</code> verifica se il codice corrisponde a una voce prevista. Il titolo viene letto dall’array sul server: non viene accettato un titolo arbitrario inviato dal browser.</p>
+      <p>Apri il file <code>attivita.php</code> nell’editor e segui questi controlli, già compilati:</p>
+      <ol>
+        <li><code>isset($_GET["attivita"])</code>: il parametro è presente?</li>
+        <li><code>is_string()</code>: contiene testo? Questo controllo, ripreso dall’approfondimento della Lezione 5, viene prima di <code>trim()</code> e rifiuta valori ricevuti come array.</li>
+        <li><code>trim()</code>: elimina gli spazi ai bordi del codice.</li>
+        <li><code>isset($attivita[$codice])</code>: il codice appartiene alle attività ammesse?</li>
+      </ol>
+      <p><strong>Prova:</strong> cambia nell’URL <code>robotica</code> con <code>calcio</code>, poi con un valore vuoto (<code>?attivita=</code>). Devi vedere “Attività non disponibile” e nessun modulo. Riapri un collegamento valido per continuare.</p>
+
+      <h3>Porta la scelta dentro POST</h3>
+      <p>Il modulo generato contiene questo campo. I tag PHP vengono eseguiti prima che il browser riceva l’HTML:</p>
+      <pre data-example="campo-nascosto"><code>&lt;form action="elabora.php" method="post"&gt;
+  &lt;input type="hidden" name="attivita"
+         value="&lt;?php echo htmlspecialchars($codice, ENT_QUOTES, 'UTF-8'); ?&gt;"&gt;
+  &lt;!-- Seguono i campi nome, email, eta e il pulsante. --&gt;
+&lt;/form&gt;</code></pre>
+      <p>Per robotica il valore inviato sarà <code>attivita=robotica</code>. <code>htmlspecialchars()</code> prepara il testo per l’attributo HTML tra virgolette: non sostituisce il controllo dei valori ammessi.</p>
+      <p><strong>Domanda:</strong> il server può fidarsi del campo nascosto? No: è modificabile come gli altri campi. Per questo <code>elabora.php</code> ripete i controlli sull’attività ricevuta da <code>$_POST</code>.</p>
+    </section>
+
+    <section id="laboratorio" class="section reading" aria-labelledby="completa">
+      <p class="eyebrow">D · Modifica e costruisci</p>
+      <h2 id="completa">Completa la pagina di elaborazione</h2>
+      <p><strong>Prodotto atteso:</strong> due file funzionanti. <code>attivita.php</code> sceglie e raccoglie; <code>elabora.php</code> controlla e risponde. Prima di modificare lo scheletro, individua il controllo del metodo POST e la variabile <code>$datiValidi</code>.</p>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Regole della simulazione: tabella scorrevole"><table>
+        <caption>Regole della simulazione, riprese dalla Lezione 5</caption>
+        <thead><tr><th scope="col">Dato</th><th scope="col">Regola sul server</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Attività</th><td>Parametro presente, stringa, codice riconosciuto nell’array.</td></tr>
+          <tr><th scope="row">Nome</th><td>Parametro presente, stringa, non vuota dopo <code>trim()</code>.</td></tr>
+          <tr><th scope="row">Email</th><td>Parametro presente, stringa, non vuota e formato accettato da <code>FILTER_VALIDATE_EMAIL</code>.</td></tr>
+          <tr><th scope="row">Età</th><td>Parametro presente, stringa non vuota, intero tra 14 e 100 inclusi.</td></tr>
+        </tbody>
+      </table></div>
+      <p>Queste regole descrivono l’esercizio. Un nome non vuoto non dimostra un’identità; il formato dell’email non dimostra che la casella esista. Non aggiungiamo controlli sui posti disponibili perché non conserviamo iscrizioni.</p>
+      <ol class="steps">
+        <li><strong>TODO 1 — email.</strong><p>Sostituisci le due righe provvisorie con i controlli, nello stesso ordine del nome: presenza, tipo stringa, <code>trim()</code> e vuoto. Aggiungi il formato email. Usa <code>$email</code> per conservare il testo ripulito e messaggi che distinguano parametro mancante, tipo inatteso, campo vuoto e formato errato.</p></li>
+        <li><strong>TODO 2 — età.</strong><p>Sostituisci le due righe provvisorie con presenza, tipo stringa, <code>trim()</code> e vuoto. Conserva il testo in <code>$etaTesto</code> e il risultato di <code>filter_var($etaTesto, FILTER_VALIDATE_INT)</code> in <code>$eta</code>. Controlla prima <code>$eta === false</code>, poi i limiti 14–100.</p></li>
+        <li><strong>TODO 3 — riepilogo.</strong><p>Dentro l’ultimo <code>if ($datiValidi === true)</code>, aggiungi email ed età. Usa <code>htmlspecialchars($email, ENT_QUOTES, 'UTF-8')</code> per l’email; l’età che ha superato i controlli è un intero. Titolo dell’attività e nome sono già visualizzati con la stessa protezione.</p></li>
+        <li><strong>Verifica l’esclusione degli errori.</strong><p>Ogni ramo di errore deve impostare <code>$datiValidi = false;</code>. Un campo corretto non deve mai rimetterla a <code>true</code>. Usa gruppi di controlli distinti per i diversi campi, così una richiesta può ricevere più messaggi utili.</p></li>
+      </ol>
+      <p><strong>Checkpoint:</strong> con <code>Studente di prova</code>, <code>prova@example.com</code> e <code>18</code>, il riepilogo mostra attività, nome, email ed età. Con email errata ed età <code>13</code>, compaiono due errori e nessun riepilogo.</p>
+      <details><summary>Aiuto 1 — riprendi la struttura del nome</summary><p>Per email ed età copia la struttura del controllo del nome già fornita, poi sostituisci chiave, variabile e messaggi. Nel ramo con testo non vuoto inserisci la regola specifica. <code>elseif</code> controlla un’alternativa solo quando la condizione precedente è falsa.</p></details>
+      <details><summary>Aiuto 2 — distingui le due regole di formato</summary><pre data-example="controlli"><code>// Dopo presenza, tipo stringa, trim e controllo del vuoto:
+if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+    echo "&lt;p&gt;Inserisci un’email nel formato nome@example.com.&lt;/p&gt;";
+    $datiValidi = false;
+}
+
+$eta = filter_var($etaTesto, FILTER_VALIDATE_INT);
+if ($eta === false) {
+    echo "&lt;p&gt;Inserisci un’età espressa con un numero intero.&lt;/p&gt;";
+    $datiValidi = false;
+} elseif ($eta &lt; 14 || $eta &gt; 100) {
+    echo "&lt;p&gt;L’età deve essere compresa tra 14 e 100 anni.&lt;/p&gt;";
+    $datiValidi = false;
+}</code></pre><p>Questo è un frammento di aiuto: inseriscilo nei rami indicati, non al posto dei controlli di presenza e tipo. <code>||</code> significa “oppure”. Il valore <code>0</code> è intero, ma fuori intervallo; non confonderlo con <code>false</code>.</p></details>
+      <details><summary>Aiuto 3 — dove va il riepilogo?</summary><p>Conserva il blocco finale dello scheletro e aggiungi lì le due righe mancanti. Non creare un secondo riepilogo fuori dall’<code>if</code>. Con un invio errato deve restare soltanto il ramo che invita a correggere e riprovare.</p></details>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><h3>Come riprovare dopo un errore</h3><p>Il collegamento in fondo all’esito riapre la scelta dell’attività. Nel percorso essenziale scegli di nuovo e ricompila i campi: non promettiamo di conservarli. Lo scopo ora è far funzionare scelta, invio e validazione.</p></div></aside>
+    </section>
+
+    <section id="prove" class="section" aria-labelledby="collaudo">
+      <p class="eyebrow">E · Metti alla prova il server</p>
+      <h2 id="collaudo">Prevedi, invia, confronta</h2>
+      <p>Prepara una tabella con <strong>input, previsione, esito osservato</strong>. Varia un dato alla volta; negli altri usa <code>Studente di prova</code>, <code>prova@example.com</code> e <code>18</code>. La colonna “atteso” indica il comportamento del progetto completato, non dello scheletro iniziale.</p>
+      <p>Per superare temporaneamente i vincoli del browser, apri gli strumenti per sviluppatori (DevTools) e ispeziona il tuo modulo locale. Per i test errati puoi aggiungere <code>novalidate</code> al tag <code>form</code> e cambiare <code>type="number"</code> in <code>type="text"</code>. Per omettere un parametro togli il suo <code>name</code>; per cambiare l’attività modifica il <code>value</code> del campo nascosto. Ricarica il modulo tra le prove per ripristinare gli attributi originali.</p>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Prove essenziali: tabella scorrevole"><table>
+        <caption>Prove essenziali nelle due ore</caption>
+        <thead><tr><th scope="col">Prova</th><th scope="col">Input o azione</th><th scope="col">Esito atteso sul server</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">1 · Percorso completo</th><td>Scegli robotica, poi teatro; invia dati corretti.</td><td>Riepilogo con l’attività scelta e i tre dati, senza salvataggio.</td></tr>
+          <tr><th scope="row">2 · Scelta non prevista</th><td>Apri <code>attivita.php?attivita=calcio</code>.</td><td>Messaggio sull’attività e nessun modulo.</td></tr>
+          <tr><th scope="row">3 · Nome vuoto</th><td>Invia tre spazi nel nome.</td><td>Errore sul nome, nessun riepilogo.</td></tr>
+          <tr><th scope="row">4 · Formato errato</th><td>Email <code>prova.example.com</code>; poi età <code>18.5</code>.</td><td>Rispettivamente errore email e richiesta di età intera.</td></tr>
+          <tr><th scope="row">5 · Limiti inclusi</th><td>Età <code>14</code>, <code>100</code>, poi <code>0</code> e <code>101</code>.</td><td>Prime due accettate; ultime due fuori intervallo.</td></tr>
+          <tr><th scope="row">6 · Parametro assente</th><td>Rimuovi <code>name="email"</code> e invia.</td><td>Parametro email mancante; nessun avviso PHP e nessun riepilogo.</td></tr>
+          <tr><th scope="row">7 · Attività manomessa</th><td>Cambia in <code>calcio</code> il valore del campo nascosto.</td><td>Attività rifiutata anche se tutti gli altri dati sono validi.</td></tr>
+          <tr><th scope="row">8 · Accesso diretto</th><td>Apri <code>http://localhost:8000/elabora.php</code>.</td><td>Invito a scegliere e inviare con POST, senza leggere campi assenti.</td></tr>
+          <tr><th scope="row">9 · Testo nell’HTML</th><td>Nome <code>&lt;b&gt;Prova&lt;/b&gt;</code>, altri dati corretti.</td><td>Tag mostrati come testo nel riepilogo, senza grassetto.</td></tr>
+          <tr><th scope="row">10 · Più errori</th><td>Nome di soli spazi ed email errata nello stesso invio.</td><td>Entrambi gli errori, nessun riepilogo.</td></tr>
+        </tbody>
+      </table></div>
+      <details><summary>Prove aggiuntive — tipo dei parametri e campi vuoti</summary><ul>
+        <li>Invia email o età vuote: ogni messaggio deve indicare il campo da compilare.</li>
+        <li>Ripeti l’assenza del parametro per attività, nome ed età.</li>
+        <li>Cambia temporaneamente <code>name="nome"</code> in <code>name="nome[]"</code>. Le parentesi fanno ricevere un array invece di testo: il controllo <code>is_string()</code> deve rifiutarlo prima di <code>trim()</code>. Ripeti con gli altri campi.</li>
+        <li>Apri <code>attivita.php?attivita[]=robotica</code>: deve comparire un errore di tipo, senza modulo né avvisi PHP.</li>
+        <li>Invia nome ed email con spazi ai bordi: nel riepilogo devono essere rimossi.</li>
+      </ul></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="autonomia">
+      <p class="eyebrow">Ora prova tu</p>
+      <h2 id="autonomia">Aggiungi un’attività senza cambiare il flusso</h2>
+      <p>Dopo le prove essenziali, aggiungi una terza attività: <code>giornalino</code> per un gruppo, <code>fotografia</code> per l’altro, secondo l’indicazione del docente. Le competenze richieste restano le stesse.</p>
+      <ol>
+        <li>Aggiungi codice e titolo agli array dei due file e il relativo collegamento alla pagina di scelta.</li>
+        <li>Verifica che il modulo mostri il titolo corretto e che il codice arrivi nel campo nascosto.</li>
+        <li>Invia una richiesta corretta e una con email errata per la nuova attività.</li>
+        <li>Scegli un codice che non hai aggiunto: deve continuare a essere rifiutato anche nel POST.</li>
+      </ol>
+      <p><strong>Criterio di completamento:</strong> la terza attività funziona senza duplicare il modulo o creare una terza pagina di elaborazione.</p>
+      <details><summary>Aiuto — il titolo deve avere una sola origine in ogni pagina</summary><p>Il titolo visualizzato si ricava da <code>$attivita[$codice]</code>. Mantieni uguali gli elenchi ammessi dei due file; non aggiungere un campo POST con il titolo da mostrare al posto del controllo sul codice.</p></details>
+      <details><summary>Approfondimento facoltativo — conserva i campi senza sessioni</summary><p>Riprendi la sfida finale della Lezione 5: una pagina unica può elaborare il POST e ripresentare il modulo nella stessa risposta, con valori preparati tramite <code>htmlspecialchars()</code>. I valori provengono dalla richiesta corrente. Questo non salva i dati tra richieste e non è necessario per completare il mini-progetto a due file.</p></details>
+    </section>
+
+    <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div>
+      <p class="eyebrow">Errori frequenti</p><h2>Se il progetto non risponde come previsto</h2>
+      <ul>
+        <li><strong>Vedi il sorgente PHP:</strong> controlla indirizzo <code>http://localhost:8000</code>, server avviato e suffisso finale <code>.php</code>.</li>
+        <li><strong>Il POST perde l’attività:</strong> controlla il campo nascosto e la chiave <code>$_POST["attivita"]</code>; non usare la vecchia variabile GET come se fosse ancora presente.</li>
+        <li><strong>Una nuova attività funziona solo nel modulo:</strong> confronta gli array nei due file.</li>
+        <li><strong>Il riepilogo compare con errori:</strong> cerca un’assegnazione a <code>true</code> dopo l’inizio dei controlli o un riepilogo fuori dal blocco finale.</li>
+        <li><strong>Il browser blocca il test:</strong> modifica temporaneamente il modulo locale con DevTools; poi verifica la risposta PHP, non soltanto l’avviso del browser.</li>
+      </ul>
+    </div></aside>
+
+    <section class="section reading" aria-labelledby="verifica">
+      <p class="eyebrow">F · Verifica e consegna</p>
+      <h2 id="verifica">Mostra il prodotto e spiega le scelte</h2>
+      <ul class="presentation-checklist">
+        <li>I collegamenti GET aprono il modulo per l’attività scelta; i codici inattesi sono rifiutati.</li>
+        <li>Il modulo ha etichette esplicite e invia i quattro parametri con POST.</li>
+        <li>I tre TODO sono completati: ogni errore impedisce il riepilogo.</li>
+        <li>Il titolo dell’attività viene dall’elenco sul server; il testo ricevuto viene preparato per l’HTML.</li>
+        <li>La tabella delle prove contiene input, previsione ed esito; hai corretto e riprovato i casi falliti.</li>
+      </ul>
+      <p>Conserva i due file e la tabella delle prove. Consegna nell’ambiente riservato indicato dal docente, con soli dati inventati. Per documentare il lavoro aggiungi quattro righe: scopo, avvio, regole applicate e limite della simulazione.</p>
+      <ol>
+        <li>Perché GET è adatto a scegliere l’attività, mentre usiamo POST per inviare il modulo?</li>
+        <li>Come passa il codice dalla prima alla seconda richiesta? Perché va controllato due volte?</li>
+        <li>Qual è la differenza tra validare un dato e usare <code>htmlspecialchars()</code>?</li>
+        <li>Perché un’età <code>0</code> non va trattata come un fallimento di <code>FILTER_VALIDATE_INT</code>?</li>
+        <li>Dopo il riepilogo, il programma può sapere quante persone si sono iscritte? Motiva usando ciò che il codice conserva.</li>
+      </ol>
+    </section>
+
+    <section class="section reading" aria-labelledby="riepilogo">
+      <p class="eyebrow">Da ricordare</p>
+      <h2 id="riepilogo">Un flusso completo, una richiesta alla volta</h2>
+      <p><strong>GET per scegliere → modulo generato dal server → POST per inviare → controlli sul server → errori oppure riepilogo.</strong></p>
+      <p>I dati ricevuti possono essere mancanti o modificati. <code>trim()</code> pulisce i bordi, <code>filter_var()</code> verifica regole scelte e <code>htmlspecialchars()</code> prepara il testo per l’HTML. L’elenco delle attività ammesse impedisce di accettare un codice arbitrario.</p>
+      <p>Il risultato dura quanto la risposta visualizzata: non abbiamo aggiunto alcun salvataggio. La domanda per il passo successivo è: come conservare i dati oltre la singola richiesta? La persistenza verrà affrontata separatamente.</p>
+      <p class="caption">Riferimenti: manuale PHP su <a href="https://www.php.net/manual/en/reserved.variables.get.php">$_GET</a>, <a href="https://www.php.net/manual/en/reserved.variables.post.php">$_POST</a>, <a href="https://www.php.net/manual/en/function.filter-var.php">filter_var()</a> e <a href="https://www.php.net/manual/en/function.htmlspecialchars.php">htmlspecialchars()</a>.</p>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../05-validare-dati/index.html">← Lezione 5</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>Informatica · Classi quinte</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<?php
+$attivita = [
+    "robotica" => "Laboratorio di robotica",
+    "teatro" => "Laboratorio di teatro"
+];
+$codice = "";
+$sceltaValida = false;
+$erroreScelta = "";
+
+if (isset($_GET["attivita"])) {
+    if (!is_string($_GET["attivita"])) {
+        $erroreScelta = "Il codice dell’attività deve essere un testo.";
+    } else {
+        $codice = trim($_GET["attivita"]);
+        if (isset($attivita[$codice])) {
+            $sceltaValida = true;
+        } else {
+            $erroreScelta = "Attività non disponibile: scegli uno dei collegamenti.";
+        }
+    }
+}
+?>
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Prova locale di iscrizione a un’attività scolastica.">
+  <title>Scegli un’attività — laboratorio PHP</title>
+</head>
+<body>
+  <a href="#contenuto">Vai al contenuto</a>
+  <main id="contenuto">
+    <h1>Iscrizione a un’attività scolastica</h1>
+    <p>Simulazione: usa dati inventati. Nessuna iscrizione viene salvata.</p>
+    <nav aria-label="Scegli l’attività">
+      <ul>
+        <li><a href="attivita.php?attivita=robotica">Laboratorio di robotica</a></li>
+        <li><a href="attivita.php?attivita=teatro">Laboratorio di teatro</a></li>
+      </ul>
+    </nav>
+<?php
+if ($erroreScelta !== "") {
+    echo "<p>" . htmlspecialchars($erroreScelta, ENT_QUOTES, 'UTF-8') . "</p>";
+}
+if ($sceltaValida === true) {
+    echo "<h2>" . htmlspecialchars($attivita[$codice], ENT_QUOTES, 'UTF-8') . "</h2>";
+?>
+    <p>Tutti i campi sono obbligatori. Età ammessa: da 14 a 100 anni.</p>
+    <form action="elabora.php" method="post">
+      <input type="hidden" name="attivita" value="<?php echo htmlspecialchars($codice, ENT_QUOTES, 'UTF-8'); ?>">
+      <p><label for="nome">Nome da mostrare nel riepilogo</label>
+      <input type="text" id="nome" name="nome" required></p>
+      <p><label for="email">Email di prova</label>
+      <input type="email" id="email" name="email" required></p>
+      <p><label for="eta">Età (14–100 anni)</label>
+      <input type="number" id="eta" name="eta" min="14" max="100" step="1" required></p>
+      <button type="submit">Controlla i dati</button>
+    </form>
+<?php
+}
+?>
+  </main>
+  <footer><p>Docente: Prof. Marco Cocciniglia</p><p>Informatica · Classi quinte · A.S. 2026/27</p></footer>
+</body>
+</html>
