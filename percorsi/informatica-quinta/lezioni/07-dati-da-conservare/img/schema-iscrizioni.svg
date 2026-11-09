@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="660" viewBox="0 0 640 660" role="img" aria-labelledby="titolo descrizione">
+<title id="titolo">Partecipante si iscrive ad Attività</title>
+<desc id="descrizione">Due rettangoli rappresentano le entità Partecipante e Attività. Un rombo centrale rappresenta l’associazione si iscrive. L’attributo data è collegato al rombo.</desc>
+<rect width="640" height="660" rx="16" fill="#ffffff"/>
+<g stroke="#0d3569" stroke-width="3" fill="none"><path d="M320 165V225 M320 395V490 M386 359L490 401"/></g>
+<rect x="120" y="20" width="400" height="145" rx="12" fill="#e4eefb" stroke="#0d3569" stroke-width="3"/>
+<path d="M320 225L475 310L320 395L165 310Z" fill="#fff0dd" stroke="#ad5708" stroke-width="3"/>
+<ellipse cx="535" cy="420" rx="75" ry="35" fill="#ffffff" stroke="#0d3569" stroke-width="3"/>
+<rect x="120" y="490" width="400" height="145" rx="12" fill="#e4eefb" stroke="#0d3569" stroke-width="3"/>
+<g font-family="Segoe UI, Arial, sans-serif" font-size="28" fill="#172d45" text-anchor="middle">
+<text x="320" y="64" font-weight="700" font-size="32">Partecipante</text>
+<text x="320" y="106">identificatore</text><text x="320" y="142">nome · email</text>
+<text x="320" y="321" font-weight="700" font-size="32">si iscrive</text><text x="535" y="430">data</text>
+<text x="320" y="537" font-weight="700" font-size="32">Attività</text>
+<text x="320" y="581">codice · titolo</text><text x="320" y="617" font-size="24">codice: identificatore</text>
+</g></svg>
