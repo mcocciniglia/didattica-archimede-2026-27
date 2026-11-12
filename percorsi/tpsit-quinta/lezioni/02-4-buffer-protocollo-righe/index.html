@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 2.4 di TPSIT quinta: due ore per implementare Riga/1 nel server concorrente, gestire buffer per connessione, costruire il client e collaudare il dialogo.">
+  <title>Lezione 2.4 — Dal flusso TCP alle righe: il buffer in Python</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+
+  <section class="hero"><div class="container"><nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT quinta</a><span aria-hidden="true">/</span><span>Lezione 2.4</span></nav><p class="eyebrow">Lezione 2.4 · M2 · TPSIT · Classe quinta</p><h1>Dal flusso TCP alle righe: il buffer in Python</h1><p class="lead">Implementare Riga/1 nel server concorrente, costruire il client e verificare il dialogo.</p><div class="meta-list"><span>Durata: 2 ore · 120 minuti</span><span>Python 3 e VS Code</span><span>Prerequisito: lezione 2.3</span></div><div class="hero-actions"><a class="button secondary" href="#file-python">Scarica i file Python</a><a class="button secondary" href="#collaudo">Vai al collaudo</a></div></div></section>
+  <main id="contenuto" class="container">
+<section class="section reading" aria-labelledby="richiamo"><h2 id="richiamo">Dalla 2.3 al laboratorio</h2>
+<p>Nella <a href="../02-3-protocollo-a-righe/index.html">lezione 2.3</a> abbiamo definito Riga/1: richieste e risposte terminano con il carattere di fine riga Line Feed (LF), rappresentato con <code>\n</code>. Il Transmission Control Protocol (TCP) trasporta byte ordinati, ma una ricezione può contenere una parte di richiesta oppure più richieste. Oggi traduciamo lo schema di ricezione in Python.</p>
+<p><strong>Obiettivo delle due ore:</strong> implementare Riga/1 nel server concorrente, costruire il client e documentare il collaudo. Puoi usare direttamente i file scaricabili per concentrarti sull’analisi del buffer e sui collaudi, senza ricopiare tutto il codice. La traccia su carta prepara il lavoro al computer. Servono Python 3, VS Code e più terminali; i prerequisiti sono il server concorrente della 2.2, i byte e il delimitatore della 2.3. Lavoriamo su localhost, cioè sullo stesso computer, all’indirizzo <code>127.0.0.1</code>.</p>
+<h3 id="semplificazione">1. Superare la semplificazione precedente</h3>
+<p>Nel server precedente usavamo <code>recv(1024)</code> seguito da <code>.decode().strip()</code> come semplificazione didattica: ogni blocco ricevuto veniva trattato come un messaggio completo. Ora ne superiamo i limiti. Il frammento era:</p>
+<pre class="language-python" tabindex="0" aria-label="Blocco di codice o risultato 1"><code class="language-python">dati = conn.recv(1024)
+messaggio = dati.decode().strip()
+</code></pre>
+<p>Con <code>b&quot;PI&quot;</code> non abbiamo ancora PING. Con <code>b&quot;PING\nPING\n&quot;</code> abbiamo due richieste, non una. Inoltre <code>strip()</code> eliminerebbe spazi che possono appartenere al testo.</p>
+<p>La soluzione è conservare i byte non ancora consumati in un <strong>buffer</strong>. Il buffer appartiene alla singola connessione: nel server concorrente ogni gestore ha la propria variabile locale.</p>
+</section>
+<section class="section" aria-labelledby="obiettivi"><p class="eyebrow">Al termine delle due ore</p><h2 id="obiettivi">Che cosa saprai fare</h2><div class="card-grid"><article class="card"><h3>Ricostruire le righe</h3><p>Spiegare i due cicli, estrarre più righe e conservare il residuo nel buffer di ogni connessione.</p></article><article class="card"><h3>Collaudare il dialogo</h3><p>Eseguire server e client Riga/1 e documentare almeno quattro prove con atteso e osservato.</p></article></div></section>
+<section class="section" aria-labelledby="file-python"><p class="eyebrow">Laboratorio · Python 3</p><h2 id="file-python">File Python scaricabili</h2><p>Salva i file nella stessa cartella di lavoro. Non richiedono pacchetti esterni. Leggi gli esempi e completa la traccia prima di passare al collaudo.</p><ul><li><a href="ricostruzione.py" download>ricostruzione.py — esempio di ricostruzione senza rete</a></li><li><a href="server.py" download>server.py — server concorrente Riga/1 completo</a></li><li><a href="client.py" download>client.py — dialogo base e lettura a righe</a></li><li><a href="client_incompleto.py" download>client_incompleto.py — chiusura senza LF</a></li><li><a href="client_due_richieste.py" download>client_due_richieste.py — due richieste in un invio</a></li></ul><p>Esegui i comandi dal terminale aperto in quella cartella. Avvia prima <code>python ricostruzione.py</code>; per le prove di rete lascia <code>python server.py</code> attivo e avvia i client negli altri terminali.</p><aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Limiti dell’esempio</h3><p>Usiamo solo localhost. Assumiamo UTF-8 valido e righe entro 80 byte prima di LF: il server non impone ancora questo limite e non gestisce timeout o eccezioni di rete. Il timeout del client non è un timeout del server.</p></div></aside></section>
+<section class="section reading" aria-labelledby="parole"><h2 id="parole">Parole nuove e concetti da riprendere</h2>
+<ul>
+<li><strong>Buffer per connessione:</strong> memoria temporanea che conserva solo i byte del client gestito da quel socket. Nel gestore è una variabile locale, creata a ogni chiamata.</li>
+<li><strong>Residuo:</strong> byte rimasti nel buffer dopo aver estratto tutte le righe complete; attendono il seguito.</li>
+<li><strong>Framing:</strong> regola che riconosce i confini dei messaggi nel flusso. In Riga/1 il delimitatore è LF.</li>
+<li><strong>Collaudo deterministico:</strong> prova con blocchi prefissati; puoi prevedere esattamente quali byte arrivano a ogni passaggio.</li>
+</ul>
+</section>
+<section class="section reading" aria-labelledby="simulazione"><h2 id="simulazione">2. Prima lavoriamo senza rete</h2>
+<p>Questa funzione simula l’arrivo di blocchi e restituisce righe complete e residuo. Non interpreta ancora i comandi.</p>
+<p class="caption">Su schermi piccoli puoi scorrere i blocchi di codice in orizzontale. Da tastiera, raggiungi il blocco con Tab e usa le frecce.</p>
+<pre class="language-python" tabindex="0" aria-label="Blocco di codice o risultato 2"><code class="language-python">def ricostruisci(blocchi):
+    buffer = b&quot;&quot;
+    righe = []
+
+    for dati in blocchi:
+        buffer += dati
+        while b&quot;\n&quot; in buffer:
+            riga, buffer = buffer.split(b&quot;\n&quot;, 1)
+            righe.append(riga.decode(&quot;utf-8&quot;))
+
+    return righe, buffer
+
+
+blocchi = [b&quot;PING\nE&quot;, b&quot;CHO sole\nPI&quot;, b&quot;NG\n&quot;]
+righe, residuo = ricostruisci(blocchi)
+print(righe)
+print(residuo)
+</code></pre>
+<p>Risultato dell’esempio svolto:</p>
+<pre class="language-text" tabindex="0" aria-label="Blocco di codice o risultato 3"><code class="language-text">[&#39;PING&#39;, &#39;ECHO sole&#39;, &#39;PING&#39;]
+b&#39;&#39;
+</code></pre>
+<p>Il prefisso <code>b</code> indica una sequenza di byte. <code>buffer += dati</code> aggiunge i nuovi byte a quelli rimasti. <code>split(b&quot;\n&quot;, 1)</code> divide al primo LF: la parte a sinistra diventa <code>riga</code>, quella a destra rimane in <code>buffer</code>; il delimitatore viene rimosso. Il parametro <code>1</code> limita la divisione al primo delimitatore.</p>
+<p>Il ciclo esterno percorre gli arrivi. Il ciclo interno estrae tutte le righe complete presenti nello stesso arrivo. Un <code>if</code> al posto di <code>while</code> ne estrarrebbe una sola, lasciando le altre in attesa di un nuovo blocco che potrebbe non arrivare.</p>
+<p>UTF-8 è la codifica che trasforma caratteri in byte e viceversa. Decodifichiamo soltanto una riga completa: anche i byte di un carattere UTF-8 possono arrivare separati. Qui assumiamo UTF-8 valido e righe brevi, come nella specifica precedente.</p>
+</section>
+<section class="section reading" aria-labelledby="gestore"><h2 id="gestore">3. Dalla simulazione al gestore di un client</h2>
+<p>Nel server vero il ciclo sugli arrivi diventa un ciclo di ricezione:</p>
+<pre class="language-python" tabindex="0" aria-label="Blocco di codice o risultato 4"><code class="language-python">def prepara_risposta(riga):
+    if riga == &quot;PING&quot;:
+        return &quot;PONG&quot;
+    if riga.startswith(&quot;ECHO &quot;) and len(riga) &gt; 5:
+        return &quot;OK &quot; + riga[5:]
+    return &quot;ERR comando&quot;
+
+
+def gestisci_client(conn, addr):
+    buffer = b&quot;&quot;
+    with conn:
+        while True:
+            dati = conn.recv(1024)
+            if dati == b&quot;&quot;:
+                if buffer:
+                    print(&quot;Richiesta incompleta da&quot;, addr)
+                break
+
+            buffer += dati
+            while b&quot;\n&quot; in buffer:
+                riga_bytes, buffer = buffer.split(b&quot;\n&quot;, 1)
+                riga = riga_bytes.decode(&quot;utf-8&quot;)
+                risposta = prepara_risposta(riga)
+                conn.sendall((risposta + &quot;\n&quot;).encode(&quot;utf-8&quot;))
+</code></pre>
+<p>Questo gestore sostituisce quello della 2.2, dove ogni thread è un percorso di esecuzione dedicato a un client; il ciclo principale che chiama <code>accept()</code> e avvia i thread resta quello già studiato.</p>
+<p><code>riga[5:]</code> prende il testo successivo a <code>ECHO </code>, che occupa cinque caratteri. Non elimina gli ulteriori spazi. Una riga vuota, ECHO senza testo o un comando minuscolo producono <code>ERR comando</code>. Ogni risposta termina con LF.</p>
+<p><code>recv()</code> che restituisce <code>b&#39;&#39;</code> segnala che il peer, cioè l’altro programma collegato, ha chiuso la propria direzione di invio. Il nostro gestore termina e chiude il socket; il residuo senza LF non viene eseguito. Il codice didattico assume input UTF-8 valido e righe entro 80 byte: non implementa ancora il controllo del limite, timeout o gestione delle eccezioni di rete.</p>
+</section>
+<section class="section reading" aria-labelledby="guidata"><h2 id="guidata">4. Attività guidata — Segui le variabili</h2>
+<p>Per ciascun arrivo compila una tabella con: buffer dopo l’aggiunta, righe estratte, risposte, residuo.</p>
+<pre class="language-text" tabindex="0" aria-label="Blocco di codice o risultato 5"><code class="language-text">1. b&quot;EC&quot;
+2. b&quot;HO luna\nPING\nECHO ma&quot;
+3. b&quot;re\n&quot;
+</code></pre>
+<p>Prima di eseguire il programma, rispondi:</p>
+<ul>
+<li>Quante volte entra nel ciclo interno al secondo arrivo?</li>
+<li>Che cosa conserva dopo il secondo arrivo?</li>
+<li>Perché <code>buffer = b&quot;&quot;</code> deve stare prima del ciclo di ricezione?</li>
+</ul>
+</section>
+<section class="section reading" aria-labelledby="autonoma"><h2 id="autonoma">5. Ora prova tu — Completa il ricevitore</h2>
+<p>Completa senza copiare il codice precedente, poi confronta i risultati.</p>
+<pre class="language-python" tabindex="0" aria-label="Blocco di codice o risultato 6"><code class="language-python">def ricostruisci(blocchi):
+    buffer = b&quot;&quot;
+    righe = []
+    for dati in blocchi:
+        buffer += ______
+        while ______ in buffer:
+            riga, buffer = buffer.split(______, 1)
+            righe.append(riga.decode(&quot;utf-8&quot;))
+    return righe, buffer
+</code></pre>
+<p>Provalo con questi casi e annota prima la previsione:</p>
+<ol>
+<li><code>[b&quot;PING\n&quot;]</code></li>
+<li><code>[b&quot;PI&quot;, b&quot;NG\n&quot;]</code></li>
+<li><code>[b&quot;PING\nECHO ciao\n&quot;]</code></li>
+<li><code>[b&quot;PING\nEC&quot;]</code></li>
+</ol>
+<p>Il lavoro è completo quando i primi due casi producono lo stesso risultato, il terzo estrae due righe e il quarto conserva il residuo.</p>
+<p><strong>Aiuto:</strong> il delimitatore deve essere in byte, come il buffer. Non azzerare il buffer a ogni arrivo.</p>
+<p><strong>Se termini prima:</strong> prova <code>[b&quot;ECHO citt\xc3&quot;, b&quot;\xa0\n&quot;]</code>. Spiega perché decodificare separatamente il primo blocco non è corretto, mentre decodificare la riga completa produce <code>ECHO città</code>.</p>
+</section>
+<section class="section reading" aria-labelledby="verifica"><h2 id="verifica">6. Checkpoint prima del laboratorio</h2>
+<ol>
+<li>Perché servono due cicli?</li>
+<li>Quale problema introduce un <code>if</code> al posto del <code>while</code> interno?</li>
+<li>Dove viene conservata una richiesta incompleta?</li>
+<li>Perché non usare un unico buffer globale per tutti i thread?</li>
+<li>Il client deve applicare il framing anche alle risposte? Motiva.</li>
+</ol>
+<p>Da ricordare: <strong>ricevere byte, conservarli, estrarre tutte le righe complete, mantenere il residuo</strong>. Il buffer risolve la ricostruzione; l’interpretazione dei comandi è un passaggio successivo.</p>
+</section>
+<section class="section reading" aria-labelledby="server"><h2 id="server">7. Integra il protocollo nel server</h2>
+<p>Passa dalla simulazione al laboratorio su localhost. Apri un terminale per il server e un secondo per il client. L’integrazione e il collaudo fanno parte di questa lezione di due ore. Se Python non è disponibile, segnala il problema al docente: le sole previsioni vanno registrate come prove non eseguite.</p>
+<p>Puoi usare <code>server.py</code> dalla sezione <a href="#file-python">File Python scaricabili</a> e analizzarlo mentre esegui le prove. Se preferisci assemblarlo, il file deve contenere gli import seguenti, le due funzioni della sezione 3 e il codice di avvio:</p>
+<pre class="language-python" tabindex="0" aria-label="Blocco di codice o risultato 7"><code class="language-python">import socket
+import threading
+
+
+def main():
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
+        server.bind((&quot;127.0.0.1&quot;, 50000))
+        server.listen()
+        print(&quot;Server pronto su 127.0.0.1:50000&quot;)
+        while True:
+            conn, addr = server.accept()
+            threading.Thread(
+                target=gestisci_client, args=(conn, addr), daemon=True
+            ).start()
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+<p>Avvia <code>python server.py</code>. Se la porta risulta occupata, verifica se è rimasto aperto un server precedente e arrestalo. Per chiudere la dimostrazione usa Ctrl+C nel terminale del server. Un thread con <code>daemon=True</code> non mantiene in vita il processo quando il programma principale termina. I thread daemon semplificano l’arresto dell’esempio; non costituiscono una gestione ordinata della chiusura.</p>
+</section>
+<section class="section reading" aria-labelledby="client"><h2 id="client">8. Anche il client deve ricostruire le righe</h2>
+<p>Salva questo esempio in <code>client.py</code>, oppure scarica il file completo nella sezione <a href="#file-python">File Python</a>. Il buffer conserva eventuali byte successivi alla prima risposta.</p>
+<pre class="language-python" tabindex="0" aria-label="Blocco di codice o risultato 8"><code class="language-python">import socket
+
+
+def leggi_riga(sock, buffer):
+    while b&quot;\n&quot; not in buffer:
+        dati = sock.recv(1024)
+        if dati == b&quot;&quot;:
+            raise ConnectionError(
+                &quot;Connessione chiusa prima della risposta completa&quot;
+            )
+        buffer += dati
+    riga, buffer = buffer.split(b&quot;\n&quot;, 1)
+    return riga.decode(&quot;utf-8&quot;), buffer
+
+
+with socket.create_connection((&quot;127.0.0.1&quot;, 50000), timeout=5) as sock:
+    buffer = b&quot;&quot;
+    for richiesta in [&quot;PING&quot;, &quot;ECHO ciao&quot;, &quot;SALUTA&quot;]:
+        sock.sendall((richiesta + &quot;\n&quot;).encode(&quot;utf-8&quot;))
+        risposta, buffer = leggi_riga(sock, buffer)
+        print(repr(risposta))
+</code></pre>
+<p>Avvia <code>python client.py</code> in un secondo terminale. Atteso: <code>&#39;PONG&#39;</code>, <code>&#39;OK ciao&#39;</code>, <code>&#39;ERR comando&#39;</code>, su tre righe. Il timeout è il tempo massimo di attesa di un’operazione bloccante sul socket. Quello di cinque secondi evita attese indefinite nel client; l’esempio mostra le eventuali eccezioni. Il server non ha ancora un timeout.</p>
+<p>Checkpoint: individua i due buffer e spiega perché entrambi servono.</p>
+</section>
+<section class="section reading" aria-labelledby="collaudo"><h2 id="collaudo">9. Piano di collaudo</h2>
+<p>Per ogni prova registra input, atteso, osservato e spiegazione.</p>
+<p class="caption">Se la tabella non entra nello schermo, scorri al suo interno in orizzontale; da tastiera, raggiungila con Tab e usa le frecce.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-labelledby="didascalia-collaudo"><table><caption id="didascalia-collaudo">Piano di collaudo di Riga/1</caption>
+<thead>
+<tr>
+<th scope="col">Prova</th>
+<th scope="col">Procedura</th>
+<th scope="col">Atteso</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dialogo base</td>
+<td>Esegui il client fornito</td>
+<td>PONG, OK ciao, ERR comando</td>
+</tr>
+<tr>
+<td>Spazi e maiuscole</td>
+<td>Usa le tre richieste indicate sotto la tabella</td>
+<td>Risposta <pre class="language-text" tabindex="0" aria-label="Risposta con due spazi dopo OK"><code class="language-text">OK  ciao</code></pre> con due spazi dopo OK, poi due errori</td>
+</tr>
+<tr>
+<td>Connessioni distinte</td>
+<td>Esegui il client da due terminali</td>
+<td>Entrambi completano il dialogo</td>
+</tr>
+<tr>
+<td>Ricostruzione deterministica</td>
+<td>Esegui i quattro casi della sezione 5</td>
+<td>Risultati coerenti con le previsioni, residuo conservato</td>
+</tr>
+</tbody></table></div>
+<h3>Spazi e maiuscole</h3>
+<p>In una copia del client sostituisci la lista delle richieste nel ciclo <code>for</code> con:</p>
+<pre class="language-python" tabindex="0" aria-label="Richieste per il controllo degli spazi"><code class="language-python">["ECHO  ciao", "echo ciao", "ECHO"]</code></pre>
+<p>Il risultato atteso con <code>repr()</code> rende visibili gli spazi fra le virgolette:</p>
+<pre class="language-text" tabindex="0" aria-label="Risposte del controllo degli spazi"><code class="language-text">'OK  ciao'
+'ERR comando'
+'ERR comando'</code></pre>
+<h3>Chiusura con richiesta incompleta</h3>
+<p>Scarica <a href="client_incompleto.py">client_incompleto.py</a> ed esegui <code>python client_incompleto.py</code> mentre il server è attivo. Il programma contiene:</p>
+<pre class="language-python" tabindex="0" aria-label="Blocco di codice o risultato 9"><code class="language-python">import socket
+
+with socket.create_connection((&quot;127.0.0.1&quot;, 50000), timeout=5) as sock:
+    sock.sendall(b&quot;PING&quot;)
+    sock.shutdown(socket.SHUT_WR)
+    print(repr(sock.recv(1024)))
+</code></pre>
+<p>Atteso: <code>b&#39;&#39;</code>; nel terminale del server compare la segnalazione di richiesta incompleta. Manca LF: il comando non viene eseguito e il gestore chiude il socket.</p>
+<h3>Due richieste consecutive</h3>
+<p>Scarica <a href="client_due_richieste.py">client_due_richieste.py</a> ed esegui <code>python client_due_richieste.py</code>. Mantiene import e funzione <code>leggi_riga()</code> del client, con questo blocco di connessione:</p>
+<pre class="language-python" tabindex="0" aria-label="Blocco di codice o risultato 10"><code class="language-python">with socket.create_connection((&quot;127.0.0.1&quot;, 50000), timeout=5) as sock:
+    buffer = b&quot;&quot;
+    sock.sendall(b&quot;PING\nECHO mare\n&quot;)
+    for _ in range(2):
+        risposta, buffer = leggi_riga(sock, buffer)
+        print(repr(risposta))
+</code></pre>
+<p>Atteso: PONG e OK mare. Questo collauda il ricevitore oltre al dialogo ordinario di Riga/1, in cui il client aspetta ogni risposta.</p>
+<p>Una sendall() non garantisce una sola recv(); due invii non garantiscono due ricezioni. Per controllare esattamente le suddivisioni usa ricostruisci() con blocchi prefissati. Non dedurre i confini di ricezione dal numero degli invii.</p>
+</section>
+<section class="section reading" aria-labelledby="consegna"><h2 id="consegna">10. Estensione e consegna</h2>
+<p><strong>Estensione facoltativa A/B.</strong> Se termini prima, apri due socket A e B nello stesso programma di prova. A invia <code>b&quot;EC&quot;</code>; B invia <code>b&quot;PING\n&quot;</code> e legge PONG; A invia <code>b&quot;HO sole\n&quot;</code> e legge OK sole. Usa leggi_riga con un buffer distinto per ogni socket. Questa prova mostra che il client incompleto A non blocca B e che i dati non si mescolano.</p>
+<p>Consegna su Moodle <code>server.py</code>, <code>client.py</code> e un rapporto con almeno quattro prove, includendo una ricostruzione deterministica con residuo e una prova di rete. Ogni componente della coppia deve saper spiegare i due cicli e la posizione del buffer. Limiti di lunghezza, attese ed errori saranno sviluppati nei laboratori successivi.</p>
+</section>
+<section class="section reading" aria-labelledby="errori"><h2 id="errori">Errori frequenti</h2>
+<ul>
+<li><strong>Azzerare il buffer dentro il ciclo esterno:</strong> perderesti il residuo della ricezione precedente.</li>
+<li><strong>Usare <code>if</code> al posto di <code>while</code>:</strong> lasceresti nel buffer altre righe già complete.</li>
+<li><strong>Usare <code>strip()</code>:</strong> potresti cancellare spazi del testo e non risolveresti il framing.</li>
+<li><strong>Condividere un buffer globale:</strong> mescoleresti dati di client diversi.</li>
+<li><strong>Ignorare il buffer restituito da <code>leggi_riga()</code>:</strong> perderesti eventuali byte già ricevuti dopo la prima risposta.</li>
+</ul>
+</section>
+<section class="section reading" aria-labelledby="riepilogo"><h2 id="riepilogo">Riepilogo</h2>
+<p>Ricevi byte, aggiungili al buffer della connessione, estrai tutte le righe complete e conserva il residuo. Decodifica una riga solo quando è completa. Applica lo stesso principio alle risposte nel client e confronta sempre atteso e osservato. Una prova senza rete controlla le suddivisioni; una prova con socket controlla il dialogo reale.</p>
+</section>
+<nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../02-3-protocollo-a-righe/index.html">← Lezione 2.3</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe quinta</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
