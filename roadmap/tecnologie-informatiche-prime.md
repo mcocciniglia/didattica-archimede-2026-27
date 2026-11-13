@@ -111,6 +111,21 @@ Titoli, paragrafi, elenchi, tabelle e immagini; collegamenti e fonti;
 commenti, cronologia e collaborazione; presentazione breve con un'idea
 principale per diapositiva.
 
+**Lezione 5 · U3 — Documenti e presentazioni (anticipo):** “Il mio primo documento strutturato —
+Una guida al laboratorio”, un incontro di circa 120 minuti inclusi avvio e
+riconsegna. Riprende Drive, cartelle, nomi dei file, salvataggio e consegna
+in Classroom dalle lezioni 1 e 2; introduce stili, intestazioni, paragrafi,
+elenco numerato, tabella e revisione a coppie senza richiedere condivisione
+del file. La dimostrazione costruisce solo l’inizio della guida. Le immagini
+non sono richieste in questo incontro.
+
+L’attività utilizza 2 delle 6 ore già previste per U3: le altre 4 restano
+destinate al completamento dell’unità. La numerazione delle lezioni 1–4
+resta invariata. Memorie, capacità e periferiche (lezioni previste 6 e 7)
+saranno riprese successivamente; la presenza delle lezioni nel sito non
+attesta che siano state svolte in classe. L’anticipo non presuppone il
+completamento di U1 o U2 e non modifica il monte ore annuale.
+
 ### U4 — Reti e Web · 6 ore
 
 Rete locale, Internet e Web; browser, motore di ricerca, URL e servizi cloud;
@@ -176,8 +191,9 @@ predisposto, correzione guidata e seconda possibilità.
 | 3 · U1 | Dentro il computer | Hardware, software, dati e flusso input-elaborazione-output | Carta d’identità della postazione |
 | Verifica 1 · margine trasversale | Lezioni 1 e 2 e approfondimento Gmail | Operazioni pratiche e brevi domande | Evidenza individuale |
 | 4 · U1 | Von Neumann | Simulazione del ciclo | Traccia del ciclo |
-| 5 · U1 | Memorie e capacità | RAM, massa e unità | Tabella comparativa |
-| 6 · U1 | Periferiche e scelta | Input/output e configurazione | Scelta motivata |
+| 5 · U3 | Il mio primo documento strutturato — Una guida al laboratorio | Stili, paragrafi, elenco numerato, tabella e Classroom | Guida organizzata, rivista e consegnata |
+| 6 · U1 · prevista | Memorie e capacità | RAM, massa e unità | Tabella comparativa |
+| 7 · U1 · prevista | Periferiche e scelta | Input/output e configurazione | Scelta motivata |
 
 La lezione 3 utilizza 2 delle 8 ore previste per U1. La verifica iniziale usa
 il margine trasversale; le 4 ore di pausa didattica restano già comprese nelle
