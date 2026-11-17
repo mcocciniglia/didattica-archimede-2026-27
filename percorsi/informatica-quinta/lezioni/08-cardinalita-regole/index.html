@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 8 di Informatica quinta: cardinalità minime e massime, regole delle iscrizioni e verifica del modello con dati inventati.">
+  <title>Lezione 8 — Cardinalità e regole del modello</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#cardinalita">Cardinalità</a>
+        <a href="#laboratorio">Laboratorio</a>
+        <a href="#nuovo-requisito">Nuovo requisito</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+<section class="hero"><div class="container">
+  <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">Informatica quinta</a><span aria-hidden="true">/</span><span>Lezione 8</span></nav>
+  <p class="eyebrow">Lezione 8 · M1 · Informatica · Classi quinte</p>
+  <h1>Quante iscrizioni sono possibili?</h1>
+  <p class="lead">Cardinalità e regole del modello: dal disegno alle possibilità ammesse per ogni partecipante e ogni attività.</p>
+  <div class="meta-list"><span>Durata: circa 2 ore</span><span>Carta oppure diagrams.net</span><span>Prerequisito: Lezione 7</span><span>Prodotto: schema motivato e casi di prova</span></div>
+  <div class="hero-actions"><a class="button" href="#cardinalita">Leggi il modello</a><a class="button secondary" href="#laboratorio">Avvia il laboratorio</a></div>
+</div></section>
+<main id="contenuto" class="container" tabindex="-1">
+  <section class="section reading" aria-labelledby="partenza">
+    <p class="eyebrow">Da dove partiamo</p><h2 id="partenza">Il disegno deve far capire le regole</h2>
+    <p>Nella <a href="../07-dati-da-conservare/index.html">Lezione 7</a> hai distinto Partecipante e Attività e li hai collegati con l’associazione «si iscrive». La data descrive la singola iscrizione. Nella variante hai aggiunto anche la conferma della partecipazione.</p>
+    <p>Riprendi il tuo schema: una persona può essere registrata senza scegliere attività? Può sceglierne due? Un’attività può non avere iscritti? Le risposte erano già nei requisiti. Ora impariamo a scriverle sul collegamento, perché un’altra persona possa leggere il modello senza spiegazioni aggiuntive.</p>
+  </section>
+  <section class="section" aria-labelledby="obiettivi">
+    <p class="eyebrow">Al termine</p><h2 id="obiettivi">Che cosa saprai dimostrare</h2>
+    <div class="card-grid">
+      <article class="card"><h3>Leggere minimo e massimo</h3><p>Spiegare quante iscrizioni sono ammesse per un singolo partecipante e per una singola attività.</p></article>
+      <article class="card"><h3>Verificare e modificare</h3><p>Controllare il modello con dati inventati e aggiornarlo quando cambia un requisito.</p></article>
+    </div>
+  </section>
+  <section class="section reading" aria-labelledby="domande">
+    <p class="eyebrow">A · Ragiona su un elemento alla volta</p><h2 id="domande">Prima le possibilità, poi i simboli</h2>
+    <p>Le regole iniziali restano quelle della lezione precedente:</p>
+    <ul><li>Un partecipante può scegliere più attività oppure non essersi ancora iscritto.</li><li>Un’attività può avere più partecipanti oppure non avere iscritti.</li><li>Ogni coppia partecipante–attività può avere una sola iscrizione.</li></ul>
+    <p>Considera soltanto P01. Sono ammesse zero iscrizioni? Una? Due ad attività diverse? Poi cambia punto di vista: considera soltanto robotica e fai le stesse domande sul numero dei suoi partecipanti.</p>
+    <p><strong>Attenzione al campione:</strong> se oggi P02 ha scelto soltanto robotica, questo non dimostra che possa scegliere al massimo un’attività. Il limite dipende dai requisiti, non dal numero di esempi che hai davanti.</p>
+  </section>
+  <section id="cardinalita" class="section reading" aria-labelledby="minimo-massimo">
+    <p class="eyebrow">B · Dai un nome alla regola</p><h2 id="minimo-massimo">Cardinalità minima e massima</h2>
+    <p>La <strong>cardinalità</strong> indica a quante occorrenze di un’associazione può partecipare un singolo elemento di un’entità. Qui un’occorrenza è una specifica iscrizione, per esempio quella di P01 a robotica.</p>
+    <p>La scriviamo come una coppia <code>(minimo,massimo)</code>. Il primo valore indica il numero più basso ammesso; il secondo quello più alto ammesso.</p>
+    <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><h3>Parole nuove</h3><ul>
+      <li><strong>Cardinalità:</strong> quanti legami sono ammessi per un singolo elemento.</li>
+      <li><strong>Cardinalità minima:</strong> il numero più basso ammesso. Zero consente l’assenza di legami; uno richiede almeno un legame.</li>
+      <li><strong>Cardinalità massima:</strong> il numero più alto ammesso. Uno consente al massimo un legame; <code>N</code> consente più legami senza fissare qui un limite numerico specifico.</li>
+    </ul></div></aside>
+    <p><code>(0,N)</code> si legge «da zero a molti»: sono ammessi zero, uno o più legami. <code>N</code> esprime una possibilità; non obbliga ogni partecipante ad avere molte iscrizioni.</p>
+    <p><code>(1,N)</code> richiede invece almeno un legame e ne consente più di uno. Un massimo pari a <code>1</code> vieterebbe il secondo legame: per esempio <code>(0,1)</code> significherebbe «nessuno oppure uno solo».</p>
+    <p><strong>Controllo:</strong> se il requisito dice «può non essere ancora iscritto», quale valore deve comparire come minimo?</p>
+  </section>
+  <section class="section reading" aria-labelledby="schema">
+    <p class="eyebrow">C · Leggi lo schema</p><h2 id="schema">Due lati, due domande</h2>
+    <p><strong>Convenzione usata in questa lezione:</strong> la coppia scritta vicino a un’entità descrive la partecipazione di un suo singolo elemento all’associazione. Leggi quindi la coppia vicino a Partecipante pensando a una persona, e quella vicino ad Attività pensando a un’attività.</p>
+    <figure class="infographic"><img src="img/cardinalita-iscrizioni.svg" width="640" height="740" alt="Partecipante e Attività sono collegati da si iscrive. Vicino a entrambe le entità compare (0,N): ciascuna può partecipare a zero o più iscrizioni. Data e conferma appartengono al legame."><figcaption>Il modello iniziale consente partecipanti senza iscrizioni e attività senza iscritti. Il vincolo di una sola iscrizione per coppia resta valido.</figcaption></figure>
+    <ul><li><strong>Vicino a Partecipante, <code>(0,N)</code>:</strong> ogni partecipante può iscriversi a zero, una o più attività.</li><li><strong>Vicino ad Attività, <code>(0,N)</code>:</strong> ogni attività può avere zero, uno o più partecipanti.</li></ul>
+    <p>Il rettangolo indica un’entità, il rombo un’associazione e gli ovali le proprietà del legame. La conferma riprende la variante della lezione 7: «no» indica un’iscrizione esistente con partecipazione non ancora confermata.</p>
+    <p><strong>Prova a spiegare:</strong> in quale punto del disegno trovi la regola che ammette un’attività senza iscritti?</p>
+  </section>
+  <section class="section reading" aria-labelledby="esempio">
+    <p class="eyebrow">D · Segui un esempio</p><h2 id="esempio">P01 ha due iscrizioni, P03 nessuna</h2>
+    <p>Tutti i dati sono inventati. Sono registrati P01, P02 e P03; le attività disponibili sono robotica, teatro e fotografia. Le iscrizioni sono queste:</p>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Iscrizioni dell’esempio"><table><caption>Le tre iscrizioni presenti</caption><thead><tr><th scope="col">Partecipante</th><th scope="col">Attività</th><th scope="col">Data</th><th scope="col">Confermata</th></tr></thead><tbody>
+      <tr><td>P01</td><td>robotica</td><td>2026-11-09</td><td>sì</td></tr><tr><td>P01</td><td>teatro</td><td>2026-11-09</td><td>no</td></tr><tr><td>P02</td><td>robotica</td><td>2026-11-10</td><td>no</td></tr>
+    </tbody></table></div>
+    <p>P01 partecipa a due legami: il massimo <code>N</code> lo consente. P03 non compare nelle iscrizioni, ma resta un partecipante registrato: il minimo <code>0</code> lo permette. Robotica ha due iscritti; fotografia non ne ha. Anche dal lato Attività entrambi i casi sono ammessi.</p>
+    <p>La partecipazione di P01 a teatro non è confermata, ma la sua iscrizione esiste e va contata. Confermare la partecipazione cambia un valore del legame, senza aggiungere un’iscrizione.</p>
+    <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Il controllo dei duplicati resta necessario</h3><p>Il massimo <code>N</code> ammette iscrizioni ad attività diverse. Non autorizza a ripetere P01–robotica con un’altra data o un altro valore di conferma: il requisito vieta una seconda iscrizione della stessa coppia. Minimo e massimo non descrivono da soli tutte le regole del modello.</p></div></aside>
+  </section>
+  <section id="laboratorio" class="section reading" aria-labelledby="verifica-modello">
+    <p class="eyebrow">E · Costruisci e verifica</p><h2 id="verifica-modello">Metti alla prova le cardinalità</h2>
+    <p><strong>Prodotto atteso:</strong> schema con cardinalità, due frasi di lettura e una tabella di prove. Lavora in coppia con carta oppure diagrams.net.</p>
+    <ol class="steps"><li><strong>Riprendi il modello.</strong><p>Usa lo schema della lezione 7. Se non lo hai disponibile, ricostruiscilo dalla figura di questa pagina, mantenendo data e conferma sul legame.</p></li><li><strong>Scrivi le cardinalità.</strong><p>Per ciascun lato rispondi prima a «zero è ammesso?» e «più di uno è ammesso?». Scrivi la coppia e una frase che la spieghi.</p></li><li><strong>Prepara i dati.</strong><p>Riutilizza il tuo campione della lezione 7 oppure i dati dell’esempio precedente. Assicurati di avere una persona senza iscrizioni e un’attività senza iscritti.</p></li><li><strong>Prova i casi.</strong><p>Per ogni riga della tabella seguente annota la previsione, il requisito usato e l’esito motivato. Valuta ogni caso separatamente a partire dai dati iniziali.</p></li></ol>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Casi da verificare"><table><caption>Per ogni caso: è ammesso? Quale regola lo dimostra?</caption><thead><tr><th scope="col">Caso</th><th scope="col">Situazione da esaminare</th></tr></thead><tbody>
+      <tr><th scope="row">A</th><td>P03 è registrato e non sceglie attività.</td></tr><tr><th scope="row">B</th><td>Fotografia esiste e non ha iscritti.</td></tr><tr><th scope="row">C</th><td>P01 sceglie robotica e teatro.</td></tr><tr><th scope="row">D</th><td>P01 e P02 scelgono entrambi robotica.</td></tr><tr><th scope="row">E</th><td>Si tenta di aggiungere P01–robotica con data diversa: quella coppia è già presente.</td></tr>
+    </tbody></table></div>
+    <p><strong>Prima di continuare:</strong> per il caso E indica se stai usando una cardinalità oppure un altro requisito.</p>
+    <details><summary>Aiuto 1 — trova il minimo</summary><p>Considera un solo elemento. Può esistere senza alcun collegamento? Rileggi il requisito che descrive questa possibilità.</p></details>
+    <details><summary>Aiuto 2 — trova il massimo</summary><p>Per una persona prova due attività diverse; per un’attività prova due persone diverse. Cerca la regola che ammette o vieta il secondo collegamento.</p></details>
+    <details><summary>Aiuto 3 — prepara la tabella delle prove</summary><p>Usa quattro colonne: caso, previsione, requisito, esito motivato. Scrivi il motivo anche quando il caso sembra immediato.</p></details>
+  </section>
+  <section id="nuovo-requisito" class="section reading" aria-labelledby="cambiamento">
+    <p class="eyebrow">F · Modifica e confronta</p><h2 id="cambiamento">Da oggi tutti devono avere un’iscrizione</h2>
+    <p>Conserva una copia del modello iniziale. La segreteria cambia una sola regola:</p>
+    <blockquote><p>«Ogni partecipante registrato deve avere almeno un’iscrizione».</p></blockquote>
+    <p>Le altre regole restano uguali. In particolare, un’attività può ancora non avere iscritti e un’iscrizione non confermata continua a essere un’iscrizione.</p>
+    <ol class="steps"><li><strong>Aggiorna lo schema.</strong><p>Decidi quale valore cambiare e su quale lato. Scrivi il nuovo requisito accanto al modello.</p></li><li><strong>Controlla il campione precedente.</strong><p>P03 senza iscrizioni è ancora uno stato valido? E fotografia senza iscritti? Motiva le risposte separatamente.</p></li><li><strong>Correggi i dati di esercizio.</strong><p>Mostra un modo per rendere conforme il caso di P03. Mantieni il divieto di duplicare una coppia e indica esattamente che cosa hai aggiunto o modificato.</p></li><li><strong>Fai leggere il modello.</strong><p>Scambia schema, regole e prove con un’altra coppia. Chiedi un caso ammesso e un caso vietato dal nuovo modello, senza aggiungere spiegazioni a voce.</p></li><li><strong>Rivedi e motiva.</strong><p>Registra un’osservazione ricevuta e la correzione apportata, oppure il motivo per cui confermi la tua scelta.</p></li></ol>
+    <details><summary>Aiuto — cambia soltanto la regola richiesta</summary><p>Individua il soggetto della nuova frase: parla di ogni partecipante oppure di ogni attività? Poi chiediti se cambia il minimo o il massimo.</p></details>
+    <p>Il requisito descrive gli stati validi dei dati. Il modo in cui il programma registrerà partecipante e prima iscrizione sarà progettato in seguito.</p>
+  </section>
+  <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h2>Errori da evitare</h2><ul>
+    <li><strong>Guardare il lato opposto:</strong> nella convenzione usata qui, leggi la coppia vicino all’entità che stai considerando.</li><li><strong>Dedurre il massimo dal campione:</strong> un solo esempio non stabilisce un limite pari a uno.</li><li><strong>Leggere N come obbligo:</strong> molti sono possibili; il minimo stabilisce quanti legami sono necessari.</li><li><strong>Confondere conferma e iscrizione:</strong> «no» non elimina il legame.</li><li><strong>Considerare il disegno già eseguibile:</strong> PHP e database dovranno applicare i controlli quando saranno realizzati.</li>
+  </ul></div></aside>
+  <section class="section reading" aria-labelledby="consegna">
+    <p class="eyebrow">G · Spiega e consegna</p><h2 id="consegna">Rendi leggibile la tua scelta</h2>
+    <p>Consegna nell’ambiente riservato indicato dal docente il modello iniziale, le frasi di lettura, le cinque prove, il modello dopo il cambiamento e i dati corretti. Aggiungi la nota sul confronto tra coppie. Se usi diagrams.net, conserva il file modificabile insieme all’esportazione richiesta.</p>
+    <ul class="presentation-checklist"><li>Le cardinalità compaiono su entrambi i lati e sono spiegate in parole.</li><li>Ogni prova richiama il requisito pertinente.</li><li>Il nuovo schema cambia soltanto quanto richiesto.</li><li>I dati aggiornati rispettano sia le cardinalità sia il divieto di duplicati.</li><li>Il confronto con l’altra coppia è documentato.</li></ul>
+    <p>Rispondi individualmente, usando il tuo disegno:</p><ol><li>Che cosa permette lo zero in <code>(0,N)</code>?</li><li>Quale dato del campione dimostra che una persona può avere più iscrizioni?</li><li>Quale valore hai modificato per il nuovo requisito e perché?</li><li>Perché le cardinalità non bastano a motivare il divieto di una seconda iscrizione di P01 a robotica?</li></ol>
+  </section>
+  <section class="section reading" aria-labelledby="riepilogo">
+    <p class="eyebrow">Da ricordare</p><h2 id="riepilogo">Le cardinalità rendono esplicite le possibilità</h2>
+    <p>Minimo e massimo descrivono i legami ammessi per un singolo elemento. Si ricavano dai requisiti e si verificano con casi concreti. Quando cambia una regola, controlla sia lo schema sia i dati già presenti. Mantieni scritti anche i vincoli che le cardinalità non esprimono da sole.</p>
+    <p>Questo lavoro precisa il modello concettuale: la descrizione dei dati e dei loro legami indipendente dalla struttura del database. Lo useremo come punto di partenza per la successiva progettazione delle tabelle.</p>
+  </section>
+  <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../07-dati-da-conservare/index.html">← Lezione 7</a><a href="../../index.html">Indice del percorso</a></nav>
+</main>
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>Informatica · Classi quinte</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>

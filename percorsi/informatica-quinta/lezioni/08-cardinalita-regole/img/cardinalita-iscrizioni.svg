@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="740" viewBox="0 0 640 740" role="img" aria-labelledby="titolo descrizione">
+<title id="titolo">Cardinalità delle iscrizioni</title><desc id="descrizione">Partecipante e Attività sono collegati da si iscrive. La cardinalità vicino a ciascuna entità è zero, N. Data e conferma sono attributi dell'associazione.</desc>
+<rect width="640" height="740" rx="16" fill="#ffffff"/>
+<g stroke="#0d3569" stroke-width="3" fill="none"><path d="M260 160V280 M260 440V570 M355 330L450 285 M355 390L440 465"/></g>
+<rect x="70" y="25" width="380" height="135" rx="12" fill="#e4eefb" stroke="#0d3569" stroke-width="3"/>
+<path d="M260 280L400 360L260 440L120 360Z" fill="#fff0dd" stroke="#ad5708" stroke-width="3"/>
+<rect x="70" y="570" width="380" height="135" rx="12" fill="#e4eefb" stroke="#0d3569" stroke-width="3"/>
+<ellipse cx="520" cy="270" rx="80" ry="34" fill="#fff" stroke="#0d3569" stroke-width="3"/>
+<ellipse cx="515" cy="480" rx="100" ry="34" fill="#fff" stroke="#0d3569" stroke-width="3"/>
+<g font-family="Segoe UI, Arial, sans-serif" text-anchor="middle" fill="#172d45" font-size="28">
+<text x="260" y="67" font-weight="700" font-size="32">Partecipante</text><text x="260" y="108">identificatore</text><text x="260" y="143">nome · email</text>
+<text x="175" y="210" font-weight="700">(0,N)</text><text x="260" y="370" font-size="32" font-weight="700">si iscrive</text>
+<text x="175" y="535" font-weight="700">(0,N)</text><text x="520" y="280">data</text><text x="515" y="490">conferma</text>
+<text x="260" y="617" font-size="32" font-weight="700">Attività</text><text x="260" y="657">codice · titolo</text><text x="260" y="689" font-size="22">codice: identificatore</text>
+</g></svg>
