@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>For: segui il contatore</title></head><body>
+<h1>For: segui il contatore</h1>
+<?php
+for ($i = 1; $i <= 3; $i = $i + 1) {
+    echo "<p>Prova numero " . $i . "</p>";
+}
+?>
+<footer><p>Docente: Prof. Marco Cocciniglia</p><p>Informatica · Classi quinte · A.S. 2026/27</p></footer></body></html>

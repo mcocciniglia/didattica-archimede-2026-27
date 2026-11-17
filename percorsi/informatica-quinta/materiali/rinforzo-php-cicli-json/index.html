@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Rinforzo PHP per Informatica quinta: array, cicli foreach e for, errori di validazione e introduzione graduale a JSON.">
+  <title>Rinforzo PHP — Ripetere, controllare e rappresentare i dati</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <a href="#cicli">Cicli</a>
+        <a href="#laboratorio">Laboratorio</a>
+        <a href="#json">JSON</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+<section class="hero"><div class="container">
+<nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">Informatica quinta</a><span aria-hidden="true">/</span><span>Rinforzo PHP</span></nav>
+<p class="eyebrow">Rinforzo PHP · Informatica · Classi quinte</p><h1>Ripetere, controllare e rappresentare i dati</h1>
+<p class="lead">Riprendiamo il laboratorio delle attività scolastiche: un ciclo per ogni elenco, controlli sui dati ricevuti e un primo incontro con JSON.</p>
+<div class="meta-list"><span>Due incontri da circa 2 ore</span><span>Prerequisiti: lezioni 1–6</span><span>PHP e browser locale</span><span>Dati inventati</span></div>
+<div class="hero-actions"><a class="button" href="#cicli">Primo incontro: i cicli</a><a class="button secondary" href="#json">Secondo incontro: JSON</a></div>
+</div></section><main id="contenuto" class="container" tabindex="-1">
+<section class="section reading" aria-labelledby="partenza"><p class="eyebrow">Prima di aggiungere concetti</p><h2 id="partenza">Torniamo al programma che conosciamo</h2>
+<p>Nella <a href="../../lezioni/06-mini-progetto-php/index.html">Lezione 6</a> il browser sceglie un’attività con GET e invia nome, email ed età con POST. PHP controlla i dati e mostra errori oppure un riepilogo. Ripartiamo da lì, senza richiedere la lezione 7 o la lezione 8.</p>
+<p>Apri il progetto e indica: l’array delle attività; la chiave letta da GET; i campi ricevuti da POST; un controllo sul nome; il punto in cui compare il riepilogo. Se uno di questi passaggi non è chiaro, riprovalo prima di continuare.</p>
+<aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><h3>Un incontro alla volta</h3><p>Nel primo lavoriamo su elenchi e ripetizioni. Nel secondo, dopo aver consolidato il primo, rappresentiamo gli stessi dati in JSON. Il materiale può essere ripreso durante il consolidamento: non è necessario completarlo tutto in un’unica lezione.</p></div></aside></section>
+<section class="section" aria-labelledby="obiettivi"><p class="eyebrow">Che cosa costruirai</p><h2 id="obiettivi">Tre risultati osservabili</h2><div class="card-grid"><article class="card"><h3>Un elenco generato da PHP</h3><p>Aggiungi un’attività all’array e ritrovala nell’elenco senza copiare un’altra riga HTML.</p></article><article class="card"><h3>Errori raccolti e mostrati insieme</h3><p>Conserva ogni messaggio in un array e visualizzalo con un ciclo.</p></article><article class="card"><h3>Lo stesso riepilogo in JSON</h3><p>Trasforma dati già validati in testo JSON e riconosci stringhe, numeri e valori booleani.</p></article></div></section>
+<section id="cicli" class="section reading" aria-labelledby="foreach"><p class="eyebrow">Primo incontro · A</p><h2 id="foreach">Un’istruzione per ogni attività</h2>
+<p>Finora l’elenco del progetto contiene una riga HTML per robotica e una per teatro. Se aggiungiamo fotografia all’array, anche l’elenco deve cambiare. Per farlo possiamo ripetere la stessa operazione per ogni elemento.</p>
+<aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><h3>Parole nuove del primo incontro</h3><ul><li><strong>Ciclo:</strong> una struttura che ripete un gruppo di istruzioni.</li><li><strong>Iterazione:</strong> un singolo passaggio attraverso le istruzioni ripetute.</li><li><strong>Contatore:</strong> una variabile numerica che aggiorniamo per seguire i passaggi.</li></ul></div></aside>
+<p><code>foreach</code> significa qui «per ogni elemento dell’array». L’array associativo, che già conosci, contiene coppie chiave–valore. In ogni passaggio PHP assegna la chiave a <code>$codice</code> e il valore a <code>$titolo</code>, poi esegue le istruzioni tra parentesi graffe.</p><pre><code>$attivita = [
+    "robotica" =&gt; "Laboratorio di robotica",
+    "teatro" =&gt; "Laboratorio di teatro"
+];
+
+echo "&lt;ul&gt;";
+foreach ($attivita as $codice =&gt; $titolo) {
+    echo "&lt;li&gt;" . htmlspecialchars($codice, ENT_QUOTES, 'UTF-8');
+    echo ": " . htmlspecialchars($titolo, ENT_QUOTES, 'UTF-8') . "&lt;/li&gt;";
+}
+echo "&lt;/ul&gt;";</code></pre>
+<p>La prima volta <code>$codice</code> vale <code>"robotica"</code> e <code>$titolo</code> vale <code>"Laboratorio di robotica"</code>; la seconda volta i valori diventano quelli di teatro. I nomi delle due variabili sono scelti da noi. Il ciclo termina quando non restano elementi da leggere.</p>
+<p><code>"&lt;ul&gt;"</code> viene scritto una volta, prima del ciclo; le righe <code>&lt;li&gt;</code> si ripetono; <code>"&lt;/ul&gt;"</code> viene scritto dopo. <code>htmlspecialchars()</code> mantiene il suo compito: prepara il testo per essere mostrato nell’HTML.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Traccia foreach"><table><caption>Segui i valori senza eseguire ancora il programma</caption><thead><tr><th scope="col">Passaggio</th><th scope="col">$codice</th><th scope="col">$titolo</th></tr></thead><tbody><tr><td>1</td><td>robotica</td><td>Laboratorio di robotica</td></tr><tr><td>2</td><td>teatro</td><td>Laboratorio di teatro</td></tr></tbody></table></div>
+<p><strong>Fermati e prova:</strong> aggiungi fotografia, prevedi il numero di righe, poi esegui. Ripeti con una sola attività e con <code>$attivita = [];</code>. Quest’ultima istruzione crea un array vuoto: il corpo di <code>foreach</code> non viene eseguito neppure una volta.</p></section>
+<section class="section reading" aria-labelledby="errori"><p class="eyebrow">Primo incontro · B</p><h2 id="errori">Dai messaggi separati a un elenco di errori</h2>
+<p>Un array può funzionare anche come elenco con posizioni numeriche. <code>$errori = [];</code> crea l’elenco vuoto; <code>$errori[] = "Inserisci il nome.";</code> aggiunge un messaggio in fondo. PHP assegna automaticamente una posizione numerica.</p><pre><code>$errori = [];
+$errori[] = "Inserisci il nome.";
+$errori[] = "Controlla il formato dell’email.";
+
+echo "&lt;ul&gt;";
+foreach ($errori as $messaggio) {
+    echo "&lt;li&gt;" . htmlspecialchars($messaggio, ENT_QUOTES, 'UTF-8') . "&lt;/li&gt;";
+}
+echo "&lt;/ul&gt;";</code></pre>
+<p>Qui usiamo <code>foreach ($errori as $messaggio)</code>: ci interessa il valore di ogni elemento, non la sua chiave. La variante con <code>$codice =&gt; $titolo</code> serviva invece a leggere entrambi.</p>
+<p>I due messaggi dell’esempio sono dati di prova. Nel programma reale si aggiunge ciascun messaggio soltanto nel ramo <code>if</code> che rileva quel problema. Il ciclo li visualizza dopo che i controlli sono terminati.</p>
+<p><code>count($errori)</code> restituisce quanti messaggi sono presenti. Se vale zero, nessun controllo ha aggiunto errori. Non rimettere a zero l’elenco dentro i singoli controlli: perderesti gli errori precedenti.</p></section>
+<section class="section reading" aria-labelledby="for"><p class="eyebrow">Primo incontro · C · confronto breve</p><h2 id="for">Quando vuoi contare i passaggi: for</h2>
+<p>Per leggere un elenco abbiamo usato <code>foreach</code>. Se vogliamo ripetere un’istruzione tre volte, possiamo usare un contatore con <code>for</code>:</p><pre><code>for ($i = 1; $i &lt;= 3; $i = $i + 1) {
+    echo "&lt;p&gt;Prova numero " . $i . "&lt;/p&gt;";
+}</code></pre>
+<ol><li><code>$i = 1</code> viene eseguito una volta all’inizio.</li><li>PHP verifica <code>$i &lt;= 3</code> prima di ogni passaggio. Se è falso, il ciclo termina.</li><li>Se è vero, esegue il corpo tra le graffe.</li><li><code>$i = $i + 1</code> aumenta il contatore di uno; poi torna alla verifica.</li></ol>
+<p>Il corpo viene eseguito con <code>$i</code> uguale a 1, 2 e 3. Dopo l’ultimo aggiornamento <code>$i</code> vale 4 e la condizione è falsa. I due punti e virgola separano inizializzazione, condizione e aggiornamento.</p>
+<p><strong>Traccia sul quaderno:</strong> per ogni controllo scrivi valore di <code>$i</code>, esito della condizione e testo prodotto. Poi cambia il limite da 3 a 2 e verifica la previsione. Se la condizione è falsa già all’inizio, non si esegue il corpo.</p>
+<p>Se togli l’aggiornamento da questo esempio, il contatore rimane a 1 e la condizione resta vera: la ripetizione non termina. Non provarlo sul server; spiegane l’effetto. Per ora ci bastano questi due cicli, senza aggiungere altre forme.</p></section>
+<section id="laboratorio" class="section reading" aria-labelledby="lab-uno"><p class="eyebrow">Primo incontro · D · laboratorio</p><h2 id="lab-uno">Migliora la copia del progetto della lezione 6</h2>
+<p>Crea una cartella <code>rinforzo-php</code> separata dal progetto originale. Copia i tuoi <code>attivita.php</code> ed <code>elabora.php</code> già completati. In fondo trovi anche i file iniziali della lezione 6; lo scheletro di elaborazione conserva i controlli da completare.</p>
+<ol class="steps"><li><strong>Genera l’elenco.</strong><p>In <code>attivita.php</code> sostituisci i due elementi statici con un <code>foreach</code>. Ogni collegamento deve avere il codice nell’indirizzo GET e il titolo come testo. Se aggiungi fotografia, inseriscila anche nell’array delle attività ammesse di <code>elabora.php</code>: i due file hanno ancora cataloghi distinti.</p></li><li><strong>Controlla l’indirizzo generato.</strong><p>Per robotica deve risultare <code>attivita.php?attivita=robotica</code>. Usa <code>urlencode($codice)</code>, una funzione che prepara il testo da inserire in un parametro dell’indirizzo; usa <code>htmlspecialchars()</code> per il titolo e per il testo completo dell’indirizzo nell’attributo HTML.</p></li><li><strong>Raccogli i messaggi.</strong><p>All’inizio di <code>elabora.php</code> crea <code>$errori = [];</code>. Nei rami di errore sostituisci la visualizzazione immediata con l’aggiunta del messaggio all’array. Conserva le condizioni di validazione già funzionanti.</p></li><li><strong>Mostra l’esito una sola volta.</strong><p>Dopo tutti i controlli, se <code>count($errori) &gt; 0</code>, mostra i messaggi con <code>foreach</code>; altrimenti mostra il riepilogo. Evita di mostrare il riepilogo nel singolo controllo di un campo.</p></li><li><strong>Prova zero, uno e più errori.</strong><p>Con dati validi deve comparire il riepilogo. Con nome vuoto deve comparire un solo messaggio relativo al nome. Con nome vuoto ed email errata devono comparire entrambi. Annota previsione ed esito.</p></li></ol>
+<details><summary>Aiuto — costruire il collegamento</summary><p>Dentro il ciclo prepara <code>$indirizzo = "attivita.php?attivita=" . urlencode($codice);</code>. Poi inserisci l’indirizzo nell’attributo <code>href</code>, racchiuso tra virgolette. Il risultato viene letto dal browser; il parametro viene controllato di nuovo da PHP nella richiesta successiva.</p></details>
+<p><strong>Prima di passare a JSON:</strong> devi saper spiegare i valori letti a ogni iterazione, aggiungere una terza attività e visualizzare insieme due errori. Se serve, ripeti questo laboratorio in un altro incontro.</p></section>
+<section id="json" class="section reading" aria-labelledby="testo-json"><p class="eyebrow">Secondo incontro · A</p><h2 id="testo-json">Gli stessi dati, una forma testuale diversa</h2>
+<p>Il riepilogo HTML serve alla persona che legge la pagina. Possiamo rappresentare le informazioni anche come testo con una struttura riconoscibile dai programmi.</p>
+<aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><h3>Parole nuove del secondo incontro</h3><p><strong>JavaScript Object Notation (JSON)</strong> è un formato testuale per rappresentare dati. Il nome richiama JavaScript, ma possiamo leggerlo e produrlo anche con PHP.</p><p>Una <strong>conversione</strong> cambia la rappresentazione dei dati: da un valore PHP a testo JSON, oppure da testo JSON a un valore PHP.</p></div></aside>
+<pre><code>{
+    "nome": "Anna",
+    "attivita": "robotica",
+    "eta": 18,
+    "confermata": false
+}</code></pre>
+<p>Le graffe delimitano un <strong>oggetto JSON</strong>, cioè un insieme di proprietà con un nome e un valore. I nomi sono tra virgolette doppie; i due punti separano nome e valore; la virgola separa le proprietà. Dopo l’ultima proprietà non c’è una virgola.</p>
+<p><code>"Anna"</code> è una stringa; <code>18</code> è un numero; <code>false</code> è un valore booleano, cioè falso. <code>"18"</code> sarebbe una stringa e <code>"false"</code> sarebbe testo, non il valore booleano falso. <code>null</code> indica l’assenza di un valore.</p>
+<p>Un elenco JSON usa parentesi quadre: <code>["robotica", "teatro"]</code>. Qui <code>json_encode()</code> traduce un array PHP con chiavi testuali in un oggetto e un array con indici consecutivi da zero in un elenco. Il caso dell’array PHP vuoto produce <code>[]</code>.</p>
+<p><strong>Non sono la stessa sintassi:</strong> nell’array PHP scrivi <code>"nome" =&gt; "Anna"</code>; nel testo JSON scrivi <code>"nome": "Anna"</code>. I nomi delle variabili PHP con <code>$</code> non fanno parte del testo JSON.</p></section>
+<section class="section reading" aria-labelledby="encode"><p class="eyebrow">Secondo incontro · B</p><h2 id="encode">Da array PHP a testo JSON</h2>
+<p><code>json_encode()</code> produce testo JSON a partire da un valore PHP. Prepariamo una scheda inventata e mostriamola nella pagina:</p><pre><code>$scheda = [
+    "nome" =&gt; "Anna",
+    "attivita" =&gt; "robotica",
+    "eta" =&gt; 18,
+    "confermata" =&gt; false
+];
+$testoJson = json_encode($scheda, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+if ($testoJson === false) {
+    echo "&lt;p&gt;Non è stato possibile rappresentare i dati in JSON.&lt;/p&gt;";
+} else {
+    echo "&lt;pre&gt;" . htmlspecialchars($testoJson, ENT_QUOTES, 'UTF-8') . "&lt;/pre&gt;";
+}</code></pre>
+<p><code>JSON_PRETTY_PRINT</code> aggiunge rientri e a capo; <code>JSON_UNESCAPED_UNICODE</code> mantiene leggibili i caratteri come le lettere accentate. Il simbolo <code>|</code> combina queste due opzioni. Puoi leggere l’esempio anche senza usare le opzioni: il significato dei dati rimane uguale.</p>
+<p>Se la conversione non riesce, la funzione restituisce <code>false</code>; per questo lo controlliamo. <code>&lt;pre&gt;</code> conserva la disposizione del testo. Poiché stiamo inserendo JSON in una pagina HTML, usiamo ancora <code>htmlspecialchars()</code>: convertire in JSON non sostituisce la preparazione per l’HTML.</p>
+<p><strong>Prova:</strong> cambia l’età da <code>18</code> a <code>"18"</code> nell’array e osserva il testo prodotto. Poi ripristina il numero. Nel programma del form usa l’intero restituito dalla validazione dell’età, non il testo originale di POST.</p>
+<p><strong>Passaggio importante:</strong> generare o mostrare JSON non salva automaticamente niente. Ricaricando la pagina non ritrovi un archivio di invii. In questo laboratorio il JSON viene solo mostrato dentro l’HTML.</p></section>
+<section class="section reading" aria-labelledby="lab-due"><p class="eyebrow">Secondo incontro · C · laboratorio</p><h2 id="lab-due">Un riepilogo validato, due rappresentazioni</h2>
+<ol class="steps"><li><strong>Prepara la scheda solo nel ramo valido.</strong><p>Dopo i controlli, se l’elenco degli errori è vuoto, costruisci un array con nome, email, età intera e codice dell’attività. Usa le variabili già pulite e validate.</p></li><li><strong>Mantieni il riepilogo leggibile.</strong><p>Mostra ancora l’HTML del riepilogo. Subito dopo aggiungi il testo ottenuto con <code>json_encode()</code>, usando l’esempio guidato.</p></li><li><strong>Confronta i valori.</strong><p>L’età deve essere un numero anche nel JSON. Nome ed email devono corrispondere ai testi validati. Un invio errato deve mostrare i messaggi e non il riepilogo JSON.</p></li><li><strong>Verifica la visualizzazione.</strong><p>Con un nome inventato come <code>&lt;b&gt;Anna&lt;/b&gt;</code> e gli altri dati validi, i tag devono comparire come testo anche nel riquadro JSON, senza diventare grassetto.</p></li></ol>
+<p><strong>Criterio di completamento:</strong> un invio valido produce HTML e JSON coerenti; un invio non valido produce gli errori; nessun dato viene salvato.</p></section>
+<section class="section reading" aria-labelledby="decode"><p class="eyebrow">Secondo incontro · D · estensione guidata</p><h2 id="decode">Da testo JSON a dati da scorrere</h2>
+<p>Affronta questa parte solo quando riesci a creare il riepilogo. <code>json_decode($testo, true)</code> legge JSON; il secondo argomento <code>true</code> fa convertire gli oggetti JSON in array associativi PHP. Possiamo quindi applicare il <code>foreach</code> già studiato.</p><pre><code>$testo = '{"robotica":"Laboratorio di robotica","teatro":"Laboratorio di teatro"}';
+$catalogo = json_decode($testo, true);
+
+if (json_last_error() !== JSON_ERROR_NONE) {
+    echo "&lt;p&gt;Il testo non è JSON valido.&lt;/p&gt;";
+} elseif (!is_array($catalogo)) {
+    echo "&lt;p&gt;In questo esercizio serve un oggetto con codici e titoli.&lt;/p&gt;";
+} else {
+    foreach ($catalogo as $codice =&gt; $titolo) {
+        if (is_string($codice) &amp;&amp; is_string($titolo)) {
+            echo "&lt;p&gt;" . htmlspecialchars($codice, ENT_QUOTES, 'UTF-8');
+            echo ": " . htmlspecialchars($titolo, ENT_QUOTES, 'UTF-8') . "&lt;/p&gt;";
+        } else {
+            echo "&lt;p&gt;Ogni voce deve avere un codice e un titolo testuali.&lt;/p&gt;";
+        }
+    }
+}</code></pre>
+<p><code>json_last_error()</code> indica l’esito dell’ultima conversione JSON. Lo confrontiamo con <code>JSON_ERROR_NONE</code>, che significa nessun errore. <code>is_array()</code> verifica se il risultato è un array: un testo come <code>18</code> è JSON valido, ma non è il catalogo richiesto qui. Controlliamo anche che ogni codice e titolo siano stringhe, usando <code>is_string()</code>, già incontrato nei controlli sui parametri.</p>
+<p><strong>Tre prove separate:</strong> usa il catalogo dell’esempio; togli una virgoletta per ottenere JSON non valido; sostituisci tutto con <code>18</code> per ottenere JSON valido ma inadatto a questo compito. Prima prevedi quale messaggio apparirà.</p>
+<p>Non riceviamo JSON da una rete e non leggiamo file: il testo è una stringa di prova nello script. Ricevere dati da altri programmi e conservarli richiederà altri passaggi.</p></section>
+<section class="section reading" aria-labelledby="materiali"><p class="eyebrow">File per lavorare in locale</p><h2 id="materiali">Esempi e punto di partenza</h2>
+<p>Salva ciascun esempio togliendo soltanto l’ultima estensione <code>.txt</code>: per esempio <code>01-foreach.php.txt</code> diventa <code>01-foreach.php</code>. Controlla che Windows mostri le estensioni. PHP si esegue con il server locale già usato nelle lezioni, non aprendo il file con doppio clic e non su GitHub Pages.</p>
+<ul><li><a href="esempi/01-foreach.php.txt" download>01 — Foreach su attività ed errori</a></li><li><a href="esempi/02-for.php.txt" download>02 — For con contatore</a></li><li><a href="esempi/03-json.php.txt" download>03 — Conversione da PHP a JSON</a></li><li><a href="esempi/04-leggere-json.php.txt" download>04 — Estensione: leggere JSON</a></li><li><a href="starter/attivita.php.txt" download>File iniziale attivita.php della lezione 6</a></li><li><a href="starter/elabora.php.txt" download>Scheletro elabora.php della lezione 6, da completare</a></li></ul>
+<p>Lo scheletro è intenzionalmente incompleto: contiene i compiti della lezione 6. Se il tuo progetto è già completo, lavora sulla sua copia. Gli esempi numerati sono invece eseguibili così come sono e servono a isolare un passaggio alla volta.</p></section>
+<aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h2>Se il risultato non torna</h2><ul><li><strong>Array PHP e JSON mescolati:</strong> controlla <code>=&gt;</code> rispetto a <code>:</code> e la posizione delle virgolette.</li><li><strong>Un solo errore invece di due:</strong> verifica di non ricreare <code>$errori = [];</code> dentro i controlli.</li><li><strong>Elenco ripetuto male:</strong> controlla quali istruzioni stanno prima, dentro e dopo le graffe del ciclo.</li><li><strong>JSON prodotto con dati errati:</strong> sposta la conversione nel ramo successivo a tutti i controlli riusciti.</li><li><strong>JSON trattato come salvataggio:</strong> nessuno degli esempi scrive dati in un archivio.</li></ul></div></aside>
+<section class="section reading" aria-labelledby="consegna"><p class="eyebrow">Consegna e autoverifica</p><h2 id="consegna">Mostra una modifica e spiegane l’effetto</h2>
+<p>Consegna nell’ambiente riservato indicato dal docente la copia del progetto e una tabella con previsione, prova ed esito. Per il primo incontro bastano il ciclo sulle attività, la traccia del contatore e le prove su zero, uno e due errori. Nel secondo aggiungi il confronto tra riepilogo HTML e JSON. L’estensione di lettura JSON può essere completata successivamente.</p>
+<ol><li>Che cosa succede a <code>$codice</code> e <code>$titolo</code> a ogni iterazione?</li><li>Che differenza c’è tra il ciclo sul catalogo e quello sui soli messaggi?</li><li>Con quali valori il corpo del <code>for</code> viene eseguito? Quale controllo lo ferma?</li><li>Nel JSON, che differenza c’è tra <code>18</code> e <code>"18"</code>?</li><li>Perché <code>json_encode()</code> non sostituisce i controlli sui dati?</li><li>Perché un testo JSON valido potrebbe non essere un catalogo adatto al nostro programma?</li></ol>
+<p><strong>Da ricordare:</strong> prima controlliamo i dati, poi li rappresentiamo. Un ciclo evita di ricopiare la stessa istruzione per ogni elemento. JSON cambia la rappresentazione dei dati; il salvataggio richiede un’operazione diversa.</p>
+<p>Riferimenti tecnici: manuale PHP su <a href="https://www.php.net/manual/en/control-structures.foreach.php">foreach</a>, <a href="https://www.php.net/manual/en/control-structures.for.php">for</a>, <a href="https://www.php.net/manual/en/function.json-encode.php">json_encode()</a> e <a href="https://www.php.net/manual/en/function.json-decode.php">json_decode()</a>.</p></section>
+<nav class="lesson-nav" aria-label="Navigazione del materiale"><a href="../../lezioni/06-mini-progetto-php/index.html">← Laboratorio della lezione 6</a><a href="../../index.html">Indice del percorso</a></nav></main>
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>Informatica · Classi quinte</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
