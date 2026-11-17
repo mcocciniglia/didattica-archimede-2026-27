@@ -2,3 +2,5 @@ exclude:
 - AGENTS.md
 - PROGETTO.md
 - docs/
+- percorsi/informatica-quinta/lezioni/07-dati-da-conservare/
+- percorsi/informatica-quinta/lezioni/08-cardinalita-regole/
