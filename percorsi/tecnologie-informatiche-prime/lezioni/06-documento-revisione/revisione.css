@@ -1,0 +1,11 @@
+/* Esempi didattici di formattazione: stessa frase, scelte diverse. */
+.sample-before { font-weight: 700; text-align: center; line-height: 1.1; }
+.sample-after { text-align: left; line-height: 1.5; }
+figure { margin-inline: 0; }
+figure img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); }
+figcaption { margin-top: .75rem; font-size: .95rem; }
+dd { margin-inline-start: 0; margin-bottom: 1rem; }
+code { overflow-wrap: anywhere; }
+kbd { color: var(--text); }
+html[data-theme="dark"] .hero-actions .button:not(.secondary) { color: var(--surface); }
+@media print { details > * { display: block; } details { break-inside: avoid; } .component-card { break-inside: avoid; } }

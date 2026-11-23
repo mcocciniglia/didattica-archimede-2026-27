@@ -119,10 +119,13 @@ elenco numerato, tabella e revisione a coppie senza richiedere condivisione
 del file. La dimostrazione costruisce solo l’inizio della guida. Le immagini
 non sono richieste in questo incontro.
 
-L’attività utilizza 2 delle 6 ore già previste per U3: le altre 4 restano
-destinate al completamento dell’unità. La numerazione delle lezioni 1–4
-resta invariata. Memorie, capacità e periferiche (lezioni previste 6 e 7)
-saranno riprese successivamente; la presenza delle lezioni nel sito non
+La lezione 5 utilizza 2 delle 6 ore già previste per U3. La lezione 6,
+“Rendere leggibile un documento e revisionarlo insieme”, ne utilizza altre 2:
+formattazione consapevole, commenti, risposte e prima collaborazione sullo
+stesso documento. Le 2 ore restanti sono destinate al completamento
+dell’unità. La numerazione delle lezioni 1–4
+resta invariata. Memorie, capacità e periferiche
+saranno riprese successivamente, con numerazione da definire; la presenza delle lezioni nel sito non
 attesta che siano state svolte in classe. L’anticipo non presuppone il
 completamento di U1 o U2 e non modifica il monte ore annuale.
 
@@ -192,8 +195,9 @@ predisposto, correzione guidata e seconda possibilità.
 | Verifica 1 · margine trasversale | Lezioni 1 e 2 e approfondimento Gmail | Operazioni pratiche e brevi domande | Evidenza individuale |
 | 4 · U1 | Von Neumann | Simulazione del ciclo | Traccia del ciclo |
 | 5 · U3 | Il mio primo documento strutturato — Una guida al laboratorio | Stili, paragrafi, elenco numerato, tabella e Classroom | Guida organizzata, rivista e consegnata |
-| 6 · U1 · prevista | Memorie e capacità | RAM, massa e unità | Tabella comparativa |
-| 7 · U1 · prevista | Periferiche e scelta | Input/output e configurazione | Scelta motivata |
+| 6 · U3 | Rendere leggibile un documento e revisionarlo insieme | Google Documenti, formattazione, commenti e risposte | Guida migliorata e revisione motivata |
+| U1 · prevista, numero da definire | Memorie e capacità | RAM, massa e unità | Tabella comparativa |
+| U1 · prevista, numero da definire | Periferiche e scelta | Input/output e configurazione | Scelta motivata |
 
 La lezione 3 utilizza 2 delle 8 ore previste per U1. La verifica iniziale usa
 il margine trasversale; le 4 ore di pausa didattica restano già comprese nelle
