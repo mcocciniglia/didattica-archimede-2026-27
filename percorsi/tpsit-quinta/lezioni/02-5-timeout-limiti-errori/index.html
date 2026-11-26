@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 2.5 di TPSIT quinta: timeout per client, limite di 80 byte per riga ed errori nel server TCP concorrente Riga/1.">
+  <title>Lezione 2.5 — Quando il client si ferma: timeout, limiti ed errori nel server TCP</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script src="../../../../assets/archimede.js" defer></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT quinta</a><span aria-hidden="true">/</span><span>Lezione 2.5</span></nav>
+      <p class="eyebrow">Lezione 2.5 · M2 · TPSIT · Classe quinta</p>
+      <h1>Quando il client si ferma: timeout, limiti ed errori nel server TCP</h1>
+      <p class="lead">Che cosa deve fare un server concorrente quando una riga non arriva mai alla fine?</p>
+      <div class="meta-list"><span>Durata: 2 ore di laboratorio</span><span>Python 3 e VS Code</span><span>Prerequisito: lezione 2.4</span></div>
+      <div class="hero-actions"><a class="button secondary" href="#file-python">Scarica i file Python</a><a class="button secondary" href="#collaudo">Vai al collaudo</a></div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="richiamo">
+      <h2 id="richiamo">Il buffer della 2.4 non basta</h2>
+      <p>Nella <a href="../02-4-buffer-protocollo-righe/index.html">lezione 2.4</a> il server concorrente ha imparato a ricostruire Riga/1: ogni richiesta termina con Line Feed (LF), cioè <code>\n</code>, e ogni thread conserva il proprio buffer. Restano due domande pratiche: quanto può aspettare una connessione silenziosa e quanto può crescere una riga senza fine?</p>
+      <p>In questa lezione partiamo dal server della 2.4, senza cambiare i comandi <code>PING</code> ed <code>ECHO testo</code> né le risposte già previste. Aggiungiamo timeout, limite per riga e rilascio affidabile del socket in caso di errore.</p>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine delle due ore</p>
+      <h2 id="obiettivi">Che cosa saprai verificare</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Isolare un client in attesa</h3><p>Impostare un timeout sul socket accettato e distinguere timeout da fine del flusso.</p></article>
+        <article class="card"><h3>Limitare ogni riga</h3><p>Contare byte prima della decodifica, sia con LF già arrivato sia nel residuo.</p></article>
+        <article class="card"><h3>Chiudere e registrare</h3><p>Gestire errori socket nel thread del client e verificare che gli altri client continuino a rispondere.</p></article>
+      </div>
+    </section>
+
+    <section class="section reading" aria-labelledby="prova-guidata">
+      <p class="eyebrow">Avvio · prova guidata su localhost</p>
+      <h2 id="prova-guidata">A aspetta; B riceve comunque una risposta</h2>
+      <p>Avvia il server della 2.4 con <code>python server_partenza.py</code>. Prima di aggiungere il timeout, apri un altro terminale ed esegui <code>python client_concorrenza.py</code>. Lo script apre due connessioni distinte:</p>
+      <ol>
+        <li>Il client A invia i byte <code>PING</code>, senza LF, e non chiude la connessione.</li>
+        <li>Il client B invia <code>PING\n</code> e legge <code>PONG</code>.</li>
+        <li>Solo dopo la risposta di B, A invia LF e riceve il proprio <code>PONG</code>.</li>
+      </ol>
+      <p><strong>Prima di lanciare il test:</strong> che cosa sta aspettando il thread di A? Il thread di B può lavorare nel frattempo? Dopo l’invio di A, il comando è già completo secondo Riga/1?</p>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><h3>Osservazione attesa</h3><p>Il thread di A è fermo nella ricezione, in attesa di altri byte o della chiusura del flusso. Il thread di B è distinto: trova LF, elabora PING e invia PONG mentre A non ha ancora ricevuto risposta. Il buffer di A non contiene una riga completa.</p></div></aside>
+      <p>Il caso è un’attesa lecita secondo il protocollo, non un errore di Riga/1. Diventa un problema di risorse se il client non completa mai la riga: il timeout introdurrà un limite all’attesa della singola operazione di ricezione.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="parole-nuove">
+      <h2 id="parole-nuove">Parole nuove</h2>
+      <ul>
+        <li><strong>Timeout:</strong> durata massima concessa a una singola operazione bloccante sul socket. Se scade, Python solleva <code>socket.timeout</code>.</li>
+        <li><strong>Fine del flusso:</strong> condizione segnalata da <code>recv()</code> con <code>b''</code>; il peer ha terminato l’invio. Non è un timeout.</li>
+        <li><strong>Errore socket:</strong> problema durante un’operazione di rete, rappresentato in Python da un’eccezione come <code>OSError</code>. Il gestore deve registrarlo e rilasciare la connessione.</li>
+      </ul>
+    </section>
+
+    <section class="section reading" aria-labelledby="file-python">
+      <p class="eyebrow">Materiali · Python 3 standard library</p>
+      <h2 id="file-python">File Python scaricabili</h2>
+      <p>Salva tutti i file nella stessa cartella. Non servono pacchetti esterni. Lo starter conserva il comportamento della 2.4; la soluzione completa aggiunge i controlli sviluppati qui.</p>
+      <ul>
+        <li><a href="server_partenza.py" download>server_partenza.py — server concorrente della lezione 2.4, da evolvere</a></li>
+        <li><a href="server.py" download>server.py — soluzione completa commentata</a></li>
+        <li><a href="client_concorrenza.py" download>client_concorrenza.py — A incompleto e B con risposta immediata</a></li>
+        <li><a href="prova_buffer.py" download>prova_buffer.py — test deterministico su blocchi prefissati</a></li>
+        <li><a href="client_collaudo.py" download>client_collaudo.py — casi di rete, limiti, timeout e chiusura</a></li>
+      </ul>
+      <p>Per ciascuna prova di rete, lascia <code>python server.py</code> attivo in un terminale e avvia il client in un altro. Il server usa localhost e la porta <code>50000</code>, come nella lezione precedente.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="passaggio-timeout">
+      <p class="eyebrow">Passaggio 1</p>
+      <h2 id="passaggio-timeout">Limita l’attesa del singolo client</h2>
+      <p>Nel server della 2.4 il thread chiama <code>conn.recv(1024)</code> senza limite di tempo. Intervieni in <code>gestisci_client()</code>, subito dopo l’ingresso nel contesto <code>with conn:</code> e prima del ciclo di ricezione:</p>
+      <pre class="language-python" tabindex="0" aria-label="Impostazione del timeout sul socket accettato"><code class="language-python">conn.settimeout(TIMEOUT_RICEZIONE)</code></pre>
+      <p>La costante della soluzione vale 5 secondi. <code>accept()</code> restituisce un nuovo socket per quella connessione; impostare il timeout su quel socket limita l’attesa delle sue operazioni di ricezione, non quella del socket in ascolto e non quella degli altri client. È un limite per operazione: se arrivano byte e il gestore esegue un’altra <code>recv()</code>, parte una nuova attesa.</p>
+      <p>Proteggi la chiamata a <code>recv()</code> con <code>try/except socket.timeout</code>. Alla scadenza, registra indirizzo e motivo, poi esci dal ciclo: il blocco <code>with conn</code> chiude il socket. Non inviare una risposta applicativa: il client non ha completato una riga.</p>
+      <aside class="callout warning"><span class="callout-icon" aria-hidden="true">!</span><div><h3>Non confondere i due casi</h3><p><code>socket.timeout</code> significa che l’operazione non ha ricevuto dati entro il tempo stabilito. <code>recv()</code> che restituisce <code>b''</code> indica invece che il peer ha chiuso la propria direzione di invio. Nel secondo caso controlla se il buffer contiene una riga incompleta e registra la chiusura ordinaria o incompleta.</p></div></aside>
+      <h3>Perché B non aspetta A</h3>
+      <p>Il timeout viene impostato nel gestore del client dopo <code>accept()</code>. Ogni connessione ha socket e thread distinti; la scadenza di A termina il suo gestore, mentre il ciclo principale continua ad accettare client e gli altri gestori continuano a lavorare.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="passaggio-limite">
+      <p class="eyebrow">Passaggio 2</p>
+      <h2 id="passaggio-limite">Applica 80 byte a ogni singola riga</h2>
+      <p>Nel gestore, il controllo va inserito subito dopo aver aggiunto il nuovo blocco al buffer e mentre estrai ogni riga delimitata da LF. In entrambi i punti la misura è <code>len(...)</code> sui byte, prima di <code>decode("utf-8")</code>.</p>
+      <pre class="language-python" tabindex="0" aria-label="Controllo della riga completa e del residuo"><code class="language-python">while b"\n" in buffer:
+    riga_bytes, buffer = buffer.split(b"\n", 1)
+    if len(riga_bytes) &gt; MAX_RIGA_BYTES:
+        errore = "riga troppo lunga"
+        break
+    righe.append(riga_bytes)
+
+if errore is None and len(buffer) &gt; MAX_RIGA_BYTES:
+    errore = "riga troppo lunga"</code></pre>
+      <p>Il delimitatore LF non conta nei 80 byte. Il residuo senza LF va controllato subito: aspettare un delimitatore gli permetterebbe di crescere senza limite. La soluzione invia <code>ERR riga troppo lunga\n</code>, registra il superamento e chiude la connessione. Le righe complete valide già estratte dallo stesso blocco ricevono prima la loro risposta.</p>
+      <p>Il limite è per riga, non per blocco ricevuto: due righe da 80 byte possono arrivare nella stessa <code>recv()</code>. Vanno accettate entrambe. Il server estrae LF una riga alla volta e controlla la lunghezza di ciascuna; non confronta con 80 la dimensione totale del blocco.</p>
+      <p>Si conta in byte perché il protocollo trasferisce byte e UTF-8 può codificare un carattere con più byte. Contare i caratteri decodificati darebbe un limite diverso da quello trasmesso.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="passaggio-errori">
+      <p class="eyebrow">Passaggio 3</p>
+      <h2 id="passaggio-errori">Registra gli errori socket e libera la connessione</h2>
+      <p>Racchiudi il corpo del gestore in <code>try/except</code>. Tratta <code>socket.timeout</code> separatamente per spiegare l’attesa scaduta; intercetta poi <code>OSError</code> per errori durante ricezione, invio o impostazione del socket. Il messaggio della soluzione riporta indirizzo, tipo dell’errore e descrizione.</p>
+      <p>Il gestore usa <code>with conn:</code>: uscita dal ciclo, ritorno per codifica non valida o eccezione chiudono comunque il socket. L’errore di codifica riceve <code>ERR codifica\n</code> e poi la connessione viene chiusa. Un errore di rete può impedire anche l’invio della risposta d’errore; in quel caso il log registra il guasto e il contesto rilascia la risorsa.</p>
+      <p>Il ciclo di ascolto gestisce separatamente un eventuale errore di <code>accept()</code> e continua. Non aggiungiamo nuovi comandi né cambiamo la risposta di <code>PING</code>, <code>ECHO testo</code> o di un comando sconosciuto.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="ordine-lavoro">
+      <p class="eyebrow">Laboratorio</p>
+      <h2 id="ordine-lavoro">Evolvi il server in tre passaggi</h2>
+      <ol class="steps">
+        <li><strong>Parti dal file precedente.</strong><p>Apri <code>server_partenza.py</code>. Individua il ciclo di <code>accept()</code>, il thread per client, il buffer locale e la chiamata a <code>recv()</code>.</p></li>
+        <li><strong>Aggiungi il timeout.</strong><p>Dichiara la costante e configura il socket appena accettato. Verifica prima il log e la chiusura di A dopo l’attesa incompleta.</p></li>
+        <li><strong>Controlla lunghezze e rilascia risorse.</strong><p>Controlla ogni riga completa e il residuo; poi aggiungi gestione degli errori. Confronta il risultato con <code>server.py</code>.</p></li>
+      </ol>
+      <p>Il file completo è la soluzione commentata e funzionante. La funzione <code>aggiungi_blocco()</code> separa il controllo del framing dai socket e rende verificabili esattamente gli arrivi artificiali.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="deterministico">
+      <h2 id="deterministico">Una prova deterministica sul buffer</h2>
+      <p>Su TCP il numero di chiamate a <code>sendall()</code> non determina il numero di blocchi restituiti da <code>recv()</code>: gli invii possono essere suddivisi o accorpati. Per verificare esattamente una sequenza, usa blocchi di byte prefissati, senza rete:</p>
+      <pre class="language-text" tabindex="0" aria-label="Comando per la prova deterministica"><code class="language-text">python prova_buffer.py</code></pre>
+      <p>Il test asserisce che 80 byte sono accettati, 81 byte sono rifiutati anche senza LF, due righe da 80 byte nello stesso blocco restano valide e una riga divisa fra due blocchi produce la medesima riga completa. Non usare il confine delle chiamate a <code>sendall()</code> come prova di un confine di ricezione.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="collaudo">
+      <p class="eyebrow">Collaudo locale</p>
+      <h2 id="collaudo">Tabella di collaudo</h2>
+      <p>Esegui prima <code>python server.py</code>, poi <code>python client_collaudo.py</code>. Le prove usano connessioni separate, salvo dove indicato. Confronta gli esiti automatici del client con i log del server.</p>
+      <div class="table-wrap" tabindex="0" role="region" aria-labelledby="tabella-collaudo">
+        <table>
+          <caption id="tabella-collaudo">Prove richieste per il server concorrente Riga/1</caption>
+          <thead><tr><th scope="col">Caso</th><th scope="col">Input</th><th scope="col">Esito atteso</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">PING valido</th><td><code>PING\n</code></td><td><code>PONG\n</code>; connessione ancora utilizzabile.</td></tr>
+            <tr><th scope="row">Riga di 80 byte</th><td><code>ECHO </code> più 75 byte ASCII e LF</td><td>Riga accettata; risposta <code>OK </code> più il testo.</td></tr>
+            <tr><th scope="row">Riga di 81 byte</th><td><code>ECHO </code> più 76 byte ASCII e LF</td><td><code>ERR riga troppo lunga</code>, poi chiusura e log del limite.</td></tr>
+            <tr><th scope="row">Residuo oltre il limite</th><td>81 byte senza LF</td><td>Errore e chiusura immediata, senza attendere LF.</td></tr>
+            <tr><th scope="row">Più righe valide nello stesso blocco</th><td>Due righe da 80 byte, inviate insieme</td><td>Due risposte valide; la somma oltre 80 byte non è un errore.</td></tr>
+            <tr><th scope="row">Timeout con riga incompleta</th><td><code>PING</code> senza LF e poi silenzio</td><td>Dopo circa 5 secondi il server registra il timeout e chiude senza risposta applicativa.</td></tr>
+            <tr><th scope="row">Chiusura ordinaria</th><td>PING completo, risposta letta, poi fine dell’invio</td><td>Il server registra la chiusura ordinaria e chiude senza errore di protocollo.</td></tr>
+            <tr><th scope="row">Client concorrenti</th><td>A invia PING incompleto; B invia PING completo</td><td>B riceve PONG mentre A è ancora in attesa; A completa e riceve PONG dopo LF.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Per l’ultimo caso avvia, con il server attivo, <code>python client_concorrenza.py</code>. L’output atteso contiene prima <code>B riceve: PONG</code>, poi conferma che A era ancora senza risposta, e infine <code>A riceve dopo LF: PONG</code>.</p>
+      <p>Il client di collaudo attende il timeout di 5 secondi: non confonderlo con un blocco del server. Per fermare il server dopo le prove usa Ctrl+C nel suo terminale.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="consegna">
+      <p class="eyebrow">Consegna su Moodle</p>
+      <h2 id="consegna">Documentate tre prove significative</h2>
+      <p>Ogni coppia consegna il server aggiornato e un breve rapporto con tre prove: input, risultato atteso, risultato osservato e una riga di log pertinente. Almeno una prova deve riguardare un limite o un timeout; una deve mostrare due client concorrenti oppure due righe valide nello stesso blocco.</p>
+      <p>Nel rapporto spiegate con parole vostre: perché il timeout appartiene al socket del singolo client e non blocca il server; perché il limite di 80 byte si applica a ogni riga e non all’intero blocco ricevuto. Indicate se la prova usa byte effettivamente inviati su rete o blocchi deterministici del buffer.</p>
+      <details><summary>Domande per la revisione della coppia</summary><ul><li>Che cosa distingue <code>socket.timeout</code> da <code>recv()</code> uguale a <code>b''</code>?</li><li>Perché si controlla anche il residuo senza LF?</li><li>Quale percorso garantisce il rilascio del socket se <code>sendall()</code> solleva un errore?</li></ul></details>
+    </section>
+
+    <section class="section reading" aria-labelledby="riepilogo">
+      <p class="eyebrow">In breve</p>
+      <h2 id="riepilogo">Tre difese, tre responsabilità</h2>
+      <ul>
+        <li>Il timeout limita l’attesa della singola operazione sul socket di quel client; alla scadenza il gestore registra il motivo e termina.</li>
+        <li><code>b''</code> indica la fine del flusso, non la scadenza di un timer.</li>
+        <li>Il limite di 80 byte si controlla prima della decodifica, sulle righe complete e sul residuo incompleto; ogni riga è valutata separatamente.</li>
+        <li><code>with conn</code> e la gestione delle eccezioni aiutano a chiudere la connessione anche quando la rete dà errore.</li>
+      </ul>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../02-4-buffer-protocollo-righe/index.html">← Lezione 2.4</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe quinta</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
