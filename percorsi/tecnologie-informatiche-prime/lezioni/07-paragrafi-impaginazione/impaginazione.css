@@ -1,0 +1,21 @@
+/* A capo del TXT conservati, con righe adattabili agli schermi piccoli. */
+.testo-da-copiare {
+  font: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.documento-atteso {
+  max-width: 100%;
+  height: auto;
+}
+
+@media print {
+  /* Il racconto completo resta disponibile nel TXT scaricabile. */
+  #testo-alternativo,
+  .lesson-nav,
+  .indice-passaggi {
+    display: none;
+  }
+}
