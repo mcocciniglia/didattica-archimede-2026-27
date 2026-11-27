@@ -1,0 +1,34 @@
+.preventivo-demo {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border-color, #8a94a6);
+  border-radius: 0.75rem;
+}
+
+.preventivo-demo label {
+  font-weight: 700;
+}
+
+.preventivo-demo input {
+  width: min(100%, 12rem);
+  padding: 0.65rem;
+  font: inherit;
+}
+
+.preventivo-demo output {
+  display: block;
+  min-height: 3rem;
+  padding: 1rem;
+  border-left: 0.3rem solid currentColor;
+}
+
+.preventivo-demo .errore {
+  font-weight: 700;
+}
+
+@media print {
+  .preventivo-demo button {
+    display: none;
+  }
+}
