@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lezione 4.02 di TPSIT quarta: leggere una quantità dalla pagina e usare if ed else per applicare uno sconto e calcolare la consegna.">
+  <title>4.02 – Quando si applica lo sconto?</title>
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/style.css">
+  <link rel="stylesheet" href="https://mcocciniglia.github.io/common/assets/theme.css">
+  <link rel="stylesheet" href="../../../../assets/archimede.css">
+  <link rel="stylesheet" href="preventivo.css">
+  <script defer src="https://mcocciniglia.github.io/common/assets/theme.js"></script>
+  <script defer src="../../../../assets/archimede.js"></script>
+  <script defer src="preventivo.js"></script>
+  <link rel="icon" href="https://mcocciniglia.github.io/common/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container site-bar">
+      <a class="brand" href="../../../../index.html"><span class="brand-mark" aria-hidden="true">A/27</span><span>Laboratori Archimede</span></a>
+      <nav class="site-nav" aria-label="Navigazione principale">
+        <a href="../../index.html">Percorso</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Cambia tema"><span class="btn-label">Tema</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Percorso"><a href="../../../../index.html">Home</a><span aria-hidden="true">/</span><a href="../../index.html">TPSIT quarta</a><span aria-hidden="true">/</span><span>4.02</span></nav>
+      <p class="eyebrow">4.02 · Modulo 1 – JavaScript e Web dinamico · 2 ore</p>
+      <h1>Quando si applica lo sconto?</h1>
+      <p class="lead">Come può una pagina leggere la quantità scelta dall’utente e decidere quale importo mostrare?</p>
+      <div class="meta-list" role="list" aria-label="Informazioni essenziali">
+        <span role="listitem">TPSIT · Classe quarta</span>
+        <span role="listitem">Browser ed editor di codice</span>
+        <span role="listitem">Prerequisito: 4.01</span>
+        <span role="listitem">Prodotto: preventivo interattivo</span>
+      </div>
+    </div>
+  </section>
+
+  <main id="contenuto" class="container">
+    <section class="section reading" aria-labelledby="partenza">
+      <p class="eyebrow">Da dove partiamo</p>
+      <h2 id="partenza">Il preventivo della 4.01</h2>
+      <p>Nella <a href="../01-preventivo-javascript/index.html">lezione 4.01</a> un quaderno costava 4 €, la quantità era fissata a 3 nel codice e il click mostrava un totale di 12 €. Ora la quantità verrà letta dalla pagina e il programma dovrà scegliere se applicare uno sconto.</p>
+      <p>Apri i tuoi file della 4.01. Se non li hai più, usa i due blocchi seguenti come codice di partenza.</p>
+      <details><summary>Codice di partenza — index.html</summary><pre><code>&lt;!doctype html&gt;
+&lt;html lang="it"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Piccolo preventivo&lt;/title&gt;
+    &lt;script src="script.js" defer&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Piccolo preventivo&lt;/h1&gt;
+    &lt;p&gt;Premi il pulsante per conoscere il totale.&lt;/p&gt;
+    &lt;button id="calcola" type="button"&gt;Calcola il totale&lt;/button&gt;
+    &lt;p id="risultato"&gt;Il totale comparirà qui.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></details>
+      <details><summary>Codice di partenza — script.js</summary><pre><code>const prodotto = "Quaderno";
+const prezzoUnitario = 4;
+let quantita = 3;
+
+const pulsante = document.getElementById("calcola");
+const risultato = document.getElementById("risultato");
+
+pulsante.addEventListener("click", function () {
+    const totale = prezzoUnitario * quantita;
+    risultato.textContent = prodotto + ": " + quantita
+        + " pezzi, totale " + totale + " euro.";
+});</code></pre></details>
+      <p><strong>Individua tre punti:</strong> la riga che stabilisce la quantità, quella che avvia il calcolo al click e quella che scrive il risultato nella pagina.</p>
+    </section>
+
+    <section class="section" aria-labelledby="obiettivi">
+      <p class="eyebrow">Al termine</p>
+      <h2 id="obiettivi">Che cosa saprai fare</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Leggere</h3><p>Ottenere dal campo la quantità presente al momento del click.</p></article>
+        <article class="card"><h3>Decidere</h3><p>Usare <code>if</code> ed <code>else</code> per scegliere fra due percorsi.</p></article>
+        <article class="card"><h3>Verificare</h3><p>Provare valori sotto, sulla e sopra una soglia e riconoscere un errore di confine.</p></article>
+      </div>
+    </section>
+
+    <section class="section reading" aria-labelledby="campo">
+      <p class="eyebrow">Prima ora · Passo 1</p>
+      <h2 id="campo">Dalla quantità fissa al campo numerico</h2>
+      <p>In <code>index.html</code>, sostituisci il paragrafo e il pulsante con queste righe. L’elemento <code>label</code> indica chiaramente che cosa inserire; <code>min</code> e <code>step</code> aiutano l’utente a scegliere una quantità intera positiva.</p>
+      <pre><code>&lt;label for="quantita"&gt;Numero di quaderni&lt;/label&gt;
+&lt;input id="quantita" type="number" min="1" step="1" value="3"&gt;
+&lt;button id="calcola" type="button"&gt;Calcola il preventivo&lt;/button&gt;
+&lt;p id="risultato" aria-live="polite"&gt;Il totale comparirà qui.&lt;/p&gt;</code></pre>
+      <p>In <code>script.js</code>, elimina <code>let quantita = 3;</code> e aggiungi vicino agli altri riferimenti:</p>
+      <pre><code>const campoQuantita = document.getElementById("quantita");</code></pre>
+      <p>Dentro il gestore del click, prima del calcolo, aggiungi il controllo già pronto:</p>
+      <pre><code>const quantita = campoQuantita.valueAsNumber;
+
+if (!Number.isInteger(quantita) || quantita &lt;= 0) {
+    risultato.textContent = "Inserisci una quantità intera maggiore di zero.";
+    return;
+}</code></pre>
+      <aside class="callout"><span class="callout-icon" aria-hidden="true">i</span><div><h3>Parole nuove</h3><p><code>valueAsNumber</code> legge il valore del campo come numero. Una <strong>condizione</strong> è un’espressione che può risultare vera o falsa. <code>return</code> interrompe il gestore quando il dato non è valido.</p></div></aside>
+      <p>Lascia il calcolo dentro il gestore. Prova prima 3 e poi 5, senza ricaricare: devono comparire 12 € e 20 €. La lettura si trova nel gestore perché ogni click deve usare il valore presente in quel momento.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="sconto">
+      <p class="eyebrow">Prima ora · Passo 2</p>
+      <h2 id="sconto">Da 10 quaderni, sconto del 10%</h2>
+      <p>La regola del negozio è: <strong>da 10 quaderni compresi</strong> si applica il 10% di sconto sull’intero subtotale. Prima di leggere il codice, traduci «almeno 10» in un confronto JavaScript.</p>
+      <pre><code>const subtotale = prezzoUnitario * quantita;
+let sconto = 0;
+let messaggioSconto = "Sconto non applicato.";
+
+if (quantita &gt;= 10) {
+    sconto = subtotale * 0.10;
+    messaggioSconto = "Sconto del 10% applicato.";
+} else {
+    sconto = 0;
+}
+
+const prodottiDopoSconto = subtotale - sconto;</code></pre>
+      <p><code>if</code> esegue il primo blocco quando la condizione è vera; <code>else</code> esegue l’altro. Quantità, subtotale, sconto e importo dopo lo sconto rappresentano dati diversi: mantieni nomi distinti.</p>
+      <p>Per mostrare due decimali soltanto alla fine, usa:</p>
+      <pre><code>risultato.textContent = messaggioSconto
+    + " Prodotti: " + prodottiDopoSconto.toFixed(2) + " euro.";</code></pre>
+      <aside class="callout success"><span class="callout-icon" aria-hidden="true">✓</span><div><h3>Checkpoint</h3><p>Con 9 quaderni compaiono 36,00 € senza sconto. Con 10 compaiono ancora 36,00 €, ma il messaggio conferma lo sconto del 10%. Con 11 compaiono 39,60 €.</p></div></aside>
+    </section>
+
+    <section class="section reading" aria-labelledby="errore-confine">
+      <p class="eyebrow">Prima ora · Prova mirata</p>
+      <h2 id="errore-confine">Quale dato rivela l’errore?</h2>
+      <p>Sostituisci temporaneamente <code>&gt;=</code> con <code>&gt;</code>. Prova 9, 10 e 11. Quale dato rivela il difetto? Provare soltanto 9 e 11 non basta: entrambi seguono lo stesso percorso anche nel programma errato. Ripristina poi <code>&gt;=</code>.</p>
+    </section>
+
+    <section class="section" aria-labelledby="demo">
+      <p class="eyebrow">Preventivo interattivo</p>
+      <h2 id="demo">Prova lo sconto della prima ora</h2>
+      <div class="preventivo-demo">
+        <label for="quantita-demo">Numero di quaderni</label>
+        <input id="quantita-demo" type="number" min="1" step="1" value="3">
+        <p><button id="calcola-demo" class="button" type="button">Calcola il preventivo</button></p>
+        <output id="risultato-demo" for="quantita-demo" aria-live="polite">Inserisci una quantità e premi il pulsante.</output>
+      </div>
+    </section>
+
+    <section class="section reading" aria-labelledby="consegna">
+      <p class="eyebrow">Seconda ora · Ora prova tu</p>
+      <h2 id="consegna">Una nuova richiesta del negozio</h2>
+      <blockquote><p>La consegna costa 4 €. Diventa gratuita quando l’importo dei prodotti <strong>dopo lo sconto</strong> raggiunge almeno 40 €. Poi aggiorna la pagina in modo che mostri separatamente l’importo dei prodotti dopo lo sconto, il costo della consegna e il totale da pagare.</p></blockquote>
+      <p><strong>Prima di modificare il codice, prevedi individualmente il risultato per 10, 11 e 12 quaderni.</strong> Per ogni ordine annota su carta l’importo dei prodotti dopo lo sconto, il costo della consegna e il totale da pagare. Durante il collaudo aggiungi il risultato ottenuto accanto alla tua previsione, lasciando leggibile la risposta iniziale.</p>
+      <div class="table-wrap"><table>
+        <caption>Tabella da ricopiare e completare prima di modificare il codice</caption>
+        <thead><tr><th scope="col">Quantità</th><th scope="col">Prodotti dopo lo sconto</th><th scope="col">Consegna</th><th scope="col">Totale da pagare</th></tr></thead>
+        <tbody><tr><th scope="row">10</th><td><span class="visually-hidden">Da completare</span></td><td><span class="visually-hidden">Da completare</span></td><td><span class="visually-hidden">Da completare</span></td></tr><tr><th scope="row">11</th><td><span class="visually-hidden">Da completare</span></td><td><span class="visually-hidden">Da completare</span></td><td><span class="visually-hidden">Da completare</span></td></tr><tr><th scope="row">12</th><td><span class="visually-hidden">Da completare</span></td><td><span class="visually-hidden">Da completare</span></td><td><span class="visually-hidden">Da completare</span></td></tr></tbody>
+      </table></div>
+      <p>Scegli quale variabile confrontare e dove inserire il secondo <code>if</code>. Mantieni numerici gli importi durante i calcoli; formatta i decimali soltanto quando costruisci il messaggio.</p>
+      <details><summary>Indizio 1</summary><p>Rileggi la regola del negozio. In quale momento conosci l’importo che decide se la consegna è gratuita?</p></details>
+      <details><summary>Indizio 2</summary><p>Prova con 10 quaderni. Prima e dopo lo sconto ottieni due importi diversi. Quale dei due sta controllando il tuo programma?</p></details>
+    </section>
+
+    <section class="section" aria-labelledby="collaudo">
+      <p class="eyebrow">Collaudo a coppie</p>
+      <h2 id="collaudo">Prevedi, esegui, confronta</h2>
+      <p>Scambiate i programmi e provate 10, 11 e 12 quaderni. Per ogni caso aggiungete il risultato osservato accanto alla previsione, senza cancellarla. Se i due valori non coincidono, indicate la correzione effettuata. Provate anche un campo vuoto, zero e una quantità frazionaria.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="verifica">
+      <p class="eyebrow">Verifica finale e consegna</p>
+      <h2 id="verifica">Confronta due preventivi</h2>
+      <p>Confronta i preventivi per 11 e 12 quaderni. Quale ordine costa di più? Spiega il risultato usando le due regole del negozio.</p>
+      <p>Consegna <code>index.html</code>, <code>script.js</code>, la tabella delle prove e la breve spiegazione. Devi saper indicare dove il programma legge la quantità, controlla il dato, decide lo sconto, decide la consegna e mostra il risultato.</p>
+    </section>
+
+    <section class="section reading" aria-labelledby="riepilogo">
+      <p class="eyebrow">In breve</p>
+      <h2 id="riepilogo">Leggere, decidere, mostrare</h2>
+      <p>Il click legge la quantità corrente con <code>valueAsNumber</code>. Il primo <code>if</code> decide lo sconto; il secondo decide il costo di consegna. I calcoli restano numerici e <code>toFixed(2)</code> interviene soltanto quando gli importi vengono mostrati.</p>
+    </section>
+
+    <nav class="lesson-nav" aria-label="Navigazione tra le lezioni"><a href="../01-preventivo-javascript/index.html">← Lezione 4.01</a><a href="../../index.html">Indice del percorso</a></nav>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p><strong>Docente: Prof. Marco Cocciniglia</strong></p><p><strong>TPSIT · Classe quarta</strong></p><p>Anno scolastico 2026/27 · Istituto Tecnico Archimede</p></div></footer>
+</body>
+</html>
